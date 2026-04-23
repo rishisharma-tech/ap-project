@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--
+  BirdAI credits — Prototype hub
+  Landing page for the interactive prototype. Shows every state discussed
+  with a short description, the primary transitions between them, and a
+  one-click link into each state.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BirdAI credits — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
+<link rel="stylesheet" href="../ds-tokens.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--ds-font-family,'Roboto',sans-serif);
+  background:var(--ds-color-bg-subtle);color:var(--ds-color-text-primary);
+  min-height:100vh;font-size:14px;line-height:20px;letter-spacing:-0.28px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Layout ── */
+.hub{max-width:1120px;margin:0 auto;padding:48px 32px 80px}
+
+/* ── Header ── */
+.hub-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:32px}
+.hub-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;line-height:16px;color:var(--ds-color-blue-primary);
+  background:#E5E9F1;padding:4px 10px;border-radius:20px;margin-bottom:12px;
+}
+.hub-eyebrow .material-symbols-outlined{font-size:14px}
+.hub-title{font-size:28px;font-weight:400;letter-spacing:-0.5px;line-height:36px;margin-bottom:8px}
+.hub-sub{font-size:14px;color:var(--ds-color-text-muted);max-width:620px}
+.hub-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn{
+  font-family:inherit;font-size:14px;padding:8px 16px;border-radius:6px;
+  cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;
+  line-height:1.4;white-space:nowrap;text-decoration:none;
+}
+.btn .material-symbols-outlined{font-size:18px}
+.btn-primary{background:var(--ds-color-blue-primary);color:#fff;border-color:var(--ds-color-blue-primary)}
+.btn-primary:hover{background:var(--ds-color-blue-dark)}
+.btn-secondary{background:#fff;color:var(--ds-color-text-primary);border-color:var(--ds-color-border)}
+.btn-secondary:hover{background:#fafafa}
+
+/* ── Flow diagram ── */
+.flow-card{
+  background:#fff;border-radius:12px;
+  box-shadow:0 2px 12px 1px rgba(33,33,33,0.06);
+  padding:28px 32px;margin-bottom:40px;
+}
+.flow-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.flow-sub{font-size:12px;color:var(--ds-color-text-muted);margin-bottom:24px}
+.flow-row{
+  display:flex;align-items:center;gap:0;flex-wrap:wrap;
+  overflow-x:auto;padding-bottom:4px;
+}
+.flow-node{
+  flex-shrink:0;min-width:128px;padding:10px 14px;
+  background:#F7F8FC;border:1px solid #E5E9F1;border-radius:8px;
+  text-align:center;display:flex;flex-direction:column;gap:2px;
+  cursor:pointer;text-decoration:none;color:inherit;
+  transition:background 0.15s ease, border-color 0.15s ease;
+}
+.flow-node:hover{background:#EEF1F8;border-color:#C7D2E8}
+.flow-node-title{font-size:13px;color:var(--ds-color-text-primary);font-weight:500}
+.flow-node-sub{font-size:11px;color:var(--ds-color-text-muted)}
+.flow-arrow{
+  flex-shrink:0;width:28px;display:flex;align-items:center;justify-content:center;
+  color:#9AA5B8;
+}
+.flow-arrow .material-symbols-outlined{font-size:18px}
+
+/* ── State grid ── */
+.section-title{font-size:14px;font-weight:500;margin:0 4px 12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:20px;
+}
+.card{
+  background:#fff;border-radius:12px;
+  box-shadow:0 2px 12px 1px rgba(33,33,33,0.06);
+  overflow:hidden;display:flex;flex-direction:column;
+  text-decoration:none;color:inherit;
+  transition:transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px 2px rgba(33,33,33,0.1)}
+.card-preview{
+  height:160px;position:relative;overflow:hidden;
+  border-bottom:1px solid var(--ds-color-border);
+  background:var(--ds-color-bg-subtle);
+  display:flex;align-items:center;justify-content:center;
+}
+.card-body{padding:16px 18px 18px}
+.card-chip{
+  display:inline-flex;align-items:center;gap:4px;font-size:11px;line-height:14px;
+  color:var(--ds-color-text-muted);background:#F7F8FC;
+  padding:2px 8px;border-radius:20px;margin-bottom:8px;
+}
+.card-chip.ok{color:#067647;background:#DCFAE6}
+.card-chip.blue{color:var(--ds-color-blue-primary);background:#E5E9F1}
+.card-title{font-size:16px;font-weight:500;line-height:22px;margin-bottom:4px}
+.card-desc{font-size:13px;color:var(--ds-color-text-muted);line-height:18px;min-height:54px}
+.card-cta{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:13px;color:var(--ds-color-blue-primary);margin-top:12px;
+}
+.card-cta .material-symbols-outlined{font-size:16px}
+
+/* ── Mini state previews (SVG-ish via divs) ── */
+.mp{
+  width:220px;background:#fff;border:1px solid var(--ds-color-border);
+  border-radius:6px;padding:10px;font-size:10px;color:#888;
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+}
+.mp-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.mp-title{font-size:11px;font-weight:500;color:var(--ds-color-text-primary);letter-spacing:-0.2px}
+.mp-hdr-dot{width:14px;height:14px;background:#eef1f8;border-radius:3px}
+.mp-kpi{
+  border:1px solid #eef1f4;border-radius:4px;padding:8px;margin-bottom:6px;
+}
+.mp-kpi-num{font-size:14px;color:var(--ds-color-text-primary);font-weight:400}
+.mp-kpi-bar{height:3px;background:#E5E9F1;border-radius:2px;margin-top:4px;overflow:hidden}
+.mp-kpi-bar > span{display:block;height:100%;background:var(--ds-color-blue-primary);border-radius:2px}
+.mp-body{background:#fafafa;border:1px dashed #E5E9F1;border-radius:4px;padding:10px;text-align:center;color:#98a2b3}
+.mp-rows{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.mp-row{display:flex;align-items:center;gap:6px;padding:5px 6px;border-radius:3px}
+.mp-row.selected{background:#F2F4F7}
+.mp-avatar{width:12px;height:12px;border-radius:50%;background:#cdd5e1;flex-shrink:0}
+.mp-line{height:6px;background:#e5e7eb;border-radius:2px;flex:1}
+.mp-line.short{max-width:50%}
+.mp-cond{
+  display:flex;align-items:center;gap:4px;margin-bottom:4px;
+  background:#F7F8FC;padding:5px 6px;border-radius:3px;
+}
+.mp-cond > span{height:5px;background:#d8e0ee;border-radius:2px}
+.mp-cond > span:nth-child(1){width:28px}
+.mp-cond > span:nth-child(2){flex:1}
+.mp-cond > span:nth-child(3){width:16px}
+.mp-chart{
+  background:linear-gradient(to top, #E5E9F1 0%, #E5E9F1 60%, transparent 60%);
+  height:60px;border-radius:3px;position:relative;margin-top:4px;
+}
+.mp-chart::before,.mp-chart::after{
+  content:"";position:absolute;bottom:0;width:10px;background:var(--ds-color-blue-primary);
+  border-radius:2px 2px 0 0;
+}
+.mp-chart::before{left:20%;height:40%}
+.mp-chart::after{left:40%;height:60%}
+.mp-chart-line{
+  position:absolute;left:15%;right:15%;top:20%;height:1px;
+  background:linear-gradient(90deg, #2C3E91 0%, #2C3E91 100%);
+  transform:rotate(-6deg);
+}
+
+/* ── Footer ── */
+.hub-foot{margin-top:48px;text-align:center;font-size:12px;color:var(--ds-color-text-muted)}
+.hub-foot a{color:var(--ds-color-blue-primary);text-decoration:none}
+.hub-foot a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="hub">
+
+  <!-- Header -->
+  <header class="hub-hdr">
+    <div>
+      <div class="hub-eyebrow">
+        <span class="material-symbols-outlined">bolt</span>
+        Interactive prototype
+      </div>
+      <h1 class="hub-title">BirdAI credits</h1>
+      <p class="hub-sub">
+        The BirdAI credits flow, end to end: start from empty, build conditions
+        to assign credits, then open any allottee's insights. Jump into any
+        step below or just hit Start prototype.
+      </p>
+    </div>
+    <div class="hub-actions">
+      <a class="btn btn-secondary" href="birdai_credits_allotment.html?reset=1">
+        <span class="material-symbols-outlined">refresh</span>
+        Reset state
+      </a>
+      <a class="btn btn-primary" href="birdai_credits_allotment.html?reset=1">
+        <span class="material-symbols-outlined">play_arrow</span>
+        Start prototype
+      </a>
+    </div>
+  </header>
+
+  <!-- Flow diagram -->
+  <section class="flow-card">
+    <div class="flow-title">Happy path</div>
+    <div class="flow-sub">Click any node to jump directly into that state.</div>
+    <div class="flow-row">
+      <a class="flow-node" href="birdai_credits_allotment.html?state=empty&reset=1">
+        <span class="flow-node-title">Empty</span>
+        <span class="flow-node-sub">No allotment</span>
+      </a>
+      <div class="flow-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+      <a class="flow-node" href="birdai_credits_allotment.html?state=configure">
+        <span class="flow-node-title">Configure</span>
+        <span class="flow-node-sub">Build conditions</span>
+      </a>
+      <div class="flow-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+      <a class="flow-node" href="birdai_credits_allotment.html?state=assigned">
+        <span class="flow-node-title">Assigned</span>
+        <span class="flow-node-sub">Allottee table</span>
+      </a>
+      <div class="flow-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+      <a class="flow-node" href="birdai_credits_insights.html?allottee=West%20Coast&type=Location%20groups">
+        <span class="flow-node-title">Insights</span>
+        <span class="flow-node-sub">Allottee detail</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- All states -->
+  <h2 class="section-title">All states</h2>
+  <div class="grid">
+
+    <!-- Empty -->
+    <a class="card" href="birdai_credits_allotment.html?state=empty&reset=1">
+      <div class="card-preview">
+        <div class="mp">
+          <div class="mp-hdr"><span class="mp-title">Conditions</span><span class="mp-hdr-dot"></span></div>
+          <div class="mp-body">○ ○ ○ ○<br/>Add conditions</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-chip">1. Empty</span>
+        <div class="card-title">Empty state</div>
+        <div class="card-desc">No allotment has been set yet. A single CTA invites the user to add conditions — either via the Segmentation Agent or manually.</div>
+        <span class="card-cta">Open state <span class="material-symbols-outlined">arrow_forward</span></span>
+      </div>
+    </a>
+
+    <!-- Configure -->
+    <a class="card" href="birdai_credits_allotment.html?state=configure">
+      <div class="card-preview">
+        <div class="mp">
+          <div class="mp-hdr"><span class="mp-title">Conditions</span><span class="mp-hdr-dot"></span></div>
+          <div class="mp-cond"><span></span><span></span><span></span></div>
+          <div class="mp-cond"><span></span><span></span><span></span></div>
+          <div style="display:flex;justify-content:flex-end;gap:4px;margin-top:8px">
+            <div style="padding:3px 10px;background:#f7f8fc;border:1px solid #eef;border-radius:3px;font-size:9px;color:#475467">Cancel</div>
+            <div style="padding:3px 10px;background:var(--ds-color-blue-primary);border-radius:3px;font-size:9px;color:#fff">Apply</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-chip blue">2. Configure</span>
+        <div class="card-title">Configure conditions</div>
+        <div class="card-desc">Build the allotment rule using Team, Locations, Location groups, Users or Agents. Add rows; Apply enables once each condition is valid.</div>
+        <span class="card-cta">Open state <span class="material-symbols-outlined">arrow_forward</span></span>
+      </div>
+    </a>
+
+    <!-- Assigned -->
+    <a class="card" href="birdai_credits_allotment.html?state=assigned">
+      <div class="card-preview">
+        <div class="mp">
+          <div class="mp-hdr"><span class="mp-title">BirdAI credits used</span></div>
+          <div class="mp-kpi">
+            <div class="mp-kpi-num">141,196 <span style="font-size:10px;color:#98a2b3">/ 225,000</span></div>
+            <div class="mp-kpi-bar"><span style="width:62.8%"></span></div>
+          </div>
+          <div class="mp-rows">
+            <div class="mp-row"><span class="mp-avatar"></span><span class="mp-line"></span><span class="mp-line short"></span></div>
+            <div class="mp-row selected">
+              <span class="mp-avatar" style="background:#1976D2"></span>
+              <span class="mp-line"></span>
+              <span class="mp-line short"></span>
+              <span class="material-symbols-outlined" style="font-size:13px;color:#555">leaderboard</span>
+            </div>
+            <div class="mp-row"><span class="mp-avatar"></span><span class="mp-line"></span><span class="mp-line short"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-chip ok">3. Assigned</span>
+        <div class="card-title">Assigned allottees</div>
+        <div class="card-desc">Allotment applied. KPIs and the allottee table render. Hover or select any row to reveal a graph icon that links to that allottee's insights page.</div>
+        <span class="card-cta">Open state <span class="material-symbols-outlined">arrow_forward</span></span>
+      </div>
+    </a>
+
+    <!-- Insights -->
+    <a class="card" href="birdai_credits_insights.html?allottee=West%20Coast&type=Location%20groups">
+      <div class="card-preview">
+        <div class="mp">
+          <div class="mp-hdr"><span class="mp-title">West Coast</span></div>
+          <div style="display:flex;gap:10px;margin-bottom:6px">
+            <div>
+              <div style="font-size:13px;color:var(--ds-color-text-primary);line-height:14px">2,046</div>
+              <div style="font-size:9px;color:#98a2b3">Reviews</div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:var(--ds-color-text-primary);line-height:14px">51,150</div>
+              <div style="font-size:9px;color:#98a2b3">Credits</div>
+            </div>
+          </div>
+          <div class="mp-chart">
+            <div class="mp-chart-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-chip blue">4. Insights</span>
+        <div class="card-title">Allottee insights</div>
+        <div class="card-desc">Per-allottee detail opened from a table row. Summary stats, reviews + credits over time, and reviews across locations with credit pills.</div>
+        <span class="card-cta">Open state <span class="material-symbols-outlined">arrow_forward</span></span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="hub-foot">
+    State is persisted in <code>localStorage</code>, so reloading or navigating between the allotment and insights pages keeps you in the same place.
+    Use the floating <strong>Prototype states</strong> pill inside either page to jump around, or come back to this hub anytime.
+  </div>
+
+</div>
+
+</body>
+</html>

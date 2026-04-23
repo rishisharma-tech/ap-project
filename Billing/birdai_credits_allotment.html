@@ -3,13 +3,12 @@
   BirdAI credits — Allotment page
   Aero DS tokens + icons copied from billing_usage.html / billing_overview.html.
 
-  States (toggle via pills in top nav):
+  States:
   - Empty:        no allotment configured. Conditions panel shows the illustration
                   + CTA to chat with Segmentation Agent or add conditions manually.
-  - Configure:    conditions builder with Where / is / value dropdowns + Add condition.
-                  Results area shows "Matching contacts will appear here".
-  - Assigned:     allotment is live. Shows alert (if over), KPI cards, and a rich
-                  table of who used how many credits, with progress bars and trends.
+  - Configure:    conditions builder for selecting teams / users / etc.
+  - Assigned:     allotment is live. Shows KPI cards + table of allottees. Clicking
+                  a row opens the Insights page (birdai_credits_insights.html).
 
   Copy follows BIRDEYE-COPY-SKILL.md (sentence case, verb+noun CTAs, no "please").
 -->
@@ -108,10 +107,9 @@ body{
   height:var(--ds-height-topnav);
   background:var(--ds-color-bg-surface);
   border-bottom:1px solid var(--ds-color-border);
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:center;justify-content:flex-end;
   padding:12px var(--ds-space-6);gap:var(--ds-space-1);flex-shrink:0;
 }
-.top-nav-left{display:flex;align-items:center;gap:var(--ds-space-1)}
 .top-nav-right{display:flex;align-items:center;gap:var(--ds-space-1)}
 .top-nav-btn{
   width:var(--ds-width-btn);height:var(--ds-width-btn);
@@ -123,23 +121,94 @@ body{
 .top-nav-btn .material-symbols-outlined{font-size:20px}
 .top-nav-btn.add{color:var(--ds-color-blue-100)}
 
-/* segmented pills that switch demo state */
-.state-pill{
-  font-family:var(--ds-font-family);
-  font-size:var(--ds-font-size-base);
-  font-weight:var(--ds-font-weight-regular);
-  color:var(--ds-color-text-secondary);
-  background:transparent;
-  border:1px solid var(--ds-color-border);
-  border-radius:var(--ds-radius-sm);
-  padding:5px 14px;cursor:pointer;line-height:1.4;
+/* page-header kebab menu + popover */
+.kebab-wrap{position:relative;display:inline-block}
+.kebab-btn{
+  width:var(--ds-width-btn);height:var(--ds-width-btn);
+  border-radius:var(--ds-radius-sm);border:1px solid var(--ds-color-border);
+  background:var(--ds-color-bg-surface);color:#555;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
 }
-.state-pill:hover{background:var(--ds-color-bg-muted)}
-.state-pill.active{
-  background:var(--ds-color-blue-selected);
-  color:var(--ds-color-text-primary);
-  border-color:var(--ds-color-blue-selected);
+.kebab-btn:hover{background:rgb(242,244,247)}
+.kebab-btn .material-symbols-outlined{font-size:18px}
+.kebab-menu{
+  position:absolute;top:calc(100% + 4px);right:0;min-width:220px;
+  background:#fff;border:1px solid var(--ds-color-border);
+  border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.12);
+  padding:4px;z-index:40;display:none;
 }
+.kebab-wrap.open .kebab-menu{display:block}
+.kebab-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;font-size:14px;color:var(--ds-color-text-primary);
+  border-radius:4px;cursor:pointer;white-space:nowrap;
+}
+.kebab-item:hover{background:var(--ds-color-bg-muted)}
+.kebab-item.danger{color:#b42318}
+.kebab-item.danger:hover{background:#fef2f2}
+.kebab-item .material-symbols-outlined{font-size:18px;color:var(--ds-color-text-secondary)}
+.kebab-item.danger .material-symbols-outlined{color:#b42318}
+.kebab-divider{height:1px;background:var(--ds-color-border);margin:4px 0}
+
+/* kebab items visible only in "assigned" state */
+body:not([data-state="assigned"]) .kebab-item.hidden-empty,
+body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
+
+/* floating "prototype states" launcher (bottom-right) */
+.proto-launcher{position:fixed;right:16px;bottom:16px;z-index:60}
+.proto-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:#212121;color:#fff;border:none;
+  font-family:inherit;font-size:12px;font-weight:400;line-height:18px;
+  padding:8px 14px;border-radius:20px;cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.24);
+  opacity:0.78;transition:opacity 0.15s ease;
+}
+.proto-pill:hover{opacity:1}
+.proto-pill .material-symbols-outlined{font-size:16px}
+
+.proto-panel{
+  position:absolute;right:0;bottom:calc(100% + 8px);
+  width:300px;background:#fff;color:var(--ds-color-text-primary);
+  border:1px solid var(--ds-color-border);border-radius:10px;
+  box-shadow:0 12px 32px rgba(0,0,0,0.18);
+  padding:6px;display:none;
+}
+.proto-launcher.open .proto-panel{display:block}
+
+.proto-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px 4px;
+}
+.proto-hdr-title{font-size:13px;font-weight:500}
+.proto-hdr-sub{font-size:11px;color:var(--ds-color-text-muted);padding:0 10px 8px}
+
+.proto-item{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 10px;
+  border-radius:6px;cursor:pointer;text-decoration:none;color:inherit;
+}
+.proto-item:hover{background:var(--ds-color-bg-muted)}
+.proto-item .dot{
+  width:8px;height:8px;border-radius:50%;margin-top:7px;flex-shrink:0;
+  background:#9AA5B8;
+}
+.proto-item.ok   .dot{background:#17B26A}
+.proto-item.blue .dot{background:var(--ds-color-blue-primary)}
+.proto-item.active{background:#E5E9F1}
+.proto-item-text{flex:1;min-width:0}
+.proto-item-name{font-size:13px;line-height:18px}
+.proto-item-sub{font-size:11px;color:var(--ds-color-text-muted);line-height:14px}
+.proto-item .material-symbols-outlined{color:var(--ds-color-text-muted);font-size:16px;margin-top:1px}
+.proto-divider{height:1px;background:var(--ds-color-border);margin:4px 2px}
+.proto-foot{
+  display:flex;align-items:center;gap:6px;padding:6px 10px;
+  font-size:11px;color:var(--ds-color-text-muted);
+}
+.proto-foot a{color:var(--ds-color-blue-primary);text-decoration:none}
+.proto-foot a:hover{text-decoration:underline}
+.proto-item.danger{color:#b42318}
+.proto-item.danger:hover{background:#fef2f2}
+.proto-item.danger .material-symbols-outlined{color:#b42318}
 
 /* ── MAIN ── */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--ds-color-bg-surface)}
@@ -199,22 +268,6 @@ body{
 }
 .col-view-btn:hover{background:var(--ds-color-bg-muted)}
 
-/* ── ALERT ── */
-.alert{
-  display:flex;align-items:center;gap:var(--ds-space-3);
-  background:#fff8eb;border:1px solid #fde4a9;
-  border-radius:var(--ds-radius-md);
-  padding:10px var(--ds-space-4);
-  margin-bottom:var(--ds-space-5);
-}
-.alert-icon{
-  flex-shrink:0;color:var(--ds-color-warning);
-  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
-}
-.alert-body{flex:1;min-width:0;font-size:var(--ds-font-size-sm);color:var(--ds-color-text-primary);line-height:18px}
-.alert-link{color:var(--ds-color-blue-100);cursor:pointer;margin-left:4px}
-.alert-link:hover{text-decoration:underline}
-
 /* ── KPI CARDS ── */
 .cards-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--ds-space-3);margin-bottom:var(--ds-space-5)}
 .kpi-card{
@@ -232,10 +285,7 @@ body{
 .kpi-secondary{font-size:var(--ds-font-size-md);color:var(--ds-color-text-muted);letter-spacing:-0.28px}
 .kpi-bar-track{height:6px;background:#e5e9f0;border-radius:3px;overflow:hidden}
 .kpi-bar-fill{height:100%;border-radius:3px;background:var(--ds-color-blue-100)}
-.kpi-bar-fill.danger{background:var(--ds-color-danger)}
-.kpi-bar-fill.warn{background:var(--ds-color-warning)}
 .kpi-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
-.kpi-pct.danger{color:var(--ds-color-danger);font-weight:var(--ds-font-weight-medium)}
 
 /* ── PANEL (Conditions + Table container) ── */
 .panel{
@@ -342,6 +392,7 @@ body{
 
 .cond-footer{
   display:flex;align-items:center;justify-content:flex-end;
+  gap:var(--ds-space-3);
   margin-top:var(--ds-space-4);
 }
 
@@ -450,12 +501,8 @@ td.muted{color:var(--ds-color-text-secondary)}
 .usage-cell-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums}
 .usage-num{font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary)}
 .usage-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted)}
-.usage-pct.warn{color:var(--ds-color-warning);font-weight:var(--ds-font-weight-medium)}
-.usage-pct.danger{color:var(--ds-color-danger);font-weight:var(--ds-font-weight-medium)}
 .usage-track{height:4px;background:#e5e9f0;border-radius:2px;overflow:hidden}
 .usage-fill{height:100%;border-radius:2px;background:var(--ds-color-blue-100)}
-.usage-fill.warn{background:var(--ds-color-warning)}
-.usage-fill.danger{background:var(--ds-color-danger)}
 
 /* trend chip */
 .trend{
@@ -561,10 +608,6 @@ tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
 body[data-state="empty"]    .state-empty{display:block}
 body[data-state="configure"] .state-configure{display:block}
 body[data-state="assigned"]  .state-assigned{display:block}
-
-/* show / hide alert only in exhausted demo */
-.alert{display:none}
-body[data-state="assigned"].over .alert{display:flex}
 </style>
 </head>
 <body data-state="empty">
@@ -634,13 +677,6 @@ body[data-state="assigned"].over .alert{display:flex}
 
     <!-- TOP NAV -->
     <div class="top-nav">
-      <!-- demo: state toggle -->
-      <div class="top-nav-left">
-        <button class="state-pill active" data-set-state="empty">Empty</button>
-        <button class="state-pill" data-set-state="configure">Configure</button>
-        <button class="state-pill" data-set-state="assigned">Assigned</button>
-        <button class="state-pill" data-set-state="assigned" data-over="1">Over limit</button>
-      </div>
       <div class="top-nav-right">
         <div class="top-nav-btn add" title="Add"><span class="material-symbols-outlined">add_circle</span></div>
         <div class="top-nav-btn" title="Help"><span class="material-symbols-outlined">help</span></div>
@@ -683,15 +719,26 @@ body[data-state="assigned"].over .alert{display:flex}
               <rect x="12" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
             </svg>
           </div>
-        </div>
-      </div>
-
-      <!-- ALERT (shows only in assigned + over demo) -->
-      <div class="alert" role="alert">
-        <div class="alert-icon"><span class="material-symbols-outlined">warning</span></div>
-        <div class="alert-body">
-          You are likely to exceed your monthly limit before the reset. Outcomes may pause. Overage is charged at a 25% premium. Add more credits to avoid extra charges.
-          <span class="alert-link" data-action="toast" data-msg="Redirecting to support">Contact support</span>
+          <div class="kebab-wrap" id="page-kebab">
+            <button class="kebab-btn" title="More options" data-kebab-toggle>
+              <span class="material-symbols-outlined">more_vert</span>
+            </button>
+            <div class="kebab-menu">
+              <div class="kebab-item hidden-empty" data-action="edit-conditions">
+                <span class="material-symbols-outlined">tune</span>
+                <span>Edit conditions</span>
+              </div>
+              <div class="kebab-item hidden-empty" data-action="export-csv">
+                <span class="material-symbols-outlined">download</span>
+                <span>Export CSV</span>
+              </div>
+              <div class="kebab-divider hidden-empty"></div>
+              <div class="kebab-item danger" data-action="reset-prototype">
+                <span class="material-symbols-outlined">refresh</span>
+                <span>Reset prototype</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -801,6 +848,7 @@ body[data-state="assigned"].over .alert{display:flex}
             </button>
 
             <div class="cond-footer">
+              <button class="btn btn-secondary" data-action="cancel-configure">Cancel</button>
               <button class="btn btn-primary" id="apply-btn" data-action="apply" disabled>Apply</button>
             </div>
           </div>
@@ -860,7 +908,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">51,150</td>
                 <td class="num">63,938</td>
                 <td class="num">2,046</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -876,7 +924,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">40,800</td>
                 <td class="num">51,000</td>
                 <td class="num">1,632</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -892,7 +940,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">29,700</td>
                 <td class="num">37,125</td>
                 <td class="num">1,485</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -908,7 +956,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">19,300</td>
                 <td class="num">24,125</td>
                 <td class="num">1,286</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -924,7 +972,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">10,500</td>
                 <td class="num">13,125</td>
                 <td class="num">2,100</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -937,7 +985,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">5,200</td>
                 <td class="num">6,500</td>
                 <td class="num">520</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -953,7 +1001,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">3,100</td>
                 <td class="num">3,875</td>
                 <td class="num">310</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -969,7 +1017,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">1,900</td>
                 <td class="num">2,375</td>
                 <td class="num">95</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
               <tr>
                 <td>
@@ -982,7 +1030,7 @@ body[data-state="assigned"].over .alert{display:flex}
                 <td class="num strong">1,050</td>
                 <td class="num">1,313</td>
                 <td class="num">70</td>
-                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
               </tr>
             </tbody>
           </table>
@@ -993,6 +1041,66 @@ body[data-state="assigned"].over .alert{display:flex}
   </div><!-- /main -->
 
 </div><!-- /body-wrap -->
+
+<!-- Floating prototype-states launcher -->
+<div class="proto-launcher" id="proto-launcher">
+  <button class="proto-pill" data-proto-toggle title="Jump to any prototype state">
+    <span class="material-symbols-outlined">layers</span>
+    <span>Prototype states</span>
+  </button>
+  <div class="proto-panel" role="menu">
+    <div class="proto-hdr">
+      <div class="proto-hdr-title">Jump to state</div>
+    </div>
+    <div class="proto-hdr-sub">Every state we talked about, one click away.</div>
+
+    <a class="proto-item" data-proto-state="empty" href="birdai_credits_allotment.html?state=empty&amp;reset=1">
+      <span class="dot"></span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Empty</div>
+        <div class="proto-item-sub">No allotment yet</div>
+      </div>
+    </a>
+    <a class="proto-item blue" data-proto-state="configure" href="birdai_credits_allotment.html?state=configure">
+      <span class="dot"></span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Configure</div>
+        <div class="proto-item-sub">Build conditions</div>
+      </div>
+    </a>
+    <a class="proto-item ok" data-proto-state="assigned" href="birdai_credits_allotment.html?state=assigned">
+      <span class="dot"></span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Assigned</div>
+        <div class="proto-item-sub">Allottees with credit usage</div>
+      </div>
+    </a>
+    <a class="proto-item blue" href="birdai_credits_insights.html?allottee=West%20Coast&amp;type=Location%20groups">
+      <span class="dot"></span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Insights</div>
+        <div class="proto-item-sub">Allottee detail with charts</div>
+      </div>
+    </a>
+
+    <div class="proto-divider"></div>
+
+    <a class="proto-item" href="birdai_credits_prototype.html">
+      <span class="material-symbols-outlined">dashboard</span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Prototype hub</div>
+        <div class="proto-item-sub">All states on one page</div>
+      </div>
+    </a>
+    <div class="proto-item danger" data-action="reset-prototype" role="button" tabindex="0">
+      <span class="material-symbols-outlined">refresh</span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Reset prototype</div>
+        <div class="proto-item-sub">Clear state and start over</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="toast-stack" id="toasts" aria-live="polite"></div>
 
@@ -1014,45 +1122,30 @@ body[data-state="assigned"].over .alert{display:flex}
     }, 2200);
   }
 
-  /* ── STATE TOGGLE ──────────────────────────────────── */
-  function setState(state, over){
-    document.body.setAttribute('data-state', state);
-    document.body.classList.toggle('over', !!over);
-    document.querySelectorAll('[data-set-state]').forEach(function(b){
-      var match = b.dataset.setState === state && (!!over === (b.dataset.over === '1'));
-      b.classList.toggle('active', match);
-    });
+  /* ── STATE + PERSISTENCE ───────────────────────────── */
+  var STORAGE_KEY = 'birdai_prototype_v1';
 
-    // KPI numbers adjust for over state
-    var kpi2 = document.getElementById('kpi2-label');
-    var kpi2Num = document.getElementById('kpi2-num');
-    var kpi2Bar = document.getElementById('kpi2-bar');
-    var kpi2Pct = document.getElementById('kpi2-pct');
-    if(state === 'assigned' && over){
-      kpi2.classList.add('danger');
-      kpi2Num.textContent = '245,250';
-      kpi2Bar.style.width = '100%';
-      kpi2Bar.classList.remove('warn'); kpi2Bar.classList.add('danger');
-      kpi2Pct.textContent = '109.4% usage estimated';
-      kpi2Pct.classList.add('danger');
-      var kpi1Num = document.getElementById('kpi1-num');
-      kpi1Num.textContent = '141,196';
-    } else {
-      kpi2.classList.remove('danger');
-      kpi2Num.textContent = '158,940';
-      kpi2Bar.style.width = '70.6%';
-      kpi2Bar.classList.remove('danger','warn');
-      kpi2Pct.textContent = '70.6% usage estimated';
-      kpi2Pct.classList.remove('danger');
-    }
+  function loadPersisted(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function savePersisted(patch){
+    var cur = loadPersisted();
+    Object.keys(patch).forEach(function(k){ cur[k] = patch[k]; });
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cur)); } catch(e){}
+  }
+  function clearPersisted(){
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
   }
 
-  document.addEventListener('click', function(e){
-    var pill = e.target.closest('[data-set-state]');
-    if(pill){
-      setState(pill.dataset.setState, pill.dataset.over === '1');
+  function setState(state, opts){
+    opts = opts || {};
+    document.body.setAttribute('data-state', state);
+
+    if(!opts.skipPersist){
+      savePersisted({ state: state });
     }
-  });
+  }
 
   /* ── SIDEBAR GROUP TOGGLE ──────────────────────────── */
   document.querySelectorAll('.sb-group-body').forEach(function(body){
@@ -1263,19 +1356,91 @@ body[data-state="assigned"].over .alert{display:flex}
         toast(el.dataset.msg || 'Done');
         break;
       case 'go-configure':
-        setState('configure', false);
+        savePersisted({ returnTo: 'empty' });
+        setState('configure');
         break;
+      case 'cancel-configure': {
+        var persisted = loadPersisted();
+        var returnTo = persisted.returnTo || 'empty';
+        setState(returnTo);
+        toast('Changes discarded');
+        break;
+      }
       case 'apply': {
         var btn = document.getElementById('apply-btn');
         if(btn.disabled) break;
-        setState('assigned', false);
-        toast('Allotment created');
+        var wasEdit = loadPersisted().returnTo === 'assigned';
+        setState('assigned');
+        toast(wasEdit ? 'Allotment updated' : 'Allotment created');
         break;
       }
       case 'edit-conditions':
-        setState('configure', false);
+        closeKebab();
+        savePersisted({ returnTo: 'assigned' });
+        setState('configure');
         break;
+      case 'export-csv':
+        closeKebab();
+        toast('Export started');
+        break;
+      case 'reset-prototype':
+        closeKebab();
+        closeProto();
+        clearPersisted();
+        setState('empty');
+        toast('Prototype reset');
+        break;
+      case 'open-insights': {
+        var row = el.closest('tr');
+        var name = row ? (row.querySelector('.outcome-name') || {}).textContent : '';
+        var type = row ? (row.querySelector('.outcome-sub')  || {}).textContent : '';
+        var qs = 'allottee=' + encodeURIComponent((name||'').trim())
+               + '&type=' + encodeURIComponent((type||'').trim());
+        window.location.href = 'birdai_credits_insights.html?' + qs;
+        break;
+      }
     }
+  });
+
+  /* ── KEBAB MENU ────────────────────────────────────── */
+  function closeKebab(){
+    var w = document.getElementById('page-kebab');
+    if(w) w.classList.remove('open');
+  }
+  document.addEventListener('click', function(e){
+    var toggle = e.target.closest('[data-kebab-toggle]');
+    var wrap = document.getElementById('page-kebab');
+    if(!wrap) return;
+    if(toggle){
+      wrap.classList.toggle('open');
+      e.stopPropagation();
+      return;
+    }
+    if(!e.target.closest('.kebab-menu')) closeKebab();
+  });
+
+  /* ── PROTOTYPE-STATES LAUNCHER ─────────────────────── */
+  function closeProto(){
+    var l = document.getElementById('proto-launcher');
+    if(l) l.classList.remove('open');
+  }
+  function refreshProtoActive(){
+    var state = document.body.getAttribute('data-state');
+    document.querySelectorAll('.proto-item[data-proto-state]').forEach(function(it){
+      it.classList.toggle('active', it.dataset.protoState === state);
+    });
+  }
+  document.addEventListener('click', function(e){
+    var toggle = e.target.closest('[data-proto-toggle]');
+    var launcher = document.getElementById('proto-launcher');
+    if(!launcher) return;
+    if(toggle){
+      launcher.classList.toggle('open');
+      if(launcher.classList.contains('open')) refreshProtoActive();
+      e.stopPropagation();
+      return;
+    }
+    if(!e.target.closest('.proto-panel')) closeProto();
   });
 
   /* ── TABLE ROW SELECT ──────────────────────────────── */
@@ -1289,7 +1454,21 @@ body[data-state="assigned"].over .alert{display:flex}
     if(!wasSelected) row.classList.add('selected');
   });
 
-  /* ── INITIAL ───────────────────────────────────────── */
+  /* ── INITIAL STATE ─────────────────────────────────── */
+  (function bootstrapState(){
+    var params = new URLSearchParams(window.location.search);
+
+    if(params.get('reset') === '1'){
+      clearPersisted();
+    }
+
+    var persisted = loadPersisted();
+    var state = params.get('state') || persisted.state || 'empty';
+
+    if(['empty','configure','assigned'].indexOf(state) === -1) state = 'empty';
+    setState(state, { skipPersist: !params.has('state') });
+  })();
+
   evaluateApplyState();
 })();
 </script>
