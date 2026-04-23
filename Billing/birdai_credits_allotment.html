@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<!--
+  BirdAI credits — Allotment page
+  Aero DS tokens + icons copied from billing_usage.html / billing_overview.html.
+
+  States (toggle via pills in top nav):
+  - Empty:        no allotment configured. Conditions panel shows the illustration
+                  + CTA to chat with Segmentation Agent or add conditions manually.
+  - Configure:    conditions builder with Where / is / value dropdowns + Add condition.
+                  Results area shows "Matching contacts will appear here".
+  - Assigned:     allotment is live. Shows alert (if over), KPI cards, and a rich
+                  table of who used how many credits, with progress bars and trends.
+
+  Copy follows BIRDEYE-COPY-SKILL.md (sentence case, verb+noun CTAs, no "please").
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BirdAI credits — Allotment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
+<link rel="stylesheet" href="../ds-tokens.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--ds-font-family);
+  background:var(--ds-color-bg-page);
+  height:100vh;overflow:hidden;
+  color:var(--ds-color-text-primary);
+  font-size:var(--ds-font-size-base);
+  font-weight:var(--ds-font-weight-regular);
+  line-height:20px;letter-spacing:-0.28px;
+}
+
+/* ── LAYOUT ── */
+.body-wrap{display:flex;height:100vh;overflow:hidden}
+
+/* ── RAIL (L1) ── */
+.rail{
+  width:var(--ds-width-rail);background:var(--ds-color-rail-bg);
+  border-right:1px solid var(--ds-color-border);
+  display:flex;flex-direction:column;flex-shrink:0;
+}
+.rail-logo-area{
+  height:var(--ds-height-topnav);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.rail-nav{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:var(--ds-space-2) 14px;gap:var(--ds-space-2);overflow:hidden;
+}
+.rail-btn{
+  width:var(--ds-width-btn);height:var(--ds-width-btn);
+  border-radius:var(--ds-radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;color:var(--ds-color-text-icon);
+}
+.rail-btn:hover{background:rgba(0,0,0,0.06)}
+.rail-btn.active{background:var(--ds-color-blue-selected)}
+.rail-btn .material-symbols-outlined{font-size:20px}
+.rail-divider{width:20px;height:1px;background:#c0c8d8;flex-shrink:0;margin:0 auto}
+
+/* ── SIDEBAR (L2) ── */
+.sidebar{
+  width:var(--ds-width-sidebar);
+  background:var(--ds-color-bg-subtle);
+  border-right:1px solid var(--ds-color-border);
+  display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;
+}
+.sb-title{
+  height:var(--ds-height-topnav);
+  display:flex;align-items:center;
+  padding:15px var(--ds-space-6);
+  font-size:var(--ds-font-size-lg);font-weight:var(--ds-font-weight-regular);
+  line-height:26px;letter-spacing:-0.36px;
+  color:var(--ds-color-text-primary);flex-shrink:0;
+}
+.sb-body{flex:1;overflow-y:auto;padding:var(--ds-space-2) var(--ds-space-4)}
+.sb-body::-webkit-scrollbar{width:4px}
+.sb-body::-webkit-scrollbar-thumb{background:var(--ds-color-blue-selected);border-radius:4px}
+.sb-group-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:var(--ds-space-1) var(--ds-space-2);height:32px;cursor:pointer;
+  font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
+  border-radius:var(--ds-radius-sm);user-select:none;
+}
+.sb-group-hdr:hover{background:rgba(0,0,0,0.04)}
+.sb-group-hdr svg{flex-shrink:0;color:var(--ds-color-text-secondary);transition:transform 0.15s ease}
+.sb-group.collapsed .sb-group-hdr svg{transform:rotate(-90deg)}
+.sb-group-body{display:flex;flex-direction:column;overflow:hidden;transition:max-height 0.2s ease}
+.sb-group.collapsed .sb-group-body{max-height:0 !important}
+.sb-item{
+  display:flex;align-items:center;
+  padding:var(--ds-space-1) var(--ds-space-2) var(--ds-space-1) var(--ds-space-5);
+  height:32px;cursor:pointer;
+  font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
+  border-radius:var(--ds-radius-sm);text-decoration:none;
+}
+.sb-item:hover{background:var(--ds-color-bg-muted)}
+.sb-item.active{background:#E5E9F1}
+.sb-group + .sb-group{margin-top:var(--ds-space-1)}
+
+/* ── TOP NAV ── */
+.top-nav{
+  height:var(--ds-height-topnav);
+  background:var(--ds-color-bg-surface);
+  border-bottom:1px solid var(--ds-color-border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px var(--ds-space-6);gap:var(--ds-space-1);flex-shrink:0;
+}
+.top-nav-left{display:flex;align-items:center;gap:var(--ds-space-1)}
+.top-nav-right{display:flex;align-items:center;gap:var(--ds-space-1)}
+.top-nav-btn{
+  width:var(--ds-width-btn);height:var(--ds-width-btn);
+  border-radius:var(--ds-radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ds-color-text-icon);
+}
+.top-nav-btn:hover{background:rgba(0,0,0,0.06)}
+.top-nav-btn .material-symbols-outlined{font-size:20px}
+.top-nav-btn.add{color:var(--ds-color-blue-100)}
+
+/* segmented pills that switch demo state */
+.state-pill{
+  font-family:var(--ds-font-family);
+  font-size:var(--ds-font-size-base);
+  font-weight:var(--ds-font-weight-regular);
+  color:var(--ds-color-text-secondary);
+  background:transparent;
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);
+  padding:5px 14px;cursor:pointer;line-height:1.4;
+}
+.state-pill:hover{background:var(--ds-color-bg-muted)}
+.state-pill.active{
+  background:var(--ds-color-blue-selected);
+  color:var(--ds-color-text-primary);
+  border-color:var(--ds-color-blue-selected);
+}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--ds-color-bg-surface)}
+
+/* ── BREADCRUMB ── */
+.breadcrumb-bar{
+  height:var(--ds-height-topnav);
+  display:flex;align-items:center;padding:0 var(--ds-space-6);flex-shrink:0;
+}
+.breadcrumb{display:flex;align-items:center;gap:2px}
+.breadcrumb-link{
+  font-size:var(--ds-font-size-base);color:var(--ds-color-blue-100);
+  cursor:pointer;padding:var(--ds-space-1) 6px;border-radius:var(--ds-radius-sm);
+}
+.breadcrumb-link:hover{text-decoration:underline}
+.breadcrumb-sep{display:flex;align-items:center;color:#bbb}
+.breadcrumb-current{
+  font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
+  padding:var(--ds-space-1) 6px;
+}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;padding:var(--ds-space-6);background:var(--ds-color-bg-surface)}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+
+/* ── PAGE HEADER ── */
+.page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:var(--ds-space-5);
+}
+.page-title{
+  font-size:var(--ds-font-size-lg);font-weight:var(--ds-font-weight-regular);
+  line-height:26px;letter-spacing:-0.36px;color:var(--ds-color-text-primary);
+}
+.page-hdr-actions{display:flex;align-items:center;gap:var(--ds-space-2)}
+
+/* date picker button */
+.date-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:var(--ds-font-size-sm);
+  color:var(--ds-color-text-primary);
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);
+  padding:5px 10px;cursor:pointer;height:28px;
+}
+.date-btn:hover{background:var(--ds-color-bg-muted)}
+.date-btn .material-symbols-outlined{font-size:16px;color:var(--ds-color-text-secondary)}
+
+.col-view-btn{
+  width:28px;height:28px;border-radius:var(--ds-radius-sm);
+  border:1px solid var(--ds-color-border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;background:var(--ds-color-bg-surface);
+  color:var(--ds-color-text-secondary);
+}
+.col-view-btn:hover{background:var(--ds-color-bg-muted)}
+
+/* ── ALERT ── */
+.alert{
+  display:flex;align-items:center;gap:var(--ds-space-3);
+  background:#fff8eb;border:1px solid #fde4a9;
+  border-radius:var(--ds-radius-md);
+  padding:10px var(--ds-space-4);
+  margin-bottom:var(--ds-space-5);
+}
+.alert-icon{
+  flex-shrink:0;color:var(--ds-color-warning);
+  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+}
+.alert-body{flex:1;min-width:0;font-size:var(--ds-font-size-sm);color:var(--ds-color-text-primary);line-height:18px}
+.alert-link{color:var(--ds-color-blue-100);cursor:pointer;margin-left:4px}
+.alert-link:hover{text-decoration:underline}
+
+/* ── KPI CARDS ── */
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--ds-space-3);margin-bottom:var(--ds-space-5)}
+.kpi-card{
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  padding:var(--ds-space-4) var(--ds-space-5);
+  display:flex;flex-direction:column;gap:var(--ds-space-2);
+}
+.kpi-label{
+  font-size:var(--ds-font-size-sm);color:var(--ds-color-text-secondary);
+}
+.kpi-big{display:flex;align-items:baseline;gap:2px}
+.kpi-primary{font-size:28px;font-weight:var(--ds-font-weight-regular);line-height:1;color:var(--ds-color-text-primary);letter-spacing:-0.5px}
+.kpi-secondary{font-size:var(--ds-font-size-md);color:var(--ds-color-text-muted);letter-spacing:-0.28px}
+.kpi-bar-track{height:6px;background:#e5e9f0;border-radius:3px;overflow:hidden}
+.kpi-bar-fill{height:100%;border-radius:3px;background:var(--ds-color-blue-100)}
+.kpi-bar-fill.danger{background:var(--ds-color-danger)}
+.kpi-bar-fill.warn{background:var(--ds-color-warning)}
+.kpi-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
+.kpi-pct.danger{color:var(--ds-color-danger);font-weight:var(--ds-font-weight-medium)}
+
+/* ── PANEL (Conditions + Table container) ── */
+.panel{
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  margin-bottom:var(--ds-space-3);
+}
+.panel-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px var(--ds-space-5);height:44px;
+  cursor:pointer;user-select:none;
+}
+.panel-hdr-title{
+  font-size:var(--ds-font-size-base);
+  color:var(--ds-color-text-primary);
+}
+.panel-hdr-chevron{
+  color:var(--ds-color-text-secondary);
+  transition:transform 0.15s ease;
+}
+.panel.collapsed .panel-hdr-chevron{transform:rotate(-180deg)}
+.panel-body{border-top:1px solid var(--ds-color-border);padding:var(--ds-space-5)}
+.panel.collapsed .panel-body{display:none}
+
+/* ── EMPTY STATE ── */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:var(--ds-space-6) 0;gap:var(--ds-space-3);
+  min-height:180px;
+}
+.empty-illus{
+  width:56px;height:56px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.empty-illus .dot{
+  width:14px;height:14px;border-radius:50%;
+  border:1.5px dashed var(--ds-color-text-muted);
+  position:absolute;
+}
+.empty-illus .dot:nth-child(1){top:8px;left:12px}
+.empty-illus .dot:nth-child(2){top:8px;right:12px}
+.empty-illus .dot:nth-child(3){bottom:8px;left:12px}
+.empty-illus .dot:nth-child(4){bottom:8px;right:12px}
+.empty-title{
+  font-size:var(--ds-font-size-base);
+  font-weight:var(--ds-font-weight-medium);
+  color:var(--ds-color-text-primary);
+}
+.empty-desc{
+  font-size:var(--ds-font-size-sm);
+  color:var(--ds-color-text-secondary);
+  text-align:center;line-height:20px;
+}
+.empty-desc a{color:var(--ds-color-blue-100);cursor:pointer;text-decoration:none}
+.empty-desc a:hover{text-decoration:underline}
+
+/* ── CONDITION ROW ── */
+.cond-rows{display:flex;flex-direction:column;gap:var(--ds-space-2)}
+.cond-row{display:flex;align-items:center;gap:var(--ds-space-2)}
+.cond-where{
+  font-size:var(--ds-font-size-base);
+  color:var(--ds-color-text-secondary);
+  min-width:52px;
+}
+.cond-select{
+  position:relative;
+  height:32px;min-width:220px;
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border-input);
+  border-radius:var(--ds-radius-sm);
+  padding:0 30px 0 12px;
+  font-size:var(--ds-font-size-base);
+  color:var(--ds-color-text-primary);
+  display:inline-flex;align-items:center;cursor:pointer;
+}
+.cond-select.placeholder{color:var(--ds-color-text-muted)}
+.cond-select .material-symbols-outlined{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-size:18px;color:var(--ds-color-text-secondary);
+  pointer-events:none;
+}
+.cond-select.narrow{min-width:88px}
+.cond-select:focus,.cond-select.open{
+  border-color:var(--ds-color-blue-100);outline:none;
+}
+.cond-remove{
+  width:32px;height:32px;border-radius:var(--ds-radius-sm);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--ds-color-text-secondary);
+  border:none;background:transparent;
+}
+.cond-remove:hover{background:var(--ds-color-bg-muted);color:var(--ds-color-danger)}
+.cond-remove .material-symbols-outlined{font-size:18px}
+
+.cond-add{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:var(--ds-font-size-base);color:var(--ds-color-blue-100);
+  background:transparent;border:none;cursor:pointer;
+  padding:6px 4px;margin-top:var(--ds-space-2);
+}
+.cond-add:hover{text-decoration:underline}
+.cond-add .material-symbols-outlined{font-size:16px}
+
+.cond-footer{
+  display:flex;align-items:center;justify-content:flex-end;
+  margin-top:var(--ds-space-4);
+}
+
+/* dropdown */
+.dd-menu{
+  position:absolute;top:calc(100% + 4px);left:0;
+  min-width:100%;max-width:320px;
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+  padding:4px;display:none;z-index:20;max-height:260px;overflow-y:auto;
+}
+.dd-menu.open{display:block}
+.dd-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:var(--ds-radius-sm);
+  cursor:pointer;font-size:var(--ds-font-size-base);
+  color:var(--ds-color-text-primary);
+}
+.dd-item:hover,.dd-item.hover{background:var(--ds-color-bg-muted)}
+.dd-item .material-symbols-outlined{font-size:18px;color:var(--ds-color-text-secondary)}
+.dd-item-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-left:auto}
+
+/* ── BUTTONS ── */
+.btn{
+  font-family:var(--ds-font-family);
+  font-size:var(--ds-font-size-base);
+  font-weight:var(--ds-font-weight-regular);
+  padding:6px 14px;border-radius:var(--ds-radius-sm);
+  cursor:pointer;line-height:1.4;border:1px solid transparent;
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  height:32px;
+}
+.btn-primary{background:var(--ds-color-blue-100);color:#fff;border-color:var(--ds-color-blue-100)}
+.btn-primary:hover{background:var(--ds-color-blue-dark);border-color:var(--ds-color-blue-dark)}
+.btn-primary:disabled{background:#cbd5e1;border-color:#cbd5e1;cursor:not-allowed;color:#fff}
+.btn-secondary{background:var(--ds-color-bg-surface);color:var(--ds-color-text-primary);border-color:#d1d5db}
+.btn-secondary:hover{background:var(--ds-color-bg-muted)}
+.btn-ghost{background:transparent;color:var(--ds-color-blue-100);border-color:transparent;padding:4px 6px}
+.btn-ghost:hover{background:var(--ds-color-bg-muted)}
+
+/* ── TABLE ── */
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:var(--ds-space-3);margin-top:var(--ds-space-5);
+}
+.section-title{
+  font-size:var(--ds-font-size-md);
+  font-weight:var(--ds-font-weight-medium);
+  color:var(--ds-color-text-primary);
+}
+.section-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
+.table-wrap{
+  background:var(--ds-color-bg-surface);
+  margin-top:var(--ds-space-5);
+  overflow:hidden;
+}
+table{width:100%;border-collapse:collapse;table-layout:auto}
+thead tr{border-bottom:1px solid var(--ds-color-border)}
+th{
+  padding:10px var(--ds-space-4);
+  font-size:var(--ds-font-size-sm);
+  font-weight:var(--ds-font-weight-regular);
+  color:var(--ds-color-text-secondary);
+  text-align:left;white-space:nowrap;
+}
+.th-inner{display:inline-flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
+.th-inner:hover{color:var(--ds-color-text-primary)}
+.sort-icon{display:flex;align-items:center;color:#bbb}
+th.sorted .sort-icon{color:var(--ds-color-text-primary)}
+th.sorted .th-inner{color:var(--ds-color-text-primary)}
+th.num{text-align:right}
+th.num .th-inner{justify-content:flex-end}
+
+tbody tr{border-bottom:1px solid var(--ds-color-border);transition:background 0.12s ease}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--ds-color-bg-muted);cursor:pointer}
+tbody tr.selected{background:#F2F4F7}
+td{
+  padding:12px var(--ds-space-4);
+  font-size:var(--ds-font-size-base);
+  color:var(--ds-color-text-primary);
+  vertical-align:middle;letter-spacing:-0.28px;
+}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+td.muted{color:var(--ds-color-text-secondary)}
+
+.allottee{display:flex;align-items:center;gap:10px}
+.allottee-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--ds-color-blue-selected);
+  color:var(--ds-color-blue-100);
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--ds-font-size-sm);
+  font-weight:var(--ds-font-weight-medium);flex-shrink:0;
+}
+.allottee-avatar.team{background:#e0f2fe;color:#0369a1}
+.allottee-avatar.agent{background:#f5e8ff;color:#7e22ce}
+.allottee-avatar .material-symbols-outlined{font-size:16px}
+.allottee-name{font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);line-height:18px}
+.allottee-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px;line-height:16px}
+
+/* usage progress in row */
+.usage-cell{display:flex;flex-direction:column;gap:6px;min-width:140px}
+.usage-cell-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums}
+.usage-num{font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary)}
+.usage-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted)}
+.usage-pct.warn{color:var(--ds-color-warning);font-weight:var(--ds-font-weight-medium)}
+.usage-pct.danger{color:var(--ds-color-danger);font-weight:var(--ds-font-weight-medium)}
+.usage-track{height:4px;background:#e5e9f0;border-radius:2px;overflow:hidden}
+.usage-fill{height:100%;border-radius:2px;background:var(--ds-color-blue-100)}
+.usage-fill.warn{background:var(--ds-color-warning)}
+.usage-fill.danger{background:var(--ds-color-danger)}
+
+/* trend chip */
+.trend{
+  display:inline-flex;align-items:center;gap:2px;
+  font-size:var(--ds-font-size-sm);
+  font-variant-numeric:tabular-nums;
+}
+.trend.up{color:var(--ds-color-success)}
+.trend.down{color:var(--ds-color-danger)}
+.trend .material-symbols-outlined{font-size:14px}
+
+.chip{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:var(--ds-font-size-sm);line-height:16px;
+  padding:2px 8px;border-radius:var(--ds-radius-full);
+  background:var(--ds-color-bg-muted);color:var(--ds-color-text-secondary);
+}
+.chip.team{background:#e0f2fe;color:#0369a1}
+.chip.user{background:#ede9fe;color:#6d28d9}
+.chip.agent{background:#f5e8ff;color:#7e22ce}
+
+/* ── Row-corner insights button (Figma node 1:30802) ──
+   Appears on the right edge of a hovered or selected row */
+th.row-corner-th,
+td.row-corner{
+  width:40px;padding:0;position:relative;
+  border-left:none;
+}
+.row-insights{
+  position:absolute;top:50%;right:12px;transform:translateY(-50%);
+  width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:#555555;
+  background:#FFFFFF;
+  border:1px solid #EAEAEA;
+  border-radius:4px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.12s ease, background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+.row-insights .material-symbols-outlined{font-size:16px}
+tbody tr:hover .row-insights,
+tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
+.row-insights:hover{
+  background:#F7F7F7;
+  color:#212121;
+}
+
+.table-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px var(--ds-space-4);
+  border-top:1px solid var(--ds-color-border);
+  background:var(--ds-color-bg-surface);
+}
+.table-foot-note{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted)}
+
+/* ── OUTCOMES TABLE (Figma node 1:35283) ──
+   Cell spec (Figma layout_DG4ZYI): padding 18px 16px, min row height 64px */
+.outcomes-table th{padding:14px 16px}
+.outcomes-table td{padding:18px 16px;letter-spacing:0;height:64px;box-sizing:border-box}
+.outcomes-table th.num,
+.outcomes-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+.outcome-name{
+  font-size:var(--ds-font-size-base);
+  color:var(--ds-color-text-primary);
+  line-height:20px;
+}
+.outcome-sub{
+  font-size:var(--ds-font-size-sm);
+  color:var(--ds-color-text-muted);
+  line-height:16px;margin-top:2px;letter-spacing:0;
+}
+.outcomes-table td.strong{
+  color:var(--ds-color-text-primary);
+  font-weight:var(--ds-font-weight-regular);
+}
+.oc-num{color:var(--ds-color-text-primary)}
+.outcomes-table td .trend{
+  margin-left:6px;
+  font-size:var(--ds-font-size-sm);
+}
+.outcomes-table td .trend .material-symbols-outlined{font-size:12px}
+
+/* ── TOAST ── */
+.toast-stack{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;gap:8px;z-index:60;pointer-events:none;
+}
+.toast{
+  background:rgb(33,33,33);color:#fff;
+  padding:10px 16px;border-radius:var(--ds-radius-md);
+  font-size:var(--ds-font-size-base);
+  box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  display:flex;align-items:center;gap:8px;pointer-events:auto;
+  animation:toast-in 0.2s ease;max-width:480px;
+}
+.toast .material-symbols-outlined{font-size:18px;color:#86efac}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast.leaving{animation:toast-out 0.15s ease forwards}
+@keyframes toast-out{to{opacity:0;transform:translateY(8px)}}
+
+/* state visibility helpers */
+.state-empty,.state-configure,.state-assigned{display:none}
+body[data-state="empty"]    .state-empty{display:block}
+body[data-state="configure"] .state-configure{display:block}
+body[data-state="assigned"]  .state-assigned{display:block}
+
+/* show / hide alert only in exhausted demo */
+.alert{display:none}
+body[data-state="assigned"].over .alert{display:flex}
+</style>
+</head>
+<body data-state="empty">
+<div class="body-wrap">
+
+  <!-- RAIL (L1) -->
+  <div class="rail">
+    <a href="../index.html" class="rail-logo-area" style="text-decoration:none">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6417 15.8029L17.6417 15.8027L17.6384 15.8014C17.5927 15.7816 17.5463 15.7632 17.4992 15.7463L12.7315 13.8611L12.7311 13.8618C12.6006 13.804 12.4564 13.7713 12.3044 13.7713C11.7231 13.7713 11.2518 14.2403 11.2518 14.8187C11.2518 15.0578 11.3332 15.2774 11.4688 15.4537L11.4681 15.4544L11.4764 15.4638C11.5005 15.4944 11.5259 15.524 11.5532 15.5517L14.9714 19.459L14.9715 19.4589C15.3977 19.9372 16.0196 20.2391 16.7125 20.2391C17.9972 20.2391 19.0387 19.2029 19.0387 17.9247C19.0387 16.9752 18.4638 16.1598 17.6417 15.8029M16.0713 7.92504C17.1523 7.58657 18.3171 8.14557 18.673 9.17345C19.0289 10.2013 18.4411 11.3088 17.36 11.6473C16.2791 11.9856 15.1142 11.4266 14.7583 10.3989C14.4025 9.37094 14.9903 8.26336 16.0713 7.92504M23.5537 9.17994C23.3965 8.95849 23.168 8.81665 22.9198 8.75419L22.9196 8.75053L21.9876 8.50627C21.9741 8.46262 21.9653 8.41842 21.9506 8.37481C20.9828 5.51383 17.8153 3.95809 14.8755 4.89999C13.3526 5.38783 12.1944 6.45242 11.5617 7.76098L9.87757 10.4368L5.88029 8.85972L5.87765 8.86265C5.62588 8.76042 5.33869 8.73796 5.05933 8.82742C4.44192 9.02534 4.10609 9.67275 4.30931 10.2738C4.33911 10.3616 4.38134 10.4416 4.42915 10.5168L4.4222 10.5248L8.59266 16.045C8.59643 16.05 8.59829 16.0555 8.60205 16.0603C8.60577 16.0655 8.61067 16.0695 8.61463 16.0746L11.5983 20.2565C12.9021 22.5847 15.7227 23.9859 18.4456 23.1135C21.3852 22.1718 22.984 19.089 22.0161 16.228C21.7148 15.3376 21.2002 14.5738 20.5458 13.9722C21.3708 13.1844 21.9306 12.1679 22.1398 11.0647L23.0412 10.8043L23.0406 10.7945C23.1205 10.7643 23.1987 10.7278 23.2723 10.6784C23.7751 10.3402 23.9012 9.66943 23.5537 9.17994" fill="#1976D2"/>
+      </svg>
+    </a>
+    <div class="rail-nav">
+      <div class="rail-btn" title="Overview"><span class="material-symbols-outlined">home</span></div>
+      <div class="rail-btn" title="Inbox" style="position:relative">
+        <span class="material-symbols-outlined">sms</span>
+        <div style="position:absolute;top:3px;right:3px;width:7px;height:7px;background:var(--ds-color-badge);border-radius:50%;border:1.5px solid var(--ds-color-rail-bg)"></div>
+      </div>
+      <div class="rail-btn" title="Listings"><span class="material-symbols-outlined">location_on</span></div>
+      <div class="rail-btn" title="Reviews"><span class="material-symbols-outlined">grade</span></div>
+      <div class="rail-btn" title="Referrals"><span class="material-symbols-outlined">card_giftcard</span></div>
+      <div class="rail-btn" title="Payments"><span class="material-symbols-outlined">monetization_on</span></div>
+      <div class="rail-btn" title="Appointments"><span class="material-symbols-outlined">calendar_month</span></div>
+      <div class="rail-btn" title="Social"><span class="material-symbols-outlined">workspaces</span></div>
+      <div class="rail-btn" title="Surveys"><span class="material-symbols-outlined">assignment_turned_in</span></div>
+      <div class="rail-btn" title="Ticketing"><span class="material-symbols-outlined">shapes</span></div>
+      <div class="rail-btn" title="Contacts"><span class="material-symbols-outlined">group</span></div>
+      <div class="rail-btn" title="Reports"><span class="material-symbols-outlined">bar_chart</span></div>
+      <div class="rail-btn" title="Campaigns"><span class="material-symbols-outlined">campaign</span></div>
+      <div style="flex:1"></div>
+      <div class="rail-divider"></div>
+      <div class="rail-btn active" title="Settings"><span class="material-symbols-outlined">settings</span></div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR (L2) -->
+  <div class="sidebar">
+    <div class="sb-title">Billing and usage</div>
+    <div class="sb-body">
+      <div class="sb-group" data-group="billing">
+        <div class="sb-group-hdr" data-toggle-group>
+          <span>Billing</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="sb-group-body">
+          <a class="sb-item" href="billing_overview.html">Overview</a>
+          <a class="sb-item" href="billing_overview.html#invoices">Invoices</a>
+          <a class="sb-item" href="billing_overview.html#payment">Payment method</a>
+          <a class="sb-item" href="billing_overview.html#plan">Plan</a>
+        </div>
+      </div>
+      <div class="sb-group" data-group="usage">
+        <div class="sb-group-hdr" data-toggle-group>
+          <span>Usage</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="sb-group-body">
+          <a class="sb-item" href="billing_usage.html?view=products">Products</a>
+          <a class="sb-item active" href="birdai_credits_allotment.html">Credits</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+      <!-- demo: state toggle -->
+      <div class="top-nav-left">
+        <button class="state-pill active" data-set-state="empty">Empty</button>
+        <button class="state-pill" data-set-state="configure">Configure</button>
+        <button class="state-pill" data-set-state="assigned">Assigned</button>
+        <button class="state-pill" data-set-state="assigned" data-over="1">Over limit</button>
+      </div>
+      <div class="top-nav-right">
+        <div class="top-nav-btn add" title="Add"><span class="material-symbols-outlined">add_circle</span></div>
+        <div class="top-nav-btn" title="Help"><span class="material-symbols-outlined">help</span></div>
+        <div class="top-nav-btn" title="Account"><span class="material-symbols-outlined">account_circle</span></div>
+        <div class="top-nav-btn" title="Menu"><span class="material-symbols-outlined">menu</span></div>
+      </div>
+    </div>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-bar">
+      <nav class="breadcrumb">
+        <span class="breadcrumb-link">Settings</span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-link">Accounts</span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-link">Billing and usage</span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-link">Usage</span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-current">Credits</span>
+      </nav>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">BirdAI credits used</h1>
+        </div>
+        <div class="page-hdr-actions">
+          <button class="date-btn" data-action="toast" data-msg="Date range picker opened">
+            <span>Dec 11, 2025 – Jan 10, 2026</span>
+            <span class="material-symbols-outlined">expand_more</span>
+          </button>
+          <div class="col-view-btn" title="Column view">
+            <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0.5" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
+              <rect x="6.25" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
+              <rect x="12" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERT (shows only in assigned + over demo) -->
+      <div class="alert" role="alert">
+        <div class="alert-icon"><span class="material-symbols-outlined">warning</span></div>
+        <div class="alert-body">
+          You are likely to exceed your monthly limit before the reset. Outcomes may pause. Overage is charged at a 25% premium. Add more credits to avoid extra charges.
+          <span class="alert-link" data-action="toast" data-msg="Redirecting to support">Contact support</span>
+        </div>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="cards-row">
+        <div class="kpi-card">
+          <div class="kpi-label">Credits used</div>
+          <div class="kpi-big">
+            <span class="kpi-primary" id="kpi1-num">141,196</span>
+            <span class="kpi-secondary">/ 225,000</span>
+          </div>
+          <div class="kpi-bar-track">
+            <div class="kpi-bar-fill" id="kpi1-bar" style="width:62.8%"></div>
+          </div>
+          <div class="kpi-pct" id="kpi1-pct">62.8% used</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label" id="kpi2-label">Projected usage</div>
+          <div class="kpi-big">
+            <span class="kpi-primary" id="kpi2-num">158,940</span>
+            <span class="kpi-secondary">/ 225,000</span>
+          </div>
+          <div class="kpi-bar-track">
+            <div class="kpi-bar-fill" id="kpi2-bar" style="width:70.6%"></div>
+          </div>
+          <div class="kpi-pct" id="kpi2-pct">70.6% usage estimated</div>
+        </div>
+      </div>
+
+      <!-- =============================================================
+           EMPTY STATE
+           ============================================================= -->
+      <div class="state-empty">
+        <div class="panel" id="panel-empty">
+          <div class="panel-hdr" data-toggle-panel="panel-empty">
+            <div class="panel-hdr-title">Conditions</div>
+            <span class="panel-hdr-chevron material-symbols-outlined">expand_less</span>
+          </div>
+          <div class="panel-body">
+            <div class="empty-state">
+              <div class="empty-illus">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+              </div>
+              <div class="empty-title">Add conditions</div>
+              <div class="empty-desc">
+                Chat with our Segmentation Agent to define conditions
+                <br/>
+                or manually <a data-action="go-configure">add conditions</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =============================================================
+           CONFIGURE STATE
+           ============================================================= -->
+      <div class="state-configure">
+        <div class="panel" id="panel-config">
+          <div class="panel-hdr" data-toggle-panel="panel-config">
+            <div class="panel-hdr-title">Conditions</div>
+            <span class="panel-hdr-chevron material-symbols-outlined">expand_less</span>
+          </div>
+          <div class="panel-body">
+            <div class="cond-rows" id="cond-rows">
+              <!-- first row -->
+              <div class="cond-row" data-cond-row>
+                <span class="cond-where">Where</span>
+                <div class="cond-select placeholder" data-field="attribute" tabindex="0">
+                  <span class="cond-select-label">Select</span>
+                  <span class="material-symbols-outlined">expand_more</span>
+                  <div class="dd-menu" data-dd="attribute">
+                    <div class="dd-item" data-value="Team" data-type="team">Team</div>
+                    <div class="dd-item" data-value="Locations" data-type="location">Locations</div>
+                    <div class="dd-item" data-value="Location groups" data-type="location_group">Location groups</div>
+                    <div class="dd-item" data-value="Users" data-type="user">Users</div>
+                    <div class="dd-item" data-value="Agents" data-type="agent">Agents</div>
+                  </div>
+                </div>
+                <div class="cond-select narrow" data-field="operator" tabindex="0">
+                  <span class="cond-select-label">is</span>
+                  <span class="material-symbols-outlined">expand_more</span>
+                  <div class="dd-menu" data-dd="operator">
+                    <div class="dd-item" data-value="is">is</div>
+                    <div class="dd-item" data-value="is not">is not</div>
+                    <div class="dd-item" data-value="is any of">is any of</div>
+                    <div class="dd-item" data-value="is none of">is none of</div>
+                  </div>
+                </div>
+                <div class="cond-select placeholder" data-field="value" tabindex="0" style="min-width:260px">
+                  <span class="cond-select-label">Select value</span>
+                  <span class="material-symbols-outlined">expand_more</span>
+                  <!-- populated dynamically -->
+                  <div class="dd-menu" data-dd="value"></div>
+                </div>
+                <button class="cond-remove" data-remove-row title="Remove">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </div>
+
+            <button class="cond-add" data-add-row>
+              <span class="material-symbols-outlined">add_circle</span>
+              Add condition
+              <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
+            </button>
+
+            <div class="cond-footer">
+              <button class="btn btn-primary" id="apply-btn" data-action="apply" disabled>Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =============================================================
+           ASSIGNED STATE — Outcomes table (Figma node 1:35283)
+           Columns: Allottee · Credits per outcome · Outcome generated
+                    · Total credits used · Projected credits · Avg monthly outcome
+           ============================================================= -->
+      <div class="state-assigned">
+        <div class="table-wrap">
+          <table class="outcomes-table">
+            <thead>
+              <tr>
+                <th>
+                  <span class="th-inner">Allottee
+                    <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </span>
+                </th>
+                <th class="num">
+                  <span class="th-inner">Outcome generated
+                    <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </span>
+                </th>
+                <th class="num sorted">
+                  <span class="th-inner">Total credits used
+                    <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></span>
+                  </span>
+                </th>
+                <th class="num">
+                  <span class="th-inner">Projected credits
+                    <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </span>
+                </th>
+                <th class="num">
+                  <span class="th-inner">Avg monthly outcome
+                    <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </span>
+                </th>
+                <th class="row-corner-th"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">North America</div>
+                    <div class="outcome-sub">Team</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">2,046</span>
+                  <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>8.4%</span>
+                </td>
+                <td class="num strong">51,150</td>
+                <td class="num">63,938</td>
+                <td class="num">2,046</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">EMEA</div>
+                    <div class="outcome-sub">Team</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">1,632</span>
+                  <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>4.2%</span>
+                </td>
+                <td class="num strong">40,800</td>
+                <td class="num">51,000</td>
+                <td class="num">1,632</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">720 Castro St</div>
+                    <div class="outcome-sub">Locations</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">1,485</span>
+                  <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>6.5%</span>
+                </td>
+                <td class="num strong">29,700</td>
+                <td class="num">37,125</td>
+                <td class="num">1,485</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">1 Market St</div>
+                    <div class="outcome-sub">Locations</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">1,286</span>
+                  <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>2.2%</span>
+                </td>
+                <td class="num strong">19,300</td>
+                <td class="num">24,125</td>
+                <td class="num">1,286</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">West Coast</div>
+                    <div class="outcome-sub">Location groups</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">2,100</span>
+                  <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>3.5%</span>
+                </td>
+                <td class="num strong">10,500</td>
+                <td class="num">13,125</td>
+                <td class="num">2,100</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">East Coast</div>
+                    <div class="outcome-sub">Location groups</div>
+                  </div>
+                </td>
+                <td class="num"><span class="oc-num">520</span></td>
+                <td class="num strong">5,200</td>
+                <td class="num">6,500</td>
+                <td class="num">520</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">Alex Chen</div>
+                    <div class="outcome-sub">Users</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">310</span>
+                  <span class="trend down"><span class="material-symbols-outlined">arrow_downward</span>3.5%</span>
+                </td>
+                <td class="num strong">3,100</td>
+                <td class="num">3,875</td>
+                <td class="num">310</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">Priya Ramesh</div>
+                    <div class="outcome-sub">Users</div>
+                  </div>
+                </td>
+                <td class="num">
+                  <span class="oc-num">95</span>
+                  <span class="trend down"><span class="material-symbols-outlined">arrow_downward</span>2.8%</span>
+                </td>
+                <td class="num strong">1,900</td>
+                <td class="num">2,375</td>
+                <td class="num">95</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="outcome">
+                    <div class="outcome-name">Review Generation Agent</div>
+                    <div class="outcome-sub">Agents</div>
+                  </div>
+                </td>
+                <td class="num"><span class="oc-num">70</span></td>
+                <td class="num strong">1,050</td>
+                <td class="num">1,313</td>
+                <td class="num">70</td>
+                <td class="row-corner"><button class="row-insights" data-action="toast" data-msg="Opening insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+</div><!-- /body-wrap -->
+
+<div class="toast-stack" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── TOAST ─────────────────────────────────────────── */
+  function toast(msg){
+    var stack = document.getElementById('toasts');
+    var el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span></span>';
+    el.lastChild.textContent = msg;
+    stack.appendChild(el);
+    setTimeout(function(){
+      el.classList.add('leaving');
+      setTimeout(function(){ el.remove(); }, 150);
+    }, 2200);
+  }
+
+  /* ── STATE TOGGLE ──────────────────────────────────── */
+  function setState(state, over){
+    document.body.setAttribute('data-state', state);
+    document.body.classList.toggle('over', !!over);
+    document.querySelectorAll('[data-set-state]').forEach(function(b){
+      var match = b.dataset.setState === state && (!!over === (b.dataset.over === '1'));
+      b.classList.toggle('active', match);
+    });
+
+    // KPI numbers adjust for over state
+    var kpi2 = document.getElementById('kpi2-label');
+    var kpi2Num = document.getElementById('kpi2-num');
+    var kpi2Bar = document.getElementById('kpi2-bar');
+    var kpi2Pct = document.getElementById('kpi2-pct');
+    if(state === 'assigned' && over){
+      kpi2.classList.add('danger');
+      kpi2Num.textContent = '245,250';
+      kpi2Bar.style.width = '100%';
+      kpi2Bar.classList.remove('warn'); kpi2Bar.classList.add('danger');
+      kpi2Pct.textContent = '109.4% usage estimated';
+      kpi2Pct.classList.add('danger');
+      var kpi1Num = document.getElementById('kpi1-num');
+      kpi1Num.textContent = '141,196';
+    } else {
+      kpi2.classList.remove('danger');
+      kpi2Num.textContent = '158,940';
+      kpi2Bar.style.width = '70.6%';
+      kpi2Bar.classList.remove('danger','warn');
+      kpi2Pct.textContent = '70.6% usage estimated';
+      kpi2Pct.classList.remove('danger');
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var pill = e.target.closest('[data-set-state]');
+    if(pill){
+      setState(pill.dataset.setState, pill.dataset.over === '1');
+    }
+  });
+
+  /* ── SIDEBAR GROUP TOGGLE ──────────────────────────── */
+  document.querySelectorAll('.sb-group-body').forEach(function(body){
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+  document.querySelectorAll('[data-toggle-group]').forEach(function(hdr){
+    hdr.addEventListener('click', function(){
+      var group = hdr.closest('.sb-group');
+      var body = group.querySelector('.sb-group-body');
+      if(group.classList.contains('collapsed')){
+        group.classList.remove('collapsed');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      } else {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        requestAnimationFrame(function(){ group.classList.add('collapsed'); });
+      }
+    });
+  });
+
+  /* ── PANEL COLLAPSE ────────────────────────────────── */
+  document.addEventListener('click', function(e){
+    var hdr = e.target.closest('[data-toggle-panel]');
+    if(hdr){
+      var panel = hdr.closest('.panel');
+      panel.classList.toggle('collapsed');
+    }
+  });
+
+  /* ── DROPDOWNS inside condition rows ──────────────── */
+  var VALUE_OPTIONS = {
+    team: [
+      { label:'North America', sub:'24 members' },
+      { label:'EMEA',          sub:'18 members' },
+      { label:'APAC',          sub:'12 members' },
+      { label:'LATAM',         sub:'6 members'  }
+    ],
+    location: [
+      { label:'720 Castro St',        sub:'Mountain View, CA'  },
+      { label:'1 Market St',          sub:'San Francisco, CA'  },
+      { label:'500 Brickell Ave',     sub:'Miami, FL'          },
+      { label:'350 5th Ave',          sub:'New York, NY'       },
+      { label:'2100 Ross Ave',        sub:'Dallas, TX'         }
+    ],
+    location_group: [
+      { label:'West Coast',    sub:'12 locations' },
+      { label:'East Coast',    sub:'9 locations'  },
+      { label:'Midwest',       sub:'6 locations'  },
+      { label:'International', sub:'4 locations'  }
+    ],
+    user: [
+      { label:'Alex Chen',     sub:'alex.chen@acme.com'     },
+      { label:'Priya Ramesh',  sub:'priya.r@acme.com'       },
+      { label:'Jordan Smith',  sub:'jordan.s@acme.com'      },
+      { label:'Morgan Lee',    sub:'morgan.l@acme.com'      }
+    ],
+    agent: [
+      { label:'Review Generation Agent', sub:'Reviews' },
+      { label:'Review Response Agent',   sub:'Reviews' },
+      { label:'Social Publishing Agent', sub:'Social' },
+      { label:'Segmentation Agent',      sub:'Marketing automation' },
+      { label:'Listings Optimization',   sub:'Listing' }
+    ]
+  };
+
+  function closeAllDropdowns(){
+    document.querySelectorAll('.dd-menu.open').forEach(function(m){ m.classList.remove('open'); });
+    document.querySelectorAll('.cond-select.open').forEach(function(s){ s.classList.remove('open'); });
+  }
+
+  function populateValueMenu(row){
+    var attr = row.querySelector('[data-field="attribute"]');
+    var val  = row.querySelector('[data-field="value"]');
+    var menu = val.querySelector('.dd-menu');
+    var type = attr.dataset.type;
+    menu.innerHTML = '';
+    if(!type){
+      var empty = document.createElement('div');
+      empty.className = 'dd-item';
+      empty.style.color = 'var(--ds-color-text-muted)';
+      empty.textContent = 'Pick an attribute first';
+      menu.appendChild(empty);
+      return;
+    }
+    VALUE_OPTIONS[type].forEach(function(opt){
+      var it = document.createElement('div');
+      it.className = 'dd-item';
+      it.dataset.value = opt.label;
+      it.innerHTML = '<span>' + opt.label + '</span>'
+        + (opt.sub ? '<span class="dd-item-sub">' + opt.sub + '</span>' : '');
+      menu.appendChild(it);
+    });
+  }
+
+  function evaluateApplyState(){
+    var btn = document.getElementById('apply-btn');
+    if(!btn) return;
+    var rows = document.querySelectorAll('#cond-rows .cond-row');
+    var ok = rows.length > 0 && Array.from(rows).every(function(r){
+      return r.querySelector('[data-field="attribute"]').dataset.value
+          && r.querySelector('[data-field="value"]').dataset.value;
+    });
+    btn.disabled = !ok;
+  }
+
+  document.addEventListener('click', function(e){
+    var sel = e.target.closest('.cond-select');
+    var itm = e.target.closest('.dd-item');
+
+    if(itm){
+      var sSel = itm.closest('.cond-select');
+      var field = sSel.dataset.field;
+      sSel.dataset.value = itm.dataset.value;
+      sSel.querySelector('.cond-select-label').textContent = itm.dataset.value;
+      sSel.classList.remove('placeholder');
+      if(field === 'attribute'){
+        sSel.dataset.type = itm.dataset.type;
+        var row = sSel.closest('.cond-row');
+        var valSel = row.querySelector('[data-field="value"]');
+        valSel.dataset.value = '';
+        valSel.querySelector('.cond-select-label').textContent = 'Select value';
+        valSel.classList.add('placeholder');
+        populateValueMenu(row);
+      }
+      closeAllDropdowns();
+      evaluateApplyState();
+      return;
+    }
+
+    if(sel){
+      var menu = sel.querySelector('.dd-menu');
+      var wasOpen = menu.classList.contains('open');
+      closeAllDropdowns();
+      if(!wasOpen){
+        if(sel.dataset.field === 'value') populateValueMenu(sel.closest('.cond-row'));
+        menu.classList.add('open');
+        sel.classList.add('open');
+      }
+      e.stopPropagation();
+      return;
+    }
+
+    if(!e.target.closest('.dd-menu')) closeAllDropdowns();
+  });
+
+  /* ── Add / Remove condition rows ───────────────────── */
+  function buildRow(){
+    var tpl = document.querySelector('#cond-rows .cond-row');
+    var clone = tpl.cloneNode(true);
+    // reset state on clone
+    clone.querySelectorAll('[data-field]').forEach(function(sel){
+      sel.dataset.value = '';
+      delete sel.dataset.type;
+      sel.classList.add('placeholder');
+      sel.classList.remove('open');
+      var label = sel.querySelector('.cond-select-label');
+      if(sel.dataset.field === 'attribute') label.textContent = 'Select';
+      else if(sel.dataset.field === 'operator'){
+        sel.dataset.value = 'is';
+        sel.classList.remove('placeholder');
+        label.textContent = 'is';
+      } else label.textContent = 'Select value';
+      var menu = sel.querySelector('.dd-menu');
+      menu.classList.remove('open');
+      if(sel.dataset.field === 'value') menu.innerHTML = '';
+    });
+    return clone;
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-add-row]')){
+      document.getElementById('cond-rows').appendChild(buildRow());
+      evaluateApplyState();
+    }
+    var rm = e.target.closest('[data-remove-row]');
+    if(rm){
+      var rows = document.querySelectorAll('#cond-rows .cond-row');
+      if(rows.length > 1){
+        rm.closest('.cond-row').remove();
+      } else {
+        // keep the row but reset values
+        var r = rm.closest('.cond-row');
+        r.querySelectorAll('[data-field]').forEach(function(sel){
+          sel.dataset.value = '';
+          delete sel.dataset.type;
+          sel.classList.add('placeholder');
+          var label = sel.querySelector('.cond-select-label');
+          if(sel.dataset.field === 'attribute') label.textContent = 'Select';
+          else if(sel.dataset.field === 'operator'){
+            sel.dataset.value = 'is';
+            sel.classList.remove('placeholder');
+            label.textContent = 'is';
+          } else label.textContent = 'Select value';
+          var menu = sel.querySelector('.dd-menu');
+          if(sel.dataset.field === 'value') menu.innerHTML = '';
+        });
+      }
+      evaluateApplyState();
+    }
+  });
+
+  /* ── ACTION ROUTER ─────────────────────────────────── */
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-action]');
+    if(!el) return;
+    var action = el.dataset.action;
+    switch(action){
+      case 'toast':
+        toast(el.dataset.msg || 'Done');
+        break;
+      case 'go-configure':
+        setState('configure', false);
+        break;
+      case 'apply': {
+        var btn = document.getElementById('apply-btn');
+        if(btn.disabled) break;
+        setState('assigned', false);
+        toast('Allotment created');
+        break;
+      }
+      case 'edit-conditions':
+        setState('configure', false);
+        break;
+    }
+  });
+
+  /* ── TABLE ROW SELECT ──────────────────────────────── */
+  document.addEventListener('click', function(e){
+    var row = e.target.closest('.outcomes-table tbody tr');
+    if(!row) return;
+    if(e.target.closest('.row-insights')) return;
+    var tbody = row.parentElement;
+    var wasSelected = row.classList.contains('selected');
+    tbody.querySelectorAll('tr.selected').forEach(function(r){ r.classList.remove('selected'); });
+    if(!wasSelected) row.classList.add('selected');
+  });
+
+  /* ── INITIAL ───────────────────────────────────────── */
+  evaluateApplyState();
+})();
+</script>
+</body>
+</html>
