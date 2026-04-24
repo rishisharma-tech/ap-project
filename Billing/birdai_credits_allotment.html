@@ -19,7 +19,6 @@
 <title>BirdAI credits — Allotment</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
 <link rel="stylesheet" href="../ds-tokens.css"/>
 <style>
@@ -180,7 +179,7 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
   display:flex;align-items:center;justify-content:space-between;
   padding:8px 10px 4px;
 }
-.proto-hdr-title{font-size:13px;font-weight:500}
+.proto-hdr-title{font-size:13px;font-weight:400}
 .proto-hdr-sub{font-size:11px;color:var(--ds-color-text-muted);padding:0 10px 8px}
 
 .proto-item{
@@ -244,7 +243,9 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
   font-size:var(--ds-font-size-lg);font-weight:var(--ds-font-weight-regular);
   line-height:26px;letter-spacing:-0.36px;color:var(--ds-color-text-primary);
 }
-.page-hdr-actions{display:flex;align-items:center;gap:var(--ds-space-2)}
+.page-hdr-actions{display:flex;align-items:center;gap:var(--ds-space-2);flex-wrap:wrap;justify-content:flex-end}
+/* Primary allotment CTA — hidden while already in the conditions builder */
+body[data-state="configure"] .page-hdr-cta{display:none}
 
 /* date picker button */
 .date-btn{
@@ -332,7 +333,7 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 .empty-illus .dot:nth-child(4){bottom:8px;right:12px}
 .empty-title{
   font-size:var(--ds-font-size-base);
-  font-weight:var(--ds-font-weight-medium);
+  font-weight:var(--ds-font-weight-regular);
   color:var(--ds-color-text-primary);
 }
 .empty-desc{
@@ -427,13 +428,19 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
   display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
   height:32px;
 }
-.btn-primary{background:var(--ds-color-blue-100);color:#fff;border-color:var(--ds-color-blue-100)}
-.btn-primary:hover{background:var(--ds-color-blue-dark);border-color:var(--ds-color-blue-dark)}
+.btn-primary{background:var(--ds-color-button-primary);color:var(--aero-gray-0);border-color:var(--ds-color-button-primary)}
+.btn-primary:hover{background:var(--ds-color-button-primary-hover);border-color:var(--ds-color-button-primary-hover)}
 .btn-primary:disabled{background:#cbd5e1;border-color:#cbd5e1;cursor:not-allowed;color:#fff}
 .btn-secondary{background:var(--ds-color-bg-surface);color:var(--ds-color-text-primary);border-color:#d1d5db}
 .btn-secondary:hover{background:var(--ds-color-bg-muted)}
 .btn-ghost{background:transparent;color:var(--ds-color-blue-100);border-color:transparent;padding:4px 6px}
 .btn-ghost:hover{background:var(--ds-color-bg-muted)}
+.btn.page-hdr-cta{
+  height:28px;
+  padding:0 12px;
+  font-size:var(--ds-font-size-sm);
+}
+.btn.page-hdr-cta .material-symbols-outlined{font-size:18px}
 
 /* ── TABLE ── */
 .section-head{
@@ -442,7 +449,7 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 }
 .section-title{
   font-size:var(--ds-font-size-md);
-  font-weight:var(--ds-font-weight-medium);
+  font-weight:var(--ds-font-weight-regular);
   color:var(--ds-color-text-primary);
 }
 .section-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
@@ -488,7 +495,7 @@ td.muted{color:var(--ds-color-text-secondary)}
   color:var(--ds-color-blue-100);
   display:flex;align-items:center;justify-content:center;
   font-size:var(--ds-font-size-sm);
-  font-weight:var(--ds-font-weight-medium);flex-shrink:0;
+  font-weight:var(--ds-font-weight-regular);flex-shrink:0;
 }
 .allottee-avatar.team{background:#e0f2fe;color:#0369a1}
 .allottee-avatar.agent{background:#f5e8ff;color:#7e22ce}
@@ -573,10 +580,6 @@ tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
   font-size:var(--ds-font-size-sm);
   color:var(--ds-color-text-muted);
   line-height:16px;margin-top:2px;letter-spacing:0;
-}
-.outcomes-table td.strong{
-  color:var(--ds-color-text-primary);
-  font-weight:var(--ds-font-weight-regular);
 }
 .oc-num{color:var(--ds-color-text-primary)}
 .outcomes-table td .trend{
@@ -708,6 +711,10 @@ body[data-state="assigned"]  .state-assigned{display:block}
           <h1 class="page-title">BirdAI credits used</h1>
         </div>
         <div class="page-hdr-actions">
+          <button type="button" class="btn btn-primary page-hdr-cta" data-action="go-configure" title="Who should receive credits">
+            <span class="material-symbols-outlined" aria-hidden="true">add</span>
+            Allot credits
+          </button>
           <button class="date-btn" data-action="toast" data-msg="Date range picker opened">
             <span>Dec 11, 2025 – Jan 10, 2026</span>
             <span class="material-symbols-outlined">expand_more</span>
@@ -905,7 +912,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">2,046</span>
                   <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>8.4%</span>
                 </td>
-                <td class="num strong">51,150</td>
+                <td class="num">51,150</td>
                 <td class="num">63,938</td>
                 <td class="num">2,046</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -921,7 +928,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">1,632</span>
                   <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>4.2%</span>
                 </td>
-                <td class="num strong">40,800</td>
+                <td class="num">40,800</td>
                 <td class="num">51,000</td>
                 <td class="num">1,632</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -937,7 +944,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">1,485</span>
                   <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>6.5%</span>
                 </td>
-                <td class="num strong">29,700</td>
+                <td class="num">29,700</td>
                 <td class="num">37,125</td>
                 <td class="num">1,485</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -953,7 +960,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">1,286</span>
                   <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>2.2%</span>
                 </td>
-                <td class="num strong">19,300</td>
+                <td class="num">19,300</td>
                 <td class="num">24,125</td>
                 <td class="num">1,286</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -969,7 +976,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">2,100</span>
                   <span class="trend up"><span class="material-symbols-outlined">arrow_upward</span>3.5%</span>
                 </td>
-                <td class="num strong">10,500</td>
+                <td class="num">10,500</td>
                 <td class="num">13,125</td>
                 <td class="num">2,100</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -982,7 +989,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   </div>
                 </td>
                 <td class="num"><span class="oc-num">520</span></td>
-                <td class="num strong">5,200</td>
+                <td class="num">5,200</td>
                 <td class="num">6,500</td>
                 <td class="num">520</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -998,7 +1005,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">310</span>
                   <span class="trend down"><span class="material-symbols-outlined">arrow_downward</span>3.5%</span>
                 </td>
-                <td class="num strong">3,100</td>
+                <td class="num">3,100</td>
                 <td class="num">3,875</td>
                 <td class="num">310</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -1014,7 +1021,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   <span class="oc-num">95</span>
                   <span class="trend down"><span class="material-symbols-outlined">arrow_downward</span>2.8%</span>
                 </td>
-                <td class="num strong">1,900</td>
+                <td class="num">1,900</td>
                 <td class="num">2,375</td>
                 <td class="num">95</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -1027,7 +1034,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                   </div>
                 </td>
                 <td class="num"><span class="oc-num">70</span></td>
-                <td class="num strong">1,050</td>
+                <td class="num">1,050</td>
                 <td class="num">1,313</td>
                 <td class="num">70</td>
                 <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
@@ -1355,10 +1362,12 @@ body[data-state="assigned"]  .state-assigned{display:block}
       case 'toast':
         toast(el.dataset.msg || 'Done');
         break;
-      case 'go-configure':
-        savePersisted({ returnTo: 'empty' });
+      case 'go-configure': {
+        var st = document.body.getAttribute('data-state') || 'empty';
+        savePersisted({ returnTo: st === 'assigned' ? 'assigned' : 'empty' });
         setState('configure');
         break;
+      }
       case 'cancel-configure': {
         var persisted = loadPersisted();
         var returnTo = persisted.returnTo || 'empty';

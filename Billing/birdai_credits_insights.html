@@ -8,7 +8,9 @@
   - Summary card  (5 stats: New reviews, Avg monthly reviews, Credits per review,
                    Credits used, Projected credits usage)
   - Combo chart   (blue bars for New reviews + navy line with pills for Credits used)
-  - Horizontal bar chart (New reviews across locations, with credits pills)
+  - Credit mix dashboard: work-type matrix (share, outcomes, credits/outcome) + stacked
+    composition bar — answers “where are credits going?” for admins; locations removed
+    as low-signal for credit policy.
 -->
 <html lang="en">
 <head>
@@ -17,14 +19,13 @@
 <title>BirdAI credits — Insights</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
 <link rel="stylesheet" href="../ds-tokens.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:var(--ds-font-family,'Roboto',sans-serif);
+  font-family:var(--ds-font-family);
   background:var(--ds-color-bg-subtle);
   height:100vh;overflow:hidden;
   color:var(--ds-color-text-primary);
@@ -136,7 +137,7 @@ body{
 }
 .proto-launcher.open .proto-panel{display:block}
 .proto-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 10px 4px}
-.proto-hdr-title{font-size:13px;font-weight:500}
+.proto-hdr-title{font-size:13px;font-weight:400}
 .proto-hdr-sub{font-size:11px;color:var(--ds-color-text-muted);padding:0 10px 8px}
 .proto-item{
   display:flex;align-items:flex-start;gap:10px;padding:8px 10px;
@@ -223,7 +224,7 @@ body{
 .card-right{display:flex;align-items:center;gap:8px}
 
 .range-btn{
-  font-family:'Roboto',sans-serif;font-size:12px;color:#555;
+  font-family:var(--ds-font-family);font-size:12px;color:#555;
   background:#fff;border:1px solid var(--ds-color-border);
   border-radius:4px;padding:4px 10px;cursor:pointer;white-space:nowrap;
   display:inline-flex;align-items:center;gap:4px;
@@ -262,26 +263,108 @@ body{
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
 .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ── LOCATIONS CHART ── */
-.loc-head{display:flex;flex-direction:column;gap:2px;margin-bottom:16px}
-.loc-head-num{font-size:24px;font-weight:400;color:var(--ds-color-text-primary);letter-spacing:-0.4px}
-.loc-head-label{font-size:12px;color:var(--ds-color-text-muted)}
+/* ── CREDIT USAGE DASHBOARD (work type) ── */
+.usage-dash-sub{
+  font-size:12px;color:var(--ds-color-text-muted);
+  line-height:18px;margin:-8px 0 20px;
+  max-width:820px;
+  font-weight:400;
+}
+/* Body blurb: never render as bold (stale markup / extensions) */
+.usage-dash-sub strong,
+.usage-dash-sub b{font-weight:400;color:inherit}
 
-.loc-chart-wrap{
+.usage-insights{
   display:grid;
-  grid-template-columns:minmax(0, 1fr) 72px;
-  gap:12px;align-items:stretch;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:12px;
+  margin-bottom:20px;
 }
-.loc-chart-box{position:relative;height:440px;width:100%}
-.loc-pills{
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding:22px 0;gap:4px;
+@media (max-width: 900px){
+  .usage-insights{grid-template-columns:1fr}
 }
-.loc-pill{
-  align-self:flex-end;
-  background:#2C3E91;color:#fff;
-  font-size:12px;font-weight:400;line-height:18px;
-  padding:2px 10px;border-radius:25px;white-space:nowrap;
+.usage-insight{
+  background:var(--ds-color-bg-muted,#f2f4f7);
+  border:1px solid var(--ds-color-border);
+  border-radius:6px;
+  padding:12px 14px;
+  min-width:0;
+}
+.usage-insight-label{
+  font-size:11px;color:var(--ds-color-text-muted);
+  line-height:14px;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+  margin-bottom:4px;
+}
+.usage-insight-val{
+  font-size:15px;font-weight:400;
+  color:var(--ds-color-text-primary);
+  line-height:1.35;
+  letter-spacing:-0.2px;
+}
+.usage-insight-hint{
+  font-size:11px;color:var(--ds-color-text-muted);
+  margin-top:6px;line-height:14px;
+}
+
+.usage-mix-chart-wrap{
+  position:relative;
+  height:100px;
+  width:100%;
+  margin-bottom:8px;
+}
+
+.usage-mix-table-wrap{overflow-x:auto}
+.usage-mix-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+.usage-mix-table th{
+  text-align:left;
+  padding:10px 12px 10px 0;
+  font-weight:400;
+  font-size:12px;
+  color:var(--ds-color-text-secondary);
+  border-bottom:1px solid var(--ds-color-border);
+  white-space:nowrap;
+}
+.usage-mix-table th.num{text-align:right;padding-left:12px}
+.usage-mix-table td{
+  padding:12px 12px 12px 0;
+  border-bottom:1px solid #f0f0f0;
+  vertical-align:middle;
+  color:var(--ds-color-text-primary);
+}
+.usage-mix-table tr:last-child td{border-bottom:none}
+.usage-mix-table .num{
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.work-type-name{font-weight:400}
+.work-type-desc{
+  display:block;
+  font-size:11px;
+  color:var(--ds-color-text-muted);
+  font-weight:400;
+  margin-top:2px;
+  max-width:360px;
+}
+.share-wrap{min-width:120px;max-width:200px}
+.share-bar{
+  height:6px;
+  border-radius:3px;
+  background:rgb(229,233,240);
+  overflow:hidden;
+  margin-top:2px;
+}
+.share-bar > span{
+  display:block;
+  height:100%;
+  background:var(--ds-color-blue-primary);
+  border-radius:3px;
 }
 
 </style>
@@ -447,12 +530,16 @@ body{
         </div>
       </div>
 
-      <!-- Reviews across locations -->
-      <div class="card">
+      <!--
+        Credit policy view (vs. ops location list):
+        Admins need (1) where spend concentrates — by capability/work type,
+        (2) efficiency — credits per outcome, (3) dependency risk — top-2 concentration.
+      -->
+      <div class="card" id="usage-mix-card">
         <div class="card-header">
           <span class="card-title">
-            New reviews across locations
-            <span class="info-icon" title="Breakdown of reviews by location"><span class="material-symbols-outlined">info</span></span>
+            Credit usage by work type
+            <span class="info-icon" title="For this allottee: how credits are split across BirdAI work types, with outcomes and efficiency. Use it to see cost drivers, compare surfaces, and plan enablement."><span class="material-symbols-outlined">info</span></span>
           </span>
           <div class="card-right">
             <button class="range-btn">Last 6 months <span class="material-symbols-outlined">expand_more</span></button>
@@ -461,19 +548,32 @@ body{
             </div>
           </div>
         </div>
-        <div class="loc-head">
-          <div class="loc-head-num">45</div>
-          <div class="loc-head-label">Locations</div>
+        <p class="usage-dash-sub">
+          Location lists answer where in the org tree work happens. For credit governance, admins usually need to see
+          which capabilities consume the pool, how that mix concentrates, and which surfaces are lean or expensive in credits per outcome.
+          That supports training teams, tuning rollouts, and defending budget.
+        </p>
+        <div class="usage-insights" id="usage-insights-strip">
+          <!-- filled by script -->
         </div>
-        <div class="loc-chart-wrap">
-          <div class="loc-chart-box">
-            <canvas id="locationChart"></canvas>
-          </div>
-          <div class="loc-pills" id="locPills"></div>
+        <div class="usage-mix-chart-wrap">
+          <canvas id="usageMixChart" aria-label="Share of credits by work type"></canvas>
         </div>
-        <div class="chart-legend" style="margin-top:16px">
-          <div class="legend-item"><div class="legend-dot" style="background:#1976D2"></div>Reviews</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#2C3E91"></div>Credits used</div>
+        <div class="usage-mix-table-wrap">
+          <table class="usage-mix-table">
+            <thead>
+              <tr>
+                <th>Work type</th>
+                <th class="num">Credits</th>
+                <th>Share of credits</th>
+                <th class="num">Outcomes</th>
+                <th class="num">Credits / outcome</th>
+              </tr>
+            </thead>
+            <tbody id="usage-matrix-tbody">
+              <!-- filled by script -->
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -549,7 +649,7 @@ body{
       if(!meta || meta.hidden) return;
       var ctx = chart.ctx;
       ctx.save();
-      ctx.font = '500 12px Roboto, sans-serif';
+      ctx.font = '400 12px Poppins, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       meta.data.forEach(function(pt, i){
@@ -589,7 +689,7 @@ body{
       if(!meta || meta.hidden) return;
       var ctx = chart.ctx;
       ctx.save();
-      ctx.font = '400 11px Roboto, sans-serif';
+      ctx.font = '400 11px Poppins, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillStyle = '#555';
@@ -653,7 +753,7 @@ body{
         x: {
           grid: { display: false },
           ticks: {
-            font: { family:'Roboto', size: 11 },
+            font: { family:'Poppins', size: 11 },
             color: '#8f8f8f',
             callback: function(v){
               var raw = this.getLabelForValue(v);
@@ -681,93 +781,149 @@ body{
     plugins: [pillPlugin, barLabelsPlugin]
   });
 
-  /* ── Locations chart (horizontal bar) ─────────────────── */
-  var locLabels = [
-    '1003 - Torrance - Rolling Hills',
-    '1016 - Cabazon',
-    '1010 - Southgate - Azalea',
-    'Pasadena - Colorado',
-    '1013 - Central styles Indianapolis, …',
-    '1019 - Laguna Niguel',
-    'Southgate - UCSB',
-    'Brookfields - Brownstone',
-    'Cabazon',
-    '1009 - Pennsylvania',
-    'Chicago'
+  /* ── Work-type credit mix (admin dashboard) ──────────── */
+  /* Totals match Summary card "Credits used" (51,150) for this prototype allottee. */
+  var WORK_TYPE_USAGE = [
+    { key: 'reviews',  name: 'Review generation',     desc: 'New or refreshed review content',   credits: 18200, outcomes: 728 },
+    { key: 'listings', name: 'Listings & SEO scan',   desc: 'Listing and SEO optimization runs',  credits: 12400, outcomes: 412 },
+    { key: 'aeo',      name: 'AEO & prompts',         desc: 'AI search / prompt-driven responses',credits:  9400, outcomes: 1050 },
+    { key: 'agents',   name: 'Agent automation',      desc: 'BirdAI agent workflows and handoffs', credits:  6800, outcomes: 240 },
+    { key: 'export',   name: 'Reports & exports',     desc: 'Bulk exports, scheduled reports',   credits:  4350, outcomes: 87 }
   ];
-  var locReviews = [845, 812, 633, 487, 412, 398, 367, 347, 312, 288, 256];
-  var locCredits = [21200, 20300, 15800, 12700, 10300, 9500, 9100, 8600, 7800, 7200, 6400];
+  var MIX_COLORS = ['#1976D2', '#1E6BB8', '#2C3E91', '#5B7A9D', '#8FA4BC'];
 
-  var locBarLabelsPlugin = {
-    id: 'locBarLabels',
-    afterDatasetsDraw: function(chart){
-      var meta = chart.getDatasetMeta(0);
-      if(!meta || meta.hidden) return;
-      var ctx = chart.ctx;
-      ctx.save();
-      ctx.font = '400 11px Roboto, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#555';
-      meta.data.forEach(function(bar, i){
-        if(!bar) return;
-        var raw = chart.data.datasets[0].data[i];
-        ctx.fillText(String(raw), bar.x + 6, bar.y);
-      });
-      ctx.restore();
-    }
-  };
+  var totalMix = WORK_TYPE_USAGE.reduce(function(s, r){ return s + r.credits; }, 0);
+  var rowsWithEff = WORK_TYPE_USAGE.map(function(r){
+    var pct = (r.credits / totalMix) * 100;
+    var cpe = r.outcomes ? r.credits / r.outcomes : 0;
+    return {
+      name: r.name, desc: r.desc, credits: r.credits, outcomes: r.outcomes,
+      pct: pct, cpe: cpe
+    };
+  });
+  var largest = rowsWithEff.reduce(function(a, b){ return a.pct >= b.pct ? a : b; });
+  var mostEfficient = rowsWithEff.reduce(function(a, b){
+    return a.cpe <= b.cpe ? a : b;
+  });
+  var top2 = rowsWithEff.slice().sort(function(a, b){ return b.credits - a.credits; }).slice(0, 2);
+  var top2Share = (top2[0].credits + top2[1].credits) / totalMix * 100;
 
-  var locationCtx = document.getElementById('locationChart').getContext('2d');
-  new Chart(locationCtx, {
+  var strip = document.getElementById('usage-insights-strip');
+  strip.innerHTML = ''
+    + '<div class="usage-insight">'
+    +   '<div class="usage-insight-label">Largest cost driver</div>'
+    +   '<div class="usage-insight-val">' + largest.name + '</div>'
+    +   '<div class="usage-insight-hint">' + largest.pct.toFixed(1) + '% of credits in this period</div>'
+    + '</div>'
+    + '<div class="usage-insight">'
+    +   '<div class="usage-insight-label">Most credits-efficient</div>'
+    +   '<div class="usage-insight-val">' + mostEfficient.name + '</div>'
+    +   '<div class="usage-insight-hint">≈ ' + mostEfficient.cpe.toFixed(1) + ' credits per outcome (lower is leaner for comparable work)</div>'
+    + '</div>'
+    + '<div class="usage-insight">'
+    +   '<div class="usage-insight-label">Concentration risk</div>'
+    +   '<div class="usage-insight-val">Top 2 work types = ' + top2Share.toFixed(0) + '%</div>'
+    +   '<div class="usage-insight-hint">High share in few surfaces means changes there swing spend quickly</div>'
+    + '</div>';
+
+  var tbody = document.getElementById('usage-matrix-tbody');
+  rowsWithEff.forEach(function(row, i){
+    var tr = document.createElement('tr');
+    var pctW = row.pct;
+    tr.innerHTML = ''
+      + '<td>'
+      +   '<span class="work-type-name"></span>'
+      +   '<span class="work-type-desc"></span>'
+      + '</td>'
+      + '<td class="num" data-credits></td>'
+      + '<td class="share-wrap">'
+      +   '<span class="usage-pct-label"></span>'
+      +   '<div class="share-bar" role="img" aria-label="Share bar"><span></span></div>'
+      + '</td>'
+      + '<td class="num" data-outcomes></td>'
+      + '<td class="num" data-cpe></td>';
+    tr.querySelector('.work-type-name').textContent = row.name;
+    tr.querySelector('.work-type-desc').textContent = row.desc;
+    tr.querySelector('[data-credits]').textContent = row.credits.toLocaleString();
+    tr.querySelector('[data-outcomes]').textContent = row.outcomes.toLocaleString();
+    tr.querySelector('[data-cpe]').textContent = row.cpe.toFixed(1);
+    var pctLabel = tr.querySelector('.usage-pct-label');
+    pctLabel.textContent = row.pct.toFixed(1) + '%';
+    pctLabel.style.cssText = 'font-size:12px;color:var(--ds-color-text-secondary)';
+    tr.querySelector('.share-bar span').style.width = Math.min(100, pctW) + '%';
+    tr.querySelector('.share-bar span').style.background = MIX_COLORS[i % MIX_COLORS.length];
+    tbody.appendChild(tr);
+  });
+
+  var mixCtx = document.getElementById('usageMixChart').getContext('2d');
+  new Chart(mixCtx, {
     type: 'bar',
     data: {
-      labels: locLabels,
-      datasets: [{
-        label: 'Reviews',
-        data: locReviews,
-        backgroundColor: '#1976D2',
-        borderRadius: 2,
-        barThickness: 14,
-      }]
+      labels: ['All credits in period'],
+      datasets: WORK_TYPE_USAGE.map(function(r, i){
+        var pct = (r.credits / totalMix) * 100;
+        return {
+          label: r.name + ' (' + pct.toFixed(0) + '%)',
+          data: [r.credits],
+          backgroundColor: MIX_COLORS[i % MIX_COLORS.length],
+          borderWidth: 0,
+          borderRadius: 2
+        };
+      })
     },
     options: {
       indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
-      layout: { padding: { right: 40 } },
+      layout: { padding: { left: 0, right: 8, top: 4, bottom: 0 } },
       plugins: {
-        legend: { display: false },
+        legend: {
+          position: 'bottom',
+          align: 'start',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'rect',
+            boxWidth: 8,
+            boxHeight: 8,
+            padding: 8,
+            font: { family: 'Poppins, sans-serif', size: 11 },
+            color: '#555'
+          }
+        },
         tooltip: {
           callbacks: {
-            label: function(ctx){ return 'Reviews: ' + ctx.parsed.x.toLocaleString(); }
+            label: function(ctx){
+              var v = ctx.parsed.x;
+              if(typeof v !== 'number') v = ctx.dataset.data[0];
+              var base = (ctx.dataset.label || '').split(' (')[0];
+              return base + ': ' + v.toLocaleString() + ' credits';
+            }
           }
         }
       },
       scales: {
         x: {
-          grid: { display: false },
-          ticks: { display: false },
+          stacked: true,
+          suggestedMax: totalMix,
+          grid: { display: true, color: 'rgba(0,0,0,0.06)' },
           border: { display: false },
-          beginAtZero: true
+          ticks: {
+            font: { family: 'Poppins, sans-serif', size: 11 },
+            color: '#8f8f8f',
+            callback: function(v){
+              if(v >= 1000) return (v / 1000) + 'K';
+              return v;
+            }
+          }
         },
         y: {
+          stacked: true,
+          display: false,
           grid: { display: false },
-          ticks: { font: { family: 'Roboto', size: 11 }, color: '#555' },
           border: { display: false }
         }
       }
-    },
-    plugins: [locBarLabelsPlugin]
-  });
-
-  /* ── Populate right-side credit pills ─────────────────── */
-  var pillsEl = document.getElementById('locPills');
-  locCredits.forEach(function(c){
-    var pill = document.createElement('div');
-    pill.className = 'loc-pill';
-    pill.textContent = (c/1000).toFixed(1) + 'K';
-    pillsEl.appendChild(pill);
+    }
   });
 
   /* ── Prototype-states launcher ─────────────────────── */

@@ -12,13 +12,12 @@
 <title>BirdAI credits — Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
 <link rel="stylesheet" href="../ds-tokens.css"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:var(--ds-font-family,'Roboto',sans-serif);
+  font-family:var(--ds-font-family);
   background:var(--ds-color-bg-subtle);color:var(--ds-color-text-primary);
   min-height:100vh;font-size:14px;line-height:20px;letter-spacing:-0.28px;
   -webkit-font-smoothing:antialiased;
@@ -55,7 +54,7 @@ body{
   box-shadow:0 2px 12px 1px rgba(33,33,33,0.06);
   padding:28px 32px;margin-bottom:40px;
 }
-.flow-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.flow-title{font-size:14px;font-weight:400;margin-bottom:4px}
 .flow-sub{font-size:12px;color:var(--ds-color-text-muted);margin-bottom:24px}
 .flow-row{
   display:flex;align-items:center;gap:0;flex-wrap:wrap;
@@ -69,7 +68,7 @@ body{
   transition:background 0.15s ease, border-color 0.15s ease;
 }
 .flow-node:hover{background:#EEF1F8;border-color:#C7D2E8}
-.flow-node-title{font-size:13px;color:var(--ds-color-text-primary);font-weight:500}
+.flow-node-title{font-size:13px;color:var(--ds-color-text-primary);font-weight:400}
 .flow-node-sub{font-size:11px;color:var(--ds-color-text-muted)}
 .flow-arrow{
   flex-shrink:0;width:28px;display:flex;align-items:center;justify-content:center;
@@ -78,7 +77,7 @@ body{
 .flow-arrow .material-symbols-outlined{font-size:18px}
 
 /* ── State grid ── */
-.section-title{font-size:14px;font-weight:500;margin:0 4px 12px}
+.section-title{font-size:14px;font-weight:400;margin:0 4px 12px}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
@@ -106,7 +105,7 @@ body{
 }
 .card-chip.ok{color:#067647;background:#DCFAE6}
 .card-chip.blue{color:var(--ds-color-blue-primary);background:#E5E9F1}
-.card-title{font-size:16px;font-weight:500;line-height:22px;margin-bottom:4px}
+.card-title{font-size:16px;font-weight:400;line-height:22px;margin-bottom:4px}
 .card-desc{font-size:13px;color:var(--ds-color-text-muted);line-height:18px;min-height:54px}
 .card-cta{
   display:inline-flex;align-items:center;gap:4px;
@@ -121,7 +120,7 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,0.04);
 }
 .mp-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.mp-title{font-size:11px;font-weight:500;color:var(--ds-color-text-primary);letter-spacing:-0.2px}
+.mp-title{font-size:11px;font-weight:400;color:var(--ds-color-text-primary);letter-spacing:-0.2px}
 .mp-hdr-dot{width:14px;height:14px;background:#eef1f8;border-radius:3px}
 .mp-kpi{
   border:1px solid #eef1f4;border-radius:4px;padding:8px;margin-bottom:6px;
@@ -326,7 +325,7 @@ body{
   <!-- Footer -->
   <div class="hub-foot">
     State is persisted in <code>localStorage</code>, so reloading or navigating between the allotment and insights pages keeps you in the same place.
-    Use the floating <strong>Prototype states</strong> pill inside either page to jump around, or come back to this hub anytime.
+    Use the floating Prototype states pill inside either page to jump around, or come back to this hub anytime.
   </div>
 
 </div>

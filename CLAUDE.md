@@ -1,5 +1,7 @@
 # Aero Design System — Project Rules
 
+**Canonical token reference:** [`RISHI-AERO-DS-TOKENS.md`](./RISHI-AERO-DS-TOKENS.md) (Elemental / Birdeye). Values are implemented in [`ds-tokens.css`](./ds-tokens.css) as `--aero-*` and legacy `--ds-*`. Prefer those variables over ad-hoc hex when building UI.
+
 Figma file key: `xecPAre4cKkeXEdvTig1oI`
 GitHub repo: `https://github.com/chamakalayilpaul-cyber/l4-nav` (branch: `L4-nav`)
 Preview: `https://chamakalayilpaul-cyber.github.io/l4-nav/L4/reviews_dashboard_v2.html`
@@ -10,42 +12,48 @@ Preview: `https://chamakalayilpaul-cyber.github.io/l4-nav/L4/reviews_dashboard_v
 
 - Plain HTML + CSS (no frameworks)
 - Chart.js bundled locally as `./chart.umd.min.js`
-- Google Fonts: Roboto + Material Symbols Outlined
-- DS tokens available in `./ds-tokens.css`
+- Google Fonts: **Poppins** (loaded in `ds-tokens.css` per RISHI) + Material Symbols Outlined in HTML
+- DS / Aero tokens: `./ds-tokens.css` (see `RISHI-AERO-DS-TOKENS.md`)
 
 ---
 
 ## Typography
 
-- Font family: `'Roboto', sans-serif`
-- Base size: `14px`
-- Page/section titles: `18px, weight 400`
-- Labels (uppercase): `12px, weight 600, letter-spacing 0.5px`
+- Font family: Poppins (primary UI, per RISHI) — `var(--aero-font-family)` / `var(--ds-font-family)` from `ds-tokens.css`
+- Base size: `14px` (`--aero-fs-14` / `--ds-font-size-base`)
+- Page/section titles: `18px`, weight `400`
+- Body and running copy: weight `400` only. Do not use bold for emphasis in paragraphs—no `<strong>`, `<b>`, or `font-weight` 600/700 in body text. Use hierarchy via size, spacing, or muted color (`--aero-gray-90`, etc.).
+- Uppercase labels: `12px`, weight `400`, `letter-spacing: 0.5px`, `text-transform: uppercase` where needed
 - Icons: Material Symbols Outlined, `20px`
 
 ```html
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"/>
+<link rel="stylesheet" href="../ds-tokens.css"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
 ```
+
+(Poppins is `@import`ed from `ds-tokens.css`; do not add a separate Roboto link.)
 
 ---
 
 ## Color Tokens
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| Page background | `rgb(242, 242, 242)` | `<body>` bg |
-| Surface | `#ffffff` | cards, panels, top nav |
-| Subtle bg | `#fafafa` | sidebar bg |
-| Hover bg | `rgb(242, 244, 247)` | hover states |
-| Primary blue | `rgb(25, 118, 210)` | active, links, primary actions |
-| Selected bg | `rgb(199, 214, 246)` | active nav/tab bg |
-| Rail bg | `rgb(229, 233, 240)` | L1 rail background |
-| Border | `rgb(234, 234, 234)` | component borders |
-| Text primary | `rgb(33, 33, 33)` | headings, body |
-| Text secondary | `rgb(85, 85, 85)` | inactive tabs |
-| Text muted | `rgb(143, 143, 143)` | placeholders, labels |
-| Icon default | `rgb(48, 48, 48)` | icon color |
+Use `var(--aero-gray-*)`, `var(--aero-blue-*)`, etc. from `ds-tokens.css`. Common legacy aliases:
+
+| Token | RISHI / CSS variable | Usage |
+|-------|----------------------|--------|
+| Page background | `--aero-gray-10` / `--ds-color-bg-page` | `<body>` bg |
+| Surface | `--aero-gray-0` / `--ds-color-bg-surface` | cards, panels, top nav |
+| Subtle bg | `--aero-gray-10` / `--ds-color-bg-subtle` | sidebar bg |
+| Hover bg | `--aero-gray-20` / `--ds-color-bg-muted` | hover states |
+| Primary blue (links) | `--aero-blue-100` / `--ds-color-blue-100` | active, links |
+| Primary button | `--aero-blue-200` / `--ds-color-button-primary` | filled CTAs; hover `--aero-blue-300` |
+| Selected bg | `--aero-blue-20` / `--ds-color-blue-selected` | active nav/tab bg |
+| Rail bg | `--aero-gray-2000` / `--ds-color-rail-bg` | L1 rail background |
+| Border default | `--aero-gray-50` / `--ds-color-border` | component borders |
+| Text primary | `--aero-gray-900` / `--ds-color-text-primary` | headings, body |
+| Text secondary | `--aero-gray-300` / `--ds-color-text-secondary` | inactive tabs |
+| Text muted | `--aero-gray-90` / `--ds-color-text-muted` | placeholders, labels |
+| Icon default | `--aero-gray-600` / `--ds-color-text-icon` | icon color |
 
 ---
 
