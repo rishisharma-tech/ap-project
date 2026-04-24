@@ -4,11 +4,10 @@
   Aero DS tokens + icons copied from billing_usage.html / billing_overview.html.
 
   States:
-  - Empty:        no allotment configured. Conditions panel shows the illustration
-                  + CTA to chat with Segmentation Agent or add conditions manually.
-  - Configure:    conditions builder for selecting teams / users / etc.
-  - Assigned:     allotment is live. Shows KPI cards + table of allottees. Clicking
-                  a row opens the Insights page (birdai_credits_insights.html).
+  - Empty:        no allotment configured. CTA opens the side drawer.
+  - Assigned:     KPI cards + allottee table. "Allot credits" / kebab open the drawer.
+  - Drawer:       Edit hydrates ribbon + plan pool from table + KPIs when a row matches;
+                  Edit hides Conditions. Add/Manage keep the conditions builder.
 
   Copy follows BIRDEYE-COPY-SKILL.md (sentence case, verb+noun CTAs, no "please").
 -->
@@ -244,8 +243,9 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
   line-height:26px;letter-spacing:-0.36px;color:var(--ds-color-text-primary);
 }
 .page-hdr-actions{display:flex;align-items:center;gap:var(--ds-space-2);flex-wrap:wrap;justify-content:flex-end}
-/* Primary allotment CTA — hidden while already in the conditions builder */
-body[data-state="configure"] .page-hdr-cta{display:none}
+/* Allotment CTA stays available; optional dim while drawer is open */
+body.allot-drawer-open .page-hdr-cta{opacity:0.45;pointer-events:none}
+body.allot-drawer-open .content{pointer-events:none}
 
 /* date picker button */
 .date-btn{
@@ -453,9 +453,14 @@ body[data-state="configure"] .page-hdr-cta{display:none}
   color:var(--ds-color-text-primary);
 }
 .section-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
+.allottee-table-hint{
+  font-size:12px;color:var(--ds-color-text-muted);
+  line-height:16px;
+  margin:0 0 10px 2px;max-width:52ch;
+}
 .table-wrap{
   background:var(--ds-color-bg-surface);
-  margin-top:var(--ds-space-5);
+  margin-top:0;
   overflow:hidden;
 }
 table{width:100%;border-collapse:collapse;table-layout:auto}
@@ -588,29 +593,282 @@ tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
 }
 .outcomes-table td .trend .material-symbols-outlined{font-size:12px}
 
-/* ── TOAST ── */
+/* ── TOAST (top center, light surface) ── */
 .toast-stack{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;gap:8px;z-index:60;pointer-events:none;
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;z-index:200;
+  pointer-events:none;
 }
 .toast{
-  background:rgb(33,33,33);color:#fff;
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  color:var(--ds-color-text-primary);
   padding:10px 16px;border-radius:var(--ds-radius-md);
   font-size:var(--ds-font-size-base);
-  box-shadow:0 8px 24px rgba(0,0,0,0.25);
-  display:flex;align-items:center;gap:8px;pointer-events:auto;
-  animation:toast-in 0.2s ease;max-width:480px;
+  box-shadow:0 4px 12px rgba(15,23,42,0.1);
+  display:flex;align-items:center;gap:10px;pointer-events:auto;
+  max-width:min(400px, calc(100vw - 32px));
+  animation:toast-in 0.2s ease;
 }
-.toast .material-symbols-outlined{font-size:18px;color:#86efac}
-@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast .material-symbols-outlined{
+  font-size:20px;color:var(--ds-color-success);
+  flex-shrink:0;
+}
+@keyframes toast-in{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .toast.leaving{animation:toast-out 0.15s ease forwards}
-@keyframes toast-out{to{opacity:0;transform:translateY(8px)}}
+@keyframes toast-out{to{opacity:0;transform:translateY(-8px)}}
 
 /* state visibility helpers */
-.state-empty,.state-configure,.state-assigned{display:none}
-body[data-state="empty"]    .state-empty{display:block}
-body[data-state="configure"] .state-configure{display:block}
-body[data-state="assigned"]  .state-assigned{display:block}
+.state-empty,.state-assigned{display:none}
+body[data-state="empty"]   .state-empty{display:block}
+body[data-state="assigned"] .state-assigned{display:block}
+
+/* ── ALLOTMENT DRAWER (Figma: manage allocation, 650px) ─ */
+.allot-drawer-backdrop{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(15,23,42,0.35);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 0.2s ease, visibility 0.2s;
+}
+body.allot-drawer-open .allot-drawer-backdrop{
+  opacity:1;visibility:visible;pointer-events:auto;
+}
+body.allot-drawer-open{overflow:hidden}
+.allot-drawer{
+  position:absolute;top:0;right:0;bottom:0;
+  width:min(650px, 100vw);
+  max-width:100%;
+  height:100%;
+  max-height:100dvh;
+  background:var(--ds-color-bg-surface);
+  border-left:1px solid var(--ds-color-border);
+  box-shadow:-12px 0 40px rgba(0,0,0,0.12);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+body.allot-drawer-open .allot-drawer{transform:translateX(0)}
+
+.allot-drawer-hdr{
+  flex-shrink:0;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:24px 24px 16px;
+  border-bottom:1px solid var(--ds-color-border);
+}
+.allot-drawer-hdr-left{
+  display:flex;align-items:flex-start;gap:8px;min-width:0;flex:1;
+}
+.allot-drawer-back{
+  width:36px;height:36px;flex-shrink:0;margin-top:2px;
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);
+  background:var(--ds-color-bg-surface);
+  color:var(--ds-color-text-secondary);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.allot-drawer-back:hover{background:var(--ds-color-bg-muted)}
+.allot-drawer-back .material-symbols-outlined{font-size:22px}
+.allot-drawer-hdr-text{min-width:0}
+.allot-drawer-title{
+  font-size:18px;
+  font-weight:var(--ds-font-weight-regular);
+  line-height:24px;letter-spacing:-0.3px;
+  color:var(--ds-color-text-primary);
+}
+.allot-drawer-sub{
+  font-size:13px;
+  color:var(--ds-color-text-muted);
+  line-height:18px;margin-top:4px;max-width:48ch;
+}
+.allot-drawer-hdr-right{
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+#save-allocation-btn{height:36px;padding:0 16px}
+.allot-drawer-close{
+  width:36px;height:36px;flex-shrink:0;
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);
+  background:var(--ds-color-bg-surface);
+  color:var(--ds-color-text-secondary);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.allot-drawer-close:hover{background:var(--ds-color-bg-muted)}
+.allot-drawer-close .material-symbols-outlined{font-size:20px}
+
+.allot-drawer-body{
+  flex:1;min-height:0;
+  overflow-x:hidden;overflow-y:auto;
+  padding:16px 24px 28px;
+  -webkit-overflow-scrolling:touch;
+}
+.allot-drawer-body::-webkit-scrollbar{width:6px}
+.allot-drawer-body::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+
+/* Boxed sections (spacing Figma) */
+.drawer-card{
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  padding:20px 20px 18px;
+  margin-bottom:16px;
+}
+.drawer-stat-dual{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;
+  align-items:end;
+}
+/* Credits summary: key figures + plan pool in one card */
+.drawer-credits-summary-title{
+  font-size:12px;letter-spacing:0.4px;text-transform:uppercase;
+  color:var(--ds-color-text-secondary);margin-bottom:16px;
+}
+.drawer-stat-row-summary{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;
+  padding:0 0 16px;margin:0 0 16px;
+  border-bottom:1px solid var(--ds-color-border);
+}
+.drawer-stat-col-summary{min-width:0;}
+.drawer-stat-tile-main{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.drawer-stat-value{
+  font-size:24px;letter-spacing:-0.4px;line-height:1.1;
+  color:var(--ds-color-text-primary);font-variant-numeric:tabular-nums;
+}
+.drawer-stat-label{
+  font-size:12px;color:var(--ds-color-text-secondary);
+  line-height:16px;
+}
+.drawer-pool-card-title{
+  font-size:12px;letter-spacing:0.4px;text-transform:uppercase;
+  color:var(--ds-color-text-secondary);margin-bottom:12px;
+}
+.drawer-pool-line{
+  height:4px;border-radius:2px;background:#e5e9f0;margin:0;overflow:hidden;
+}
+.drawer-pool-line > span{
+  display:block;height:100%;background:var(--ds-color-blue-100);border-radius:2px;
+  transition:width 0.2s ease;
+}
+.drawer-pool-note{
+  display:flex;flex-wrap:wrap;gap:6px 12px;
+  font-size:12px;color:var(--ds-color-text-muted);margin-top:10px;
+}
+.drawer-pool-note span{font-variant-numeric:tabular-nums}
+.drawer-card--form .drawer-field{margin-bottom:0}
+.drawer-card--form .drawer-field + .drawer-field{margin-top:16px}
+.drawer-field{
+  margin-bottom:0;
+}
+.drawer-label{
+  display:block;font-size:13px;
+  color:var(--ds-color-text-secondary);margin-bottom:6px;
+}
+.drawer-hint{
+  font-size:12px;color:var(--ds-color-text-muted);margin-top:4px;line-height:16px;
+}
+.drawer-input{
+  width:100%;height:36px;border:1px solid var(--ds-color-border-input);
+  border-radius:var(--ds-radius-sm);padding:0 12px;
+  font-size:14px;font-family:inherit;
+  color:var(--ds-color-text-primary);background:var(--ds-color-bg-surface);
+  box-sizing:border-box;
+}
+.drawer-input:focus{
+  border-color:var(--ds-color-blue-100);outline:none;
+  box-shadow:0 0 0 1px var(--ds-color-blue-100);
+}
+.drawer-seg{
+  display:flex;gap:0;border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);overflow:hidden;
+}
+.drawer-seg button{
+  flex:1;
+  font-family:inherit;font-size:13px;
+  padding:8px 12px;border:none;background:var(--ds-color-bg-surface);
+  color:var(--ds-color-text-secondary);cursor:pointer;
+  border-right:1px solid var(--ds-color-border);
+}
+.drawer-seg button:last-child{border-right:none}
+.drawer-seg button[aria-pressed="true"]{
+  background:var(--ds-color-blue-selected);
+  color:var(--ds-color-text-primary);
+}
+.drawer-card--cond{
+  padding-bottom:32px;
+}
+.drawer-cond-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:0 0 12px;
+  padding:0 0 10px;
+  border-bottom:1px solid var(--ds-color-border);
+}
+.drawer-cond-hdr .panel-hdr-title{
+  font-size:15px;
+}
+#allot-drawer .cond-rows{
+  display:flex;flex-direction:column;gap:10px;overflow:visible;
+}
+#allot-drawer .cond-row{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;row-gap:10px;
+}
+#allot-drawer .dd-menu{
+  z-index:5000;
+  max-width:min(300px, 85vw);
+}
+#allot-drawer .cond-select{min-width:0}
+#allot-drawer .cond-select:focus-visible{
+  outline:2px solid var(--ds-color-blue-100);
+  outline-offset:2px;
+}
+#allot-drawer .dd-item[tabindex="0"]{cursor:pointer}
+
+/* Context ribbon — edit / specific allottee (not shown for Add) */
+.drawer-context-ribbon{
+  background:var(--ds-color-bg-subtle);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  padding:14px 16px;
+  margin:0 0 16px;
+}
+.drawer-context-ribbon[hidden]{display:none !important}
+.dcr-top{
+  display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;
+  margin-bottom:12px;
+}
+.dcr-entity{
+  font-size:16px;line-height:22px;letter-spacing:-0.2px;
+  color:var(--ds-color-text-primary);
+}
+.dcr-type,.dcr-status{
+  font-size:11px;text-transform:uppercase;letter-spacing:0.4px;
+  padding:3px 8px;border-radius:20px;
+  line-height:14px;
+}
+.dcr-type{
+  background:#E5E9F1;color:var(--ds-color-text-secondary);
+}
+.dcr-status{
+  background:#DCFAE6;color:#067647;
+}
+.dcr-dl{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px;
+  font-size:12px;
+}
+.dcr-dl dt{
+  color:var(--ds-color-text-muted);
+  font-weight:var(--ds-font-weight-regular);
+  margin-bottom:2px;
+}
+.dcr-dl dd{
+  color:var(--ds-color-text-primary);
+  font-variant-numeric:tabular-nums;
+  margin:0;
+}
+@media (max-width:640px){
+  .dcr-dl{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body data-state="empty">
@@ -732,8 +990,8 @@ body[data-state="assigned"]  .state-assigned{display:block}
             </button>
             <div class="kebab-menu">
               <div class="kebab-item hidden-empty" data-action="edit-conditions">
-                <span class="material-symbols-outlined">tune</span>
-                <span>Edit conditions</span>
+                <span class="material-symbols-outlined">edit</span>
+                <span>Edit allotment</span>
               </div>
               <div class="kebab-item hidden-empty" data-action="export-csv">
                 <span class="material-symbols-outlined">download</span>
@@ -755,7 +1013,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
           <div class="kpi-label">Credits used</div>
           <div class="kpi-big">
             <span class="kpi-primary" id="kpi1-num">141,196</span>
-            <span class="kpi-secondary">/ 225,000</span>
+            <span class="kpi-secondary">/ <span id="kpi-pool-total">225,000</span></span>
           </div>
           <div class="kpi-bar-track">
             <div class="kpi-bar-fill" id="kpi1-bar" style="width:62.8%"></div>
@@ -767,7 +1025,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
           <div class="kpi-label" id="kpi2-label">Projected usage</div>
           <div class="kpi-big">
             <span class="kpi-primary" id="kpi2-num">158,940</span>
-            <span class="kpi-secondary">/ 225,000</span>
+            <span class="kpi-secondary">/ <span id="kpi2-pool-total">225,000</span></span>
           </div>
           <div class="kpi-bar-track">
             <div class="kpi-bar-fill" id="kpi2-bar" style="width:70.6%"></div>
@@ -801,66 +1059,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
         </div>
       </div>
 
-      <!-- =============================================================
-           CONFIGURE STATE
-           ============================================================= -->
-      <div class="state-configure">
-        <div class="panel" id="panel-config">
-          <div class="panel-hdr" data-toggle-panel="panel-config">
-            <div class="panel-hdr-title">Conditions</div>
-            <span class="panel-hdr-chevron material-symbols-outlined">expand_less</span>
-          </div>
-          <div class="panel-body">
-            <div class="cond-rows" id="cond-rows">
-              <!-- first row -->
-              <div class="cond-row" data-cond-row>
-                <span class="cond-where">Where</span>
-                <div class="cond-select placeholder" data-field="attribute" tabindex="0">
-                  <span class="cond-select-label">Select</span>
-                  <span class="material-symbols-outlined">expand_more</span>
-                  <div class="dd-menu" data-dd="attribute">
-                    <div class="dd-item" data-value="Team" data-type="team">Team</div>
-                    <div class="dd-item" data-value="Locations" data-type="location">Locations</div>
-                    <div class="dd-item" data-value="Location groups" data-type="location_group">Location groups</div>
-                    <div class="dd-item" data-value="Users" data-type="user">Users</div>
-                    <div class="dd-item" data-value="Agents" data-type="agent">Agents</div>
-                  </div>
-                </div>
-                <div class="cond-select narrow" data-field="operator" tabindex="0">
-                  <span class="cond-select-label">is</span>
-                  <span class="material-symbols-outlined">expand_more</span>
-                  <div class="dd-menu" data-dd="operator">
-                    <div class="dd-item" data-value="is">is</div>
-                    <div class="dd-item" data-value="is not">is not</div>
-                    <div class="dd-item" data-value="is any of">is any of</div>
-                    <div class="dd-item" data-value="is none of">is none of</div>
-                  </div>
-                </div>
-                <div class="cond-select placeholder" data-field="value" tabindex="0" style="min-width:260px">
-                  <span class="cond-select-label">Select value</span>
-                  <span class="material-symbols-outlined">expand_more</span>
-                  <!-- populated dynamically -->
-                  <div class="dd-menu" data-dd="value"></div>
-                </div>
-                <button class="cond-remove" data-remove-row title="Remove">
-                  <span class="material-symbols-outlined">delete</span>
-                </button>
-              </div>
-            </div>
-
-            <button class="cond-add" data-add-row>
-              <span class="material-symbols-outlined">add_circle</span>
-              Add condition
-              <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
-            </button>
-
-            <div class="cond-footer">
-              <button class="btn btn-secondary" data-action="cancel-configure">Cancel</button>
-              <button class="btn btn-primary" id="apply-btn" data-action="apply" disabled>Apply</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Configuration UI lives in #allot-drawer (side panel) -->
 
       <!-- =============================================================
            ASSIGNED STATE — Outcomes table (Figma node 1:35283)
@@ -868,6 +1067,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
                     · Total credits used · Projected credits · Avg monthly outcome
            ============================================================= -->
       <div class="state-assigned">
+        <p class="allottee-table-hint">Double-click a row to edit that allottee&rsquo;s allocation. Select a row first to use Edit in the list menu.</p>
         <div class="table-wrap">
           <table class="outcomes-table">
             <thead>
@@ -1049,6 +1249,142 @@ body[data-state="assigned"]  .state-assigned{display:block}
 
 </div><!-- /body-wrap -->
 
+<!-- Allotment side panel: pool + cap/resets + conditions -->
+<div class="allot-drawer-backdrop" id="allot-drawer-backdrop" aria-hidden="true">
+  <div class="allot-drawer" id="allot-drawer" role="dialog" aria-modal="true" aria-labelledby="allot-drawer-title" tabindex="-1" data-drawer-mode="manage">
+    <div class="allot-drawer-hdr">
+      <div class="allot-drawer-hdr-left">
+        <button type="button" class="allot-drawer-back" data-action="cancel-configure" title="Back">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+        </button>
+        <div class="allot-drawer-hdr-text">
+          <h2 class="allot-drawer-title" id="allot-drawer-title">Manage allocation</h2>
+          <p class="allot-drawer-sub" id="allot-drawer-sub">Use Save or Add to apply changes to this rule.</p>
+        </div>
+      </div>
+      <div class="allot-drawer-hdr-right">
+        <button type="button" class="btn btn-primary" id="apply-btn" data-action="apply" disabled>Save</button>
+        <button type="button" class="allot-drawer-close" data-action="cancel-configure" title="Close" aria-label="Close">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
+    </div>
+    <div class="allot-drawer-body" id="allot-drawer-body">
+
+      <div class="drawer-context-ribbon" id="drawer-context-ribbon" hidden>
+        <div class="dcr-top">
+          <span class="dcr-entity" id="dcr-entity">—</span>
+          <span class="dcr-type" id="dcr-type">—</span>
+          <span class="dcr-status" id="dcr-status">Active</span>
+        </div>
+        <dl class="dcr-dl" aria-label="Allottee context">
+          <div>
+            <dt>Total credits used</dt>
+            <dd id="dcr-used">—</dd>
+          </div>
+          <div>
+            <dt>Outcomes (period)</dt>
+            <dd id="dcr-outcomes">—</dd>
+          </div>
+          <div>
+            <dt>Projected credits</dt>
+            <dd id="dcr-projected">—</dd>
+          </div>
+          <div>
+            <dt>Opened from</dt>
+            <dd id="dcr-source">—</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="drawer-card drawer-card--credits-summary" role="region" aria-label="This cap in your plan">
+        <div class="drawer-credits-summary-title">This cap in your plan</div>
+        <div class="drawer-stat-row-summary" role="group" aria-label="Cap and available credits">
+          <div class="drawer-stat-col-summary" aria-label="Credits available after this cap">
+            <div class="drawer-stat-tile-main">
+              <div class="drawer-stat-value" id="drawer-stat-available">200,000</div>
+              <div class="drawer-stat-label">Credits available after this cap</div>
+            </div>
+          </div>
+          <div class="drawer-stat-col-summary" aria-label="Credit cap for this rule">
+            <div class="drawer-stat-tile-main">
+              <div class="drawer-stat-value" id="drawer-stat-allocated">25,000</div>
+              <div class="drawer-stat-label">Credit cap (this rule)</div>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-pool-line" aria-hidden="true" role="presentation"><span id="drawer-alloc-bar" style="width:11%"></span></div>
+        <div class="drawer-pool-note" id="drawer-pool-note">
+          <span>Total in plan: <span id="drawer-pool-total">225,000</span></span>
+          <span>Already in rules: <span id="drawer-pool-committed">141,196</span></span>
+          <span>Remaining: <span id="drawer-pool-available">83,804</span></span>
+        </div>
+      </div>
+
+      <div class="drawer-card drawer-card--form">
+        <div class="drawer-field">
+          <label class="drawer-label" for="drawer-credit-cap" id="drawer-cap-label">Credit cap for this rule</label>
+          <input type="text" class="drawer-input" id="drawer-credit-cap" inputmode="numeric" autocomplete="off" value="25,000" aria-describedby="drawer-cap-hint"/>
+          <p class="drawer-hint" id="drawer-cap-hint">Maximum credits this rule can consume per period, before conditions.</p>
+        </div>
+        <div class="drawer-field">
+          <span class="drawer-label">Resets</span>
+          <div class="drawer-seg" role="group" aria-label="Allotment reset">
+            <button type="button" id="drawer-reset-monthly" aria-pressed="true">Each billing period</button>
+            <button type="button" id="drawer-reset-once" aria-pressed="false">One-time</button>
+          </div>
+          <p class="drawer-hint">One-time allotments do not refill until you edit or remove them.</p>
+        </div>
+      </div>
+
+      <div class="drawer-card drawer-card--cond" id="drawer-conditions-box">
+        <div class="drawer-cond-hdr">
+          <div class="panel-hdr-title">Conditions</div>
+        </div>
+        <div class="cond-rows" id="cond-rows">
+          <div class="cond-row" data-cond-row>
+            <span class="cond-where">Where</span>
+            <div class="cond-select placeholder" data-field="attribute" tabindex="0">
+              <span class="cond-select-label">Select</span>
+              <span class="material-symbols-outlined">expand_more</span>
+              <div class="dd-menu" data-dd="attribute">
+                <div class="dd-item" data-value="Team" data-type="team">Team</div>
+                <div class="dd-item" data-value="Locations" data-type="location">Locations</div>
+                <div class="dd-item" data-value="Location groups" data-type="location_group">Location groups</div>
+                <div class="dd-item" data-value="Users" data-type="user">Users</div>
+                <div class="dd-item" data-value="Agents" data-type="agent">Agents</div>
+              </div>
+            </div>
+            <div class="cond-select narrow" data-field="operator" tabindex="0">
+              <span class="cond-select-label">is</span>
+              <span class="material-symbols-outlined">expand_more</span>
+              <div class="dd-menu" data-dd="operator">
+                <div class="dd-item" data-value="is">is</div>
+                <div class="dd-item" data-value="is not">is not</div>
+                <div class="dd-item" data-value="is any of">is any of</div>
+                <div class="dd-item" data-value="is none of">is none of</div>
+              </div>
+            </div>
+            <div class="cond-select placeholder" data-field="value" tabindex="0" style="min-width:200px;flex:1 1 200px;max-width:100%">
+              <span class="cond-select-label">Select value</span>
+              <span class="material-symbols-outlined">expand_more</span>
+              <div class="dd-menu" data-dd="value"></div>
+            </div>
+            <button type="button" class="cond-remove" data-remove-row title="Remove">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="cond-add" data-add-row>
+          <span class="material-symbols-outlined">add_circle</span>
+          Add condition
+          <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Floating prototype-states launcher -->
 <div class="proto-launcher" id="proto-launcher">
   <button class="proto-pill" data-proto-toggle title="Jump to any prototype state">
@@ -1109,7 +1445,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
   </div>
 </div>
 
-<div class="toast-stack" id="toasts" aria-live="polite"></div>
+<div class="toast-stack" id="toasts" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 (function(){
@@ -1120,7 +1456,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
     var stack = document.getElementById('toasts');
     var el = document.createElement('div');
     el.className = 'toast';
-    el.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span></span>';
+    el.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span></span>';
     el.lastChild.textContent = msg;
     stack.appendChild(el);
     setTimeout(function(){
@@ -1147,11 +1483,279 @@ body[data-state="assigned"]  .state-assigned{display:block}
 
   function setState(state, opts){
     opts = opts || {};
+    if(state === 'configure') state = 'empty';
+    if(['empty','assigned'].indexOf(state) === -1) state = 'empty';
     document.body.setAttribute('data-state', state);
 
     if(!opts.skipPersist){
       savePersisted({ state: state });
     }
+  }
+
+  function setDrawerA11y(open){
+    var root = document.getElementById('allot-drawer-backdrop');
+    if(root){
+      root.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+  }
+
+  var currentDrawerContext = { mode: 'manage' };
+
+  function getPoolTotal(){
+    var el = document.getElementById('kpi-pool-total');
+    if(el){
+      var n = parseNum(el.textContent);
+      if(n > 0) return n;
+    }
+    return 225000;
+  }
+
+  /** Plan-level pool from the page KPIs (same source as “Credits used”). */
+  function getPlanPoolFromKpi(){
+    var total = getPoolTotal();
+    var usedEl = document.getElementById('kpi1-num');
+    var committed = usedEl ? parseNum(usedEl.textContent) : 0;
+    return { total: total, committed: committed, remaining: Math.max(0, total - committed) };
+  }
+
+  function syncDrawerPoolFooterFromKpi(){
+    var snap = getPlanPoolFromKpi();
+    var t = document.getElementById('drawer-pool-total');
+    var c = document.getElementById('drawer-pool-committed');
+    var r = document.getElementById('drawer-pool-available');
+    if(t) t.textContent = formatNum(snap.total);
+    if(c) c.textContent = formatNum(snap.committed);
+    if(r) r.textContent = formatNum(snap.remaining);
+  }
+
+  function findAllotteeRow(name, type){
+    var nameNorm = (name || '').trim().toLowerCase();
+    var typeNorm = (type || '').trim().toLowerCase();
+    if(!nameNorm) return null;
+    var rows = document.querySelectorAll('.outcomes-table tbody tr');
+    for(var i = 0; i < rows.length; i++){
+      var tr = rows[i];
+      var on = (tr.querySelector('.outcome-name') || {}).textContent.trim().toLowerCase();
+      var ot = (tr.querySelector('.outcome-sub') || {}).textContent.trim().toLowerCase();
+      if(on !== nameNorm) continue;
+      if(typeNorm && ot !== typeNorm) continue;
+      return tr;
+    }
+    return null;
+  }
+
+  function formatOutcomeForRibbon(td){
+    if(!td) return '—';
+    var n = td.querySelector('.oc-num');
+    if(!n) return '—';
+    var base = n.textContent.trim();
+    var trd = td.querySelector('.trend');
+    if(!trd) return base;
+    var m = (trd.textContent || '').match(/([\d.]+%)/);
+    if(!m) return base;
+    var sign = trd.classList.contains('down') ? '−' : '+';
+    return base + ' (' + sign + m[1] + ')';
+  }
+
+  function entityFromTableRow(tr){
+    if(!tr) return null;
+    var on = (tr.querySelector('.outcome-name') || {}).textContent.trim();
+    var ot = (tr.querySelector('.outcome-sub') || {}).textContent.trim();
+    var tds = tr.querySelectorAll('td');
+    return {
+      name: on,
+      type: ot,
+      outcomes: tds[1] ? formatOutcomeForRibbon(tds[1]) : '—',
+      creditsUsed: tds[2] ? tds[2].textContent.trim() : '—',
+      projected: tds[3] ? tds[3].textContent.trim() : '—',
+      avgMonthly: tds[4] ? tds[4].textContent.trim() : '—'
+    };
+  }
+
+  /** Fill ribbon fields from the main list when the allottee exists on this page. */
+  function mergeEntityWithTableData(entity){
+    if(!entity || !entity.name) return entity;
+    var tr = findAllotteeRow(entity.name, entity.type);
+    if(!tr) return entity;
+    var fromTable = entityFromTableRow(tr);
+    return fromTable || entity;
+  }
+
+  function applyDrawerMode(mode, ctx){
+    ctx = ctx || {};
+    var titleEl = document.getElementById('allot-drawer-title');
+    var subEl = document.getElementById('allot-drawer-sub');
+    var btn = document.getElementById('apply-btn');
+    var ribbon = document.getElementById('drawer-context-ribbon');
+    var dr = document.getElementById('allot-drawer');
+    if(dr) dr.setAttribute('data-drawer-mode', mode);
+    currentDrawerContext = { mode: mode, entity: ctx.entity, from: ctx.from };
+
+    if(mode === 'add'){
+      if(titleEl) titleEl.textContent = 'Add allottee';
+      if(subEl) subEl.textContent = 'Define a credit cap, reset cadence, and conditions to choose who receives credits. This creates a new allottee on your plan.';
+      if(btn) btn.textContent = 'Add allottee';
+      if(ribbon) ribbon.hidden = true;
+    } else if(mode === 'manage'){
+      if(titleEl) titleEl.textContent = 'Manage allocation';
+      if(subEl) subEl.textContent = 'Review and adjust how credits are allocated. Changes take effect in the next billing period unless your contract says otherwise.';
+      if(btn) btn.textContent = 'Save changes';
+      if(ribbon) ribbon.hidden = true;
+    } else if(mode === 'edit'){
+      if(titleEl) titleEl.textContent = 'Edit allocation';
+      var en = (ctx.entity && ctx.entity.name) || 'Allottee';
+      var tp = (ctx.entity && ctx.entity.type) || '';
+      if(subEl) subEl.textContent = 'You are editing allocation for ' + en + (tp ? ' (' + tp + ').' : '.');
+      if(btn) btn.textContent = 'Save changes';
+      if(ribbon && ctx.entity){
+        var e = document.getElementById('dcr-entity');
+        var t = document.getElementById('dcr-type');
+        var s = document.getElementById('dcr-status');
+        var u = document.getElementById('dcr-used');
+        var o = document.getElementById('dcr-outcomes');
+        var pr = document.getElementById('dcr-projected');
+        var so = document.getElementById('dcr-source');
+        if(e) e.textContent = en;
+        if(t) t.textContent = tp || '—';
+        if(s) s.textContent = 'Active';
+        if(u) u.textContent = (ctx.entity.creditsUsed != null && ctx.entity.creditsUsed !== '') ? ctx.entity.creditsUsed : '—';
+        if(o) o.textContent = (ctx.entity.outcomes != null && ctx.entity.outcomes !== '') ? ctx.entity.outcomes : '—';
+        if(pr) pr.textContent = (ctx.entity.projected != null && ctx.entity.projected !== '') ? ctx.entity.projected : '—';
+        if(so){
+          var map = { 'table-row': 'This list', insights: 'Insights', kebab: 'List menu' };
+          so.textContent = map[ctx.from] || 'Allotment';
+        }
+        ribbon.hidden = false;
+      } else if(ribbon){
+        ribbon.hidden = true;
+      }
+    }
+
+    var cond = document.getElementById('drawer-conditions-box');
+    var capL = document.getElementById('drawer-cap-label');
+    var capH = document.getElementById('drawer-cap-hint');
+    if(mode === 'edit'){
+      if(cond) cond.hidden = true;
+      if(capL) capL.textContent = 'Credit cap for this allottee';
+      if(capH) capH.textContent = 'Maximum credits this allottee can use each period. Change the cap and reset cadence here.';
+    } else {
+      if(cond) cond.hidden = false;
+      if(capL) capL.textContent = 'Credit cap for this rule';
+      if(capH) capH.textContent = 'Maximum credits this rule can consume per period, before conditions.';
+    }
+  }
+
+  function openDrawer(ctx){
+    ctx = ctx || {};
+    var st = document.body.getAttribute('data-state') || 'empty';
+    var mode = ctx.mode;
+    if(!mode) mode = (st === 'empty') ? 'add' : 'manage';
+    if(mode === 'edit' && ctx.entity && ctx.entity.name){
+      ctx.entity = mergeEntityWithTableData(ctx.entity);
+    }
+    applyDrawerMode(mode, ctx);
+    document.body.classList.add('allot-drawer-open');
+    setDrawerA11y(true);
+    var d = document.getElementById('allot-drawer');
+    if(d) d.focus();
+    closeAllDropdowns();
+    ensureDrawerDdItemsFocusable();
+    if(st === 'assigned') syncDrawerPoolFooterFromKpi();
+    updateDrawerAllocStats();
+    evaluateApplyState();
+    refreshProtoActive();
+  }
+
+  function closeDrawer(){
+    document.body.classList.remove('allot-drawer-open');
+    setDrawerA11y(false);
+    refreshProtoActive();
+  }
+
+  function formatNum(n){
+    return (n || 0).toLocaleString('en-US');
+  }
+
+  function parseNum(str){
+    var t = String(str || '').replace(/,/g, '').replace(/\D/g, '');
+    var n = parseInt(t || '0', 10);
+    return (isNaN(n) ? 0 : n);
+  }
+
+  function updateDrawerAllocStats(){
+    var capEl = document.getElementById('drawer-credit-cap');
+    var cap = capEl ? parseNum(capEl.value) : 0;
+    var elA = document.getElementById('drawer-stat-available');
+    var elB = document.getElementById('drawer-stat-allocated');
+    var bar = document.getElementById('drawer-alloc-bar');
+    var poolTotal = getPoolTotal();
+    if(elB) elB.textContent = formatNum(cap);
+    if(elA) elA.textContent = formatNum(Math.max(0, poolTotal - cap));
+    if(bar) bar.style.width = Math.min(100, (cap / poolTotal) * 100) + '%';
+  }
+
+  function hasValidConditions(){
+    var rows = document.querySelectorAll('#cond-rows .cond-row');
+    return rows.length > 0 && Array.from(rows).every(function(r){
+      return r.querySelector('[data-field="attribute"]').dataset.value
+        && r.querySelector('[data-field="value"]').dataset.value;
+    });
+  }
+
+  function subLabelForAttrType(t){
+    var m = { team:'Team', location:'Locations', location_group:'Location groups', user:'Users', agent:'Agents' };
+    return m[t] || 'Allottee';
+  }
+
+  function appendAllotmentFromConditions(){
+    var mainTbody = document.querySelector('.outcomes-table tbody');
+    if(!mainTbody) return;
+    var capEl = document.getElementById('drawer-credit-cap');
+    var cap = capEl ? parseNum(capEl.value) : 0;
+    if(cap <= 0) return;
+    var existing = {};
+    mainTbody.querySelectorAll('.outcome-name').forEach(function(el){
+      existing[el.textContent.trim()] = true;
+    });
+    document.querySelectorAll('#cond-rows .cond-row').forEach(function(row){
+      var attr = row.querySelector('[data-field="attribute"]');
+      var val = row.querySelector('[data-field="value"]');
+      if(!attr || !val) return;
+      if(!attr.dataset.value || !val.dataset.value) return;
+      var name = val.dataset.value;
+      var sub = subLabelForAttrType(attr.dataset.type);
+      if(existing[name]) return;
+      existing[name] = true;
+      var proj = Math.round(cap * 1.12);
+      var r = document.createElement('tr');
+      r.innerHTML = ''
+        + '<td>'
+        +   '<div class="outcome">'
+        +     '<div class="outcome-name"></div>'
+        +     '<div class="outcome-sub"></div>'
+        +   '</div>'
+        + '</td>'
+        + '<td class="num"><span class="oc-num">0</span></td>'
+        + '<td class="num"></td>'
+        + '<td class="num"></td>'
+        + '<td class="num">0</td>'
+        + '<td class="row-corner">'
+        +   '<button class="row-insights" data-action="open-insights" type="button" title="View insights">'
+        +     '<span class="material-symbols-outlined">leaderboard</span>'
+        +   '</button>'
+        + '</td>';
+      r.querySelector('.outcome-name').textContent = name;
+      r.querySelector('.outcome-sub').textContent  = sub;
+      var nums = r.querySelectorAll('td.num');
+      nums[1].textContent = formatNum(cap);
+      nums[2].textContent = formatNum(proj);
+      mainTbody.insertBefore(r, mainTbody.firstChild);
+    });
+  }
+
+  function capIsValid(){
+    var el = document.getElementById('drawer-credit-cap');
+    return el && parseNum(el.value) > 0;
   }
 
   /* ── SIDEBAR GROUP TOGGLE ──────────────────────────── */
@@ -1239,6 +1843,8 @@ body[data-state="assigned"]  .state-assigned{display:block}
     VALUE_OPTIONS[type].forEach(function(opt){
       var it = document.createElement('div');
       it.className = 'dd-item';
+      it.setAttribute('tabindex', '0');
+      it.setAttribute('role', 'option');
       it.dataset.value = opt.label;
       it.innerHTML = '<span>' + opt.label + '</span>'
         + (opt.sub ? '<span class="dd-item-sub">' + opt.sub + '</span>' : '');
@@ -1246,15 +1852,25 @@ body[data-state="assigned"]  .state-assigned{display:block}
     });
   }
 
+  function ensureDrawerDdItemsFocusable(){
+    document.querySelectorAll('#allot-drawer .dd-item').forEach(function(it){
+      if(!it.hasAttribute('tabindex')) it.setAttribute('tabindex', '0');
+    });
+  }
+
   function evaluateApplyState(){
     var btn = document.getElementById('apply-btn');
     if(!btn) return;
-    var rows = document.querySelectorAll('#cond-rows .cond-row');
-    var ok = rows.length > 0 && Array.from(rows).every(function(r){
-      return r.querySelector('[data-field="attribute"]').dataset.value
-          && r.querySelector('[data-field="value"]').dataset.value;
-    });
-    btn.disabled = !ok;
+    var mode = currentDrawerContext.mode;
+    if(!mode){
+      var dr = document.getElementById('allot-drawer');
+      mode = dr && dr.getAttribute('data-drawer-mode');
+    }
+    if(mode === 'edit'){
+      btn.disabled = !capIsValid();
+      return;
+    }
+    btn.disabled = !(hasValidConditions() && capIsValid());
   }
 
   document.addEventListener('click', function(e){
@@ -1365,28 +1981,51 @@ body[data-state="assigned"]  .state-assigned{display:block}
       case 'go-configure': {
         var st = document.body.getAttribute('data-state') || 'empty';
         savePersisted({ returnTo: st === 'assigned' ? 'assigned' : 'empty' });
-        setState('configure');
+        openDrawer({ mode: st === 'empty' ? 'add' : 'manage', from: 'cta' });
         break;
       }
       case 'cancel-configure': {
+        closeDrawer();
         var persisted = loadPersisted();
         var returnTo = persisted.returnTo || 'empty';
-        setState(returnTo);
+        if(returnTo === 'insights' && persisted.insightsQs){
+          window.location.href = 'birdai_credits_insights.html?' + persisted.insightsQs;
+          return;
+        }
+        setState(['empty','assigned'].indexOf(returnTo) === -1 ? 'empty' : returnTo);
         toast('Changes discarded');
         break;
       }
       case 'apply': {
         var btn = document.getElementById('apply-btn');
-        if(btn.disabled) break;
-        var wasEdit = loadPersisted().returnTo === 'assigned';
+        if(!btn || btn.disabled) break;
+        var persistedApply = loadPersisted();
+        if(persistedApply.returnTo === 'insights' && persistedApply.insightsQs){
+          closeDrawer();
+          savePersisted({ state: 'assigned', returnTo: 'assigned' });
+          window.location.href = 'birdai_credits_insights.html?' + persistedApply.insightsQs + '&saved=1';
+          return;
+        }
+        if(currentDrawerContext.mode === 'add'){
+          appendAllotmentFromConditions();
+        }
+        closeDrawer();
         setState('assigned');
-        toast(wasEdit ? 'Allotment updated' : 'Allotment created');
+        toast(currentDrawerContext.mode === 'add' ? 'Allottee added to list' : 'Changes saved');
         break;
       }
       case 'edit-conditions':
         closeKebab();
         savePersisted({ returnTo: 'assigned' });
-        setState('configure');
+        (function(){
+          var row = document.querySelector('.outcomes-table tbody tr.selected');
+          if(row){
+            var ent = entityFromTableRow(row);
+            if(ent) openDrawer({ mode: 'edit', from: 'kebab', entity: ent });
+          } else {
+            openDrawer({ mode: 'manage', from: 'kebab' });
+          }
+        })();
         break;
       case 'export-csv':
         closeKebab();
@@ -1395,6 +2034,7 @@ body[data-state="assigned"]  .state-assigned{display:block}
       case 'reset-prototype':
         closeKebab();
         closeProto();
+        closeDrawer();
         clearPersisted();
         setState('empty');
         toast('Prototype reset');
@@ -1435,8 +2075,10 @@ body[data-state="assigned"]  .state-assigned{display:block}
   }
   function refreshProtoActive(){
     var state = document.body.getAttribute('data-state');
+    var drawerOpen = document.body.classList.contains('allot-drawer-open');
     document.querySelectorAll('.proto-item[data-proto-state]').forEach(function(it){
-      it.classList.toggle('active', it.dataset.protoState === state);
+      var ps = it.dataset.protoState;
+      it.classList.toggle('active', ps === state || (ps === 'configure' && drawerOpen));
     });
   }
   document.addEventListener('click', function(e){
@@ -1463,6 +2105,89 @@ body[data-state="assigned"]  .state-assigned{display:block}
     if(!wasSelected) row.classList.add('selected');
   });
 
+  /* Double-click row → Edit allocation with live row context */
+  document.addEventListener('dblclick', function(e){
+    var row = e.target.closest('.outcomes-table tbody tr');
+    if(!row || e.target.closest('.row-insights')) return;
+    e.preventDefault();
+    savePersisted({ returnTo: 'assigned' });
+    var ent = entityFromTableRow(row);
+    if(ent) openDrawer({ mode: 'edit', from: 'table-row', entity: ent });
+  });
+
+  /* Drawer: backdrop dismiss */
+  (function setupDrawerChrome(){
+    var back = document.getElementById('allot-drawer-backdrop');
+    if(back){
+      back.addEventListener('click', function(e){
+        if(e.target === back){
+          var c = document.querySelector('#allot-drawer .allot-drawer-back[data-action="cancel-configure"]');
+          if(c) c.click();
+        }
+      });
+    }
+    /* Keyboard: open condition dropdowns (Enter / Space) */
+    document.addEventListener('keydown', function(e){
+      if(e.key !== 'Enter' && e.key !== ' ') return;
+      var sel = e.target && e.target.closest && e.target.closest('.cond-select');
+      if(!sel) return;
+      var dr = document.getElementById('allot-drawer');
+      if(!dr || !dr.contains(sel)) return;
+      e.preventDefault();
+      sel.click();
+    }, true);
+    /* Keyboard: choose dropdown option (Enter) */
+    document.addEventListener('keydown', function(e){
+      if(e.key !== 'Enter') return;
+      var it = e.target && e.target.closest && e.target.closest('.dd-item');
+      if(!it) return;
+      if(!document.getElementById('allot-drawer') || !document.getElementById('allot-drawer').contains(it)) return;
+      if(!it.closest('.dd-menu') || !it.closest('.dd-menu').classList.contains('open')) return;
+      e.preventDefault();
+      it.click();
+    }, true);
+    document.addEventListener('keydown', function(e){
+      if(e.key !== 'Escape') return;
+      if(document.querySelector('#allot-drawer .dd-menu.open')){
+        e.preventDefault();
+        closeAllDropdowns();
+        return;
+      }
+      if(!document.body.classList.contains('allot-drawer-open')) return;
+      var c = document.querySelector('#allot-drawer [data-action="cancel-configure"]');
+      if(c) c.click();
+    });
+  })();
+
+  /* Allotment period toggle (drawer) */
+  (function setupDrawerSeg(){
+    var m = document.getElementById('drawer-reset-monthly');
+    var o = document.getElementById('drawer-reset-once');
+    if(!m || !o) return;
+    m.addEventListener('click', function(){
+      m.setAttribute('aria-pressed', 'true');
+      o.setAttribute('aria-pressed', 'false');
+    });
+    o.addEventListener('click', function(){
+      o.setAttribute('aria-pressed', 'true');
+      m.setAttribute('aria-pressed', 'false');
+    });
+  })();
+
+  /* Credit cap: sync summary + Save enable */
+  (function setupCapField(){
+    var cap = document.getElementById('drawer-credit-cap');
+    if(!cap) return;
+    cap.addEventListener('input', function(){
+      updateDrawerAllocStats();
+      evaluateApplyState();
+    });
+    cap.addEventListener('blur', function(){
+      this.value = formatNum(parseNum(this.value));
+      updateDrawerAllocStats();
+    });
+  })();
+
   /* ── INITIAL STATE ─────────────────────────────────── */
   (function bootstrapState(){
     var params = new URLSearchParams(window.location.search);
@@ -1471,13 +2196,47 @@ body[data-state="assigned"]  .state-assigned{display:block}
       clearPersisted();
     }
 
-    var persisted = loadPersisted();
-    var state = params.get('state') || persisted.state || 'empty';
+    var openFromUrl = params.get('state') === 'configure' || params.get('openDrawer') === '1';
 
-    if(['empty','configure','assigned'].indexOf(state) === -1) state = 'empty';
-    setState(state, { skipPersist: !params.has('state') });
+    /* Open from Insights (Manage allocation / Edit allotment) */
+    if((params.get('state') === 'configure' || openFromUrl) && params.get('returnTo') === 'insights'){
+      var iq = [];
+      if(params.get('allottee')) iq.push('allottee=' + encodeURIComponent(params.get('allottee')));
+      if(params.get('type')) iq.push('type=' + encodeURIComponent(params.get('type')));
+      savePersisted({ returnTo: 'insights', insightsQs: iq.join('&') });
+    }
+
+    var persisted = loadPersisted();
+    if(persisted.state === 'configure'){
+      try { savePersisted({ state: 'empty' }); } catch(x){}
+      persisted = loadPersisted();
+    }
+    var state = params.get('state');
+    if(state === 'configure' || state === 'openDrawer') state = null;
+    if(params.get('returnTo') === 'insights' && !state) state = 'assigned';
+    state = state || persisted.state || 'empty';
+    if(['empty','assigned'].indexOf(state) === -1) state = 'empty';
+    setState(state, { skipPersist: !params.has('state') && !openFromUrl });
+
+    if(openFromUrl) requestAnimationFrame(function(){
+      if(params.get('returnTo') === 'insights' && (params.get('allottee') || params.get('type'))){
+        openDrawer({
+          mode: 'edit',
+          from: 'insights',
+          entity: {
+            name: params.get('allottee') || '',
+            type: params.get('type') || ''
+          }
+        });
+      } else {
+        var s0 = document.body.getAttribute('data-state') || 'empty';
+        if(s0 === 'empty') openDrawer({ mode: 'add', from: 'url' });
+        else openDrawer({ mode: 'manage', from: 'url' });
+      }
+    });
   })();
 
+  ensureDrawerDdItemsFocusable();
   evaluateApplyState();
 })();
 </script>

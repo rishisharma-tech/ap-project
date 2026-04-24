@@ -539,30 +539,39 @@ td.right{text-align:right}
   font-weight:var(--ds-font-weight-medium);
 }
 
-/* ── TOAST ── */
+/* ── TOAST (top center, light surface) ── */
 .toast-stack{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;gap:8px;z-index:60;
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;z-index:200;
   pointer-events:none;
 }
 .toast{
-  background:rgb(33,33,33);color:#fff;
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  color:var(--ds-color-text-primary);
   padding:10px 16px;border-radius:var(--ds-radius-md);
   font-size:var(--ds-font-size-base);
-  box-shadow:0 8px 24px rgba(0,0,0,0.25);
-  display:flex;align-items:center;gap:8px;
-  animation:toast-in 0.2s ease;pointer-events:auto;
-  max-width:480px;
+  box-shadow:0 4px 12px rgba(15,23,42,0.1);
+  display:flex;align-items:center;gap:10px;pointer-events:auto;
+  animation:toast-in 0.2s ease;
+  max-width:min(400px, calc(100vw - 32px));
 }
-.toast .material-symbols-outlined{font-size:18px;color:#86efac}
-.toast.error .material-symbols-outlined{color:#fca5a5}
+.toast .material-symbols-outlined{
+  font-size:20px;color:var(--ds-color-success);
+  flex-shrink:0;
+}
+.toast.error{
+  background:var(--ds-color-danger-bg);
+  border-color:var(--aero-red-30);
+}
+.toast.error .material-symbols-outlined{color:var(--ds-color-danger)}
 @keyframes toast-in{
-  from{opacity:0;transform:translateY(8px)}
+  from{opacity:0;transform:translateY(-10px)}
   to{opacity:1;transform:translateY(0)}
 }
 .toast.leaving{animation:toast-out 0.15s ease forwards}
 @keyframes toast-out{
-  to{opacity:0;transform:translateY(8px)}
+  to{opacity:0;transform:translateY(-8px)}
 }
 
 /* ── POPOVER ── */
