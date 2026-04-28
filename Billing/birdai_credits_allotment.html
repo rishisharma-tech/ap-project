@@ -490,6 +490,8 @@ body.allot-drawer-open .content{pointer-events:none}
 .btn-primary:disabled{background:var(--aero-gray-60);border-color:var(--aero-gray-60);cursor:not-allowed;color:var(--aero-gray-0)}
 .btn-secondary{background:var(--ds-color-bg-surface);color:var(--ds-color-text-primary);border-color:var(--ds-color-border)}
 .btn-secondary:hover{background:var(--ds-color-bg-muted)}
+.btn-danger{background:var(--ds-color-danger);color:var(--aero-gray-0);border-color:var(--ds-color-danger)}
+.btn-danger:hover{filter:brightness(0.97)}
 .btn-ghost{background:transparent;color:var(--ds-color-blue-100);border-color:transparent;padding:4px 6px}
 .btn-ghost:hover{background:var(--ds-color-bg-muted)}
 .btn.page-hdr-cta{
@@ -764,6 +766,40 @@ tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
 @keyframes toast-in{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .toast.leaving{animation:toast-out 0.15s ease forwards}
 @keyframes toast-out{to{opacity:0;transform:translateY(-8px)}}
+
+/* ── Archive agent confirm (centered dialog) ─ */
+.archive-agent-dialog-backdrop{
+  position:fixed;inset:0;z-index:150;
+  background:var(--ds-overlay-dialog-scrim);
+  display:none;align-items:center;justify-content:center;padding:var(--ds-space-6);
+}
+.archive-agent-dialog-backdrop.is-open{display:flex;}
+.archive-agent-dialog{
+  width:min(420px, calc(100vw - 32px));
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  box-shadow:var(--ds-shadow-raised);
+  padding:var(--ds-space-5) var(--ds-space-6);
+}
+.archive-agent-dialog h3{
+  font-size:var(--ds-font-size-lg);
+  font-weight:var(--ds-font-weight-regular);
+  color:var(--ds-color-text-primary);
+  margin:0 0 var(--ds-space-2);
+  line-height:var(--aero-lh-18);
+}
+.archive-agent-dialog-body{
+  font-size:var(--ds-font-size-base);
+  font-weight:var(--ds-font-weight-regular);
+  color:var(--ds-color-text-secondary);
+  line-height:var(--aero-lh-14);
+  margin:0 0 var(--ds-space-5);
+}
+.archive-agent-dialog-actions{
+  display:flex;justify-content:flex-end;gap:var(--ds-space-2);
+  flex-wrap:wrap;
+}
 
 /* state visibility helpers */
 .state-empty,.state-assigned{display:none}
@@ -1382,6 +1418,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                           <span class="material-symbols-outlined">download</span>
                           <span>Export CSV</span>
                         </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
+                        </div>
                         <div class="kebab-divider hidden-empty"></div>
                         <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
                           <span class="material-symbols-outlined">refresh</span>
@@ -1413,6 +1453,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                         <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
                           <span class="material-symbols-outlined">download</span>
                           <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
                         </div>
                         <div class="kebab-divider hidden-empty"></div>
                         <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
@@ -1446,6 +1490,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                           <span class="material-symbols-outlined">download</span>
                           <span>Export CSV</span>
                         </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
+                        </div>
                         <div class="kebab-divider hidden-empty"></div>
                         <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
                           <span class="material-symbols-outlined">refresh</span>
@@ -1477,6 +1525,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                         <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
                           <span class="material-symbols-outlined">download</span>
                           <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
                         </div>
                         <div class="kebab-divider hidden-empty"></div>
                         <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
@@ -1510,6 +1562,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                           <span class="material-symbols-outlined">download</span>
                           <span>Export CSV</span>
                         </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
+                        </div>
                         <div class="kebab-divider hidden-empty"></div>
                         <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
                           <span class="material-symbols-outlined">refresh</span>
@@ -1541,6 +1597,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                         <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
                           <span class="material-symbols-outlined">download</span>
                           <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
                         </div>
                         <div class="kebab-divider hidden-empty"></div>
                         <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
@@ -2059,6 +2119,17 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   </div>
 </div>
 
+<div class="archive-agent-dialog-backdrop" id="archive-agent-dialog-backdrop" aria-hidden="true">
+  <div class="archive-agent-dialog" role="dialog" aria-modal="true" aria-labelledby="archive-agent-dialog-title" id="archive-agent-dialog">
+    <h3 id="archive-agent-dialog-title">Archive this agent?</h3>
+    <p class="archive-agent-dialog-body">The agent is removed from this list. Existing usage stays in Billing; future runs stop until you restore or replace the allotment. Credits already consumed are unchanged.</p>
+    <div class="archive-agent-dialog-actions">
+      <button type="button" class="btn btn-secondary" id="archive-agent-cancel">Cancel</button>
+      <button type="button" class="btn btn-danger" id="archive-agent-confirm">Archive</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-stack" id="toasts" aria-live="polite" aria-atomic="true"></div>
 
 <script>
@@ -2078,6 +2149,55 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       setTimeout(function(){ el.remove(); }, 150);
     }, 2200);
   }
+
+  var pendingArchiveAgentRow = null;
+
+  function openArchiveAgentConfirm(tr){
+    pendingArchiveAgentRow = tr || null;
+    var bd = document.getElementById('archive-agent-dialog-backdrop');
+    if(!bd) return;
+    bd.classList.add('is-open');
+    bd.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    var c = document.getElementById('archive-agent-cancel');
+    if(c) setTimeout(function(){ c.focus(); }, 0);
+  }
+
+  function closeArchiveAgentConfirm(){
+    pendingArchiveAgentRow = null;
+    var bd = document.getElementById('archive-agent-dialog-backdrop');
+    if(!bd) return;
+    bd.classList.remove('is-open');
+    bd.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+
+  (function setupArchiveAgentDialog(){
+    var bd = document.getElementById('archive-agent-dialog-backdrop');
+    var cancel = document.getElementById('archive-agent-cancel');
+    var confirm = document.getElementById('archive-agent-confirm');
+    if(!bd || !cancel || !confirm) return;
+    bd.addEventListener('click', function(e){
+      if(e.target === bd) closeArchiveAgentConfirm();
+    });
+    cancel.addEventListener('click', closeArchiveAgentConfirm);
+    confirm.addEventListener('click', function(){
+      var tr = pendingArchiveAgentRow;
+      if(!tr || !tr.parentNode){
+        closeArchiveAgentConfirm();
+        return;
+      }
+      tr.remove();
+      pendingArchiveAgentRow = null;
+      closeArchiveAgentConfirm();
+      toast('Agent archived');
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key !== 'Escape') return;
+      if(!bd.classList.contains('is-open')) return;
+      closeArchiveAgentConfirm();
+    });
+  })();
 
   /* ── STATE + PERSISTENCE ───────────────────────────── */
   var STORAGE_KEY = 'birdai_prototype_v3';
@@ -2173,6 +2293,22 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     };
   }
 
+  /** Agents tab row — type "Agents" matches #allotments-table mergeEntityWithTableData. */
+  function entityFromAgentsRow(tr){
+    if(!tr) return null;
+    var pn = tr.querySelector('.td-product-name');
+    var name = pn ? pn.textContent.trim() : '';
+    if(!name) return null;
+    var tds = tr.querySelectorAll('td');
+    return {
+      name: name,
+      type: 'Agents',
+      outcomes: tds[2] ? tds[2].textContent.trim() : '—',
+      creditsUsed: '—',
+      projected: tds[4] ? tds[4].textContent.trim() : '—'
+    };
+  }
+
   /** Fill ribbon fields from the main list when the allottee exists on this page. */
   function mergeEntityWithTableData(entity){
     if(!entity || !entity.name) return entity;
@@ -2219,7 +2355,13 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         if(o) o.textContent = (ctx.entity.outcomes != null && ctx.entity.outcomes !== '') ? ctx.entity.outcomes : '—';
         if(pr) pr.textContent = (ctx.entity.projected != null && ctx.entity.projected !== '') ? ctx.entity.projected : '—';
         if(so){
-          var map = { 'table-row': 'This list', 'table-row-menu': 'This list', insights: 'Insights', kebab: 'List menu' };
+          var map = {
+            'table-row': 'This list',
+            'table-row-menu': 'This list',
+            'agents-row-menu': 'Agents list',
+            insights: 'Insights',
+            kebab: 'List menu'
+          };
           so.textContent = map[ctx.from] || 'Allotment';
         }
         ribbon.hidden = false;
@@ -3167,10 +3309,22 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         closeAllocRowKebabs();
         savePersisted({ returnTo: 'assigned' });
         (function(){
-          var row = document.querySelector('#allotments-table tbody tr.selected');
-          if(row){
-            var ent = entityFromTableRow(row);
-            if(ent) openDrawer({ mode: 'edit', from: 'kebab', entity: ent });
+          var ent = null;
+          var src = 'kebab';
+          var rowFromClick = el.closest('#agents-usage-table tbody tr');
+          if(rowFromClick){
+            ent = entityFromAgentsRow(rowFromClick);
+            src = 'agents-row-menu';
+          }
+          if(!ent){
+            var allocRow = document.querySelector('#allotments-table tbody tr.selected');
+            if(allocRow){
+              ent = entityFromTableRow(allocRow);
+              src = 'kebab';
+            }
+          }
+          if(ent){
+            openDrawer({ mode: 'edit', from: src, entity: ent });
           } else {
             openDrawer({ mode: 'manage', from: 'kebab' });
           }
@@ -3180,6 +3334,13 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         closeKebab();
         toast('Export started');
         break;
+      case 'archive-agent-row': {
+        closeKebab();
+        closeAllocRowKebabs();
+        var agentTr = el.closest('#agents-usage-table tbody tr');
+        if(agentTr) openArchiveAgentConfirm(agentTr);
+        break;
+      }
       case 'reset-prototype':
         closeKebab();
         closeProto();
@@ -3550,20 +3711,26 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     setState(state, { skipPersist: !params.has('state') && !openFromUrl });
 
     if(openFromUrl) requestAnimationFrame(function(){
-      if(params.get('returnTo') === 'insights' && (params.get('allottee') || params.get('type'))){
-        openDrawer({
-          mode: 'edit',
-          from: 'insights',
-          entity: {
-            name: params.get('allottee') || '',
-            type: params.get('type') || ''
-          }
-        });
-      } else {
-        var s0 = document.body.getAttribute('data-state') || 'empty';
-        if(s0 === 'empty') openDrawer({ mode: 'add', from: 'url' });
-        else openDrawer({ mode: 'manage', from: 'url' });
+      if(params.get('returnTo') === 'insights'){
+        if(params.get('drawer') === 'manage'){
+          openDrawer({ mode: 'manage', from: 'insights' });
+          return;
+        }
+        if(params.get('allottee') || params.get('type')){
+          openDrawer({
+            mode: 'edit',
+            from: 'insights',
+            entity: {
+              name: params.get('allottee') || '',
+              type: params.get('type') || ''
+            }
+          });
+          return;
+        }
       }
+      var s0 = document.body.getAttribute('data-state') || 'empty';
+      if(s0 === 'empty') openDrawer({ mode: 'add', from: 'url' });
+      else openDrawer({ mode: 'manage', from: 'url' });
     });
   })();
 
