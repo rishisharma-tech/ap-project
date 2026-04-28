@@ -523,14 +523,14 @@ new Chart(timeCtx, {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { font: { family: 'Poppins', size: 11 }, color: '#8f8f8f' },
+        ticks: { font: { family: 'Roboto', size: 11 }, color: '#8f8f8f' },
         border: { display: false }
       },
       y: {
         stacked: true,
         grid: { color: '#f0f0f0' },
         ticks: {
-          font: { family: 'Poppins', size: 11 },
+          font: { family: 'Roboto', size: 11 },
           color: '#8f8f8f',
           callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'K' : v)
         },
@@ -578,7 +578,7 @@ new Chart(locationCtx, {
       x: {
         grid: { color: '#f0f0f0' },
         ticks: {
-          font: { family: 'Poppins', size: 11 },
+          font: { family: 'Roboto', size: 11 },
           color: '#8f8f8f',
           callback: v => (v >= 1000 ? (v/1000).toFixed(0) + 'K' : v)
         },
@@ -586,7 +586,7 @@ new Chart(locationCtx, {
       },
       y: {
         grid: { display: false },
-        ticks: { font: { family: 'Poppins', size: 11 }, color: '#555' },
+        ticks: { font: { family: 'Roboto', size: 11 }, color: '#555' },
         border: { display: false }
       }
     }

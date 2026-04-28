@@ -1,7 +1,7 @@
 # Aero DS Token Reference
 > Use this file in every Claude Design session. Paste it at the start and say: "Design using these exact Aero DS tokens from Birdeye's Elemental design system."
 
-**Implementation:** CSS custom properties live in [`ds-tokens.css`](./ds-tokens.css) (`--aero-*` = values from this doc; `--ds-*` = backward-compatible aliases). Pages that import `ds-tokens.css` load **Poppins** via that file. Prefer tokens over hard-coded hex in HTML/CSS.
+**Implementation:** CSS custom properties live in [`ds-tokens.css`](./ds-tokens.css) (`--aero-*` = values from this doc; `--ds-*` = backward-compatible aliases). Pages that import `ds-tokens.css` load **Roboto** via that file. Prefer tokens over hard-coded hex in HTML/CSS.
 
 ---
 
@@ -86,7 +86,7 @@
 ## Typography
 
 ### Font Family
-- **Primary:** Poppins (UI text, headings)
+- **Primary:** Roboto (UI text, headings)
 - **Mono:** SF Mono / system monospace (code, kbd keys)
 
 ### Font Sizes

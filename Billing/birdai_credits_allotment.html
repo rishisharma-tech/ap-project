@@ -29,7 +29,7 @@ body{
   color:var(--ds-color-text-primary);
   font-size:var(--ds-font-size-base);
   font-weight:var(--ds-font-weight-regular);
-  line-height:20px;letter-spacing:-0.28px;
+  line-height:var(--aero-lh-14);letter-spacing:-0.28px;
 }
 
 /* ── LAYOUT ── */
@@ -55,10 +55,10 @@ body{
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;flex-shrink:0;color:var(--ds-color-text-icon);
 }
-.rail-btn:hover{background:rgba(0,0,0,0.06)}
+.rail-btn:hover{background:var(--ds-overlay-black-060)}
 .rail-btn.active{background:var(--ds-color-blue-selected)}
 .rail-btn .material-symbols-outlined{font-size:20px}
-.rail-divider{width:20px;height:1px;background:#c0c8d8;flex-shrink:0;margin:0 auto}
+.rail-divider{width:20px;height:1px;background:var(--aero-gray-70);flex-shrink:0;margin:0 auto}
 
 /* ── SIDEBAR (L2) ── */
 .sidebar{
@@ -84,7 +84,7 @@ body{
   font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
   border-radius:var(--ds-radius-sm);user-select:none;
 }
-.sb-group-hdr:hover{background:rgba(0,0,0,0.04)}
+.sb-group-hdr:hover{background:var(--ds-overlay-black-040)}
 .sb-group-hdr svg{flex-shrink:0;color:var(--ds-color-text-secondary);transition:transform 0.15s ease}
 .sb-group.collapsed .sb-group-hdr svg{transform:rotate(-90deg)}
 .sb-group-body{display:flex;flex-direction:column;overflow:hidden;transition:max-height 0.2s ease}
@@ -97,7 +97,7 @@ body{
   border-radius:var(--ds-radius-sm);text-decoration:none;
 }
 .sb-item:hover{background:var(--ds-color-bg-muted)}
-.sb-item.active{background:#E5E9F1}
+.sb-item.active{background:var(--ds-color-rail-bg)}
 .sb-group + .sb-group{margin-top:var(--ds-space-1)}
 
 /* ── TOP NAV ── */
@@ -115,7 +115,7 @@ body{
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;color:var(--ds-color-text-icon);
 }
-.top-nav-btn:hover{background:rgba(0,0,0,0.06)}
+.top-nav-btn:hover{background:var(--ds-overlay-black-060)}
 .top-nav-btn .material-symbols-outlined{font-size:20px}
 .top-nav-btn.add{color:var(--ds-color-blue-100)}
 
@@ -124,15 +124,15 @@ body{
 .kebab-btn{
   width:var(--ds-width-btn);height:var(--ds-width-btn);
   border-radius:var(--ds-radius-sm);border:1px solid var(--ds-color-border);
-  background:var(--ds-color-bg-surface);color:#555;cursor:pointer;
+  background:var(--ds-color-bg-surface);color:var(--ds-color-text-secondary);cursor:pointer;
   display:flex;align-items:center;justify-content:center;
 }
-.kebab-btn:hover{background:rgb(242,244,247)}
+.kebab-btn:hover{background:var(--ds-color-bg-muted)}
 .kebab-btn .material-symbols-outlined{font-size:18px}
 .kebab-menu{
   position:absolute;top:calc(100% + 4px);right:0;min-width:220px;
-  background:#fff;border:1px solid var(--ds-color-border);
-  border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.12);
+  background:var(--ds-color-bg-surface);border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);box-shadow:var(--ds-shadow-menu);
   padding:4px;z-index:40;display:none;
 }
 .kebab-wrap.open .kebab-menu{display:block}
@@ -142,10 +142,10 @@ body{
   border-radius:4px;cursor:pointer;white-space:nowrap;
 }
 .kebab-item:hover{background:var(--ds-color-bg-muted)}
-.kebab-item.danger{color:#b42318}
-.kebab-item.danger:hover{background:#fef2f2}
+.kebab-item.danger{color:var(--ds-color-danger)}
+.kebab-item.danger:hover{background:var(--ds-color-danger-bg)}
 .kebab-item .material-symbols-outlined{font-size:18px;color:var(--ds-color-text-secondary)}
-.kebab-item.danger .material-symbols-outlined{color:#b42318}
+.kebab-item.danger .material-symbols-outlined{color:var(--ds-color-danger)}
 .kebab-divider{height:1px;background:var(--ds-color-border);margin:4px 0}
 
 /* kebab items visible only in "assigned" state */
@@ -156,10 +156,10 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 .proto-launcher{position:fixed;right:16px;bottom:16px;z-index:60}
 .proto-pill{
   display:inline-flex;align-items:center;gap:6px;
-  background:#212121;color:#fff;border:none;
-  font-family:inherit;font-size:12px;font-weight:400;line-height:18px;
+  background:var(--aero-gray-900);color:var(--aero-gray-0);border:none;
+  font-family:inherit;font-size:var(--aero-fs-12);font-weight:var(--aero-fw-regular);line-height:var(--aero-lh-12);
   padding:8px 14px;border-radius:20px;cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,0.24);
+  box-shadow:var(--ds-shadow-float);
   opacity:0.78;transition:opacity 0.15s ease;
 }
 .proto-pill:hover{opacity:1}
@@ -167,9 +167,9 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 
 .proto-panel{
   position:absolute;right:0;bottom:calc(100% + 8px);
-  width:300px;background:#fff;color:var(--ds-color-text-primary);
-  border:1px solid var(--ds-color-border);border-radius:10px;
-  box-shadow:0 12px 32px rgba(0,0,0,0.18);
+  width:300px;background:var(--ds-color-bg-surface);color:var(--ds-color-text-primary);
+  border:1px solid var(--ds-color-border);border-radius:var(--ds-radius-card);
+  box-shadow:var(--ds-shadow-raised);
   padding:6px;display:none;
 }
 .proto-launcher.open .proto-panel{display:block}
@@ -183,16 +183,16 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 
 .proto-item{
   display:flex;align-items:flex-start;gap:10px;padding:8px 10px;
-  border-radius:6px;cursor:pointer;text-decoration:none;color:inherit;
+  border-radius:var(--ds-radius-md);cursor:pointer;text-decoration:none;color:inherit;
 }
 .proto-item:hover{background:var(--ds-color-bg-muted)}
 .proto-item .dot{
   width:8px;height:8px;border-radius:50%;margin-top:7px;flex-shrink:0;
-  background:#9AA5B8;
+  background:var(--aero-gray-80);
 }
-.proto-item.ok   .dot{background:#17B26A}
+.proto-item.ok   .dot{background:var(--ds-color-success)}
 .proto-item.blue .dot{background:var(--ds-color-blue-primary)}
-.proto-item.active{background:#E5E9F1}
+.proto-item.active{background:var(--ds-color-rail-bg)}
 .proto-item-text{flex:1;min-width:0}
 .proto-item-name{font-size:13px;line-height:18px}
 .proto-item-sub{font-size:11px;color:var(--ds-color-text-muted);line-height:14px}
@@ -204,9 +204,9 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 }
 .proto-foot a{color:var(--ds-color-blue-primary);text-decoration:none}
 .proto-foot a:hover{text-decoration:underline}
-.proto-item.danger{color:#b42318}
-.proto-item.danger:hover{background:#fef2f2}
-.proto-item.danger .material-symbols-outlined{color:#b42318}
+.proto-item.danger{color:var(--ds-color-danger)}
+.proto-item.danger:hover{background:var(--ds-color-danger-bg)}
+.proto-item.danger .material-symbols-outlined{color:var(--ds-color-danger)}
 
 /* ── MAIN ── */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--ds-color-bg-surface)}
@@ -222,7 +222,7 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
   cursor:pointer;padding:var(--ds-space-1) 6px;border-radius:var(--ds-radius-sm);
 }
 .breadcrumb-link:hover{text-decoration:underline}
-.breadcrumb-sep{display:flex;align-items:center;color:#bbb}
+.breadcrumb-sep{display:flex;align-items:center;color:var(--ds-color-text-muted)}
 .breadcrumb-current{
   font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
   padding:var(--ds-space-1) 6px;
@@ -231,19 +231,29 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
 /* ── CONTENT ── */
 .content{flex:1;overflow-y:auto;padding:var(--ds-space-6);background:var(--ds-color-bg-surface)}
 .content::-webkit-scrollbar{width:6px}
-.content::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+.content::-webkit-scrollbar-thumb{background:var(--aero-gray-60);border-radius:var(--aero-radius-sm)}
 
 /* ── PAGE HEADER ── */
 .page-header{
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:var(--ds-space-5);
 }
+.page-hdr-actions{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:var(--ds-space-2)}
 .page-title{
   font-size:var(--ds-font-size-lg);font-weight:var(--ds-font-weight-regular);
   line-height:26px;letter-spacing:-0.36px;color:var(--ds-color-text-primary);
 }
-.page-hdr-actions{display:flex;align-items:center;gap:var(--ds-space-2);flex-wrap:wrap;justify-content:flex-end}
-/* Allotment CTA stays available; optional dim while drawer is open */
+.page-hdr-insights{
+  display:inline-flex;align-items:center;
+  font-size:var(--ds-font-size-sm);
+  color:var(--ds-color-blue-100);
+  text-decoration:none;
+  padding:4px 2px;
+  margin-right:var(--ds-space-2);
+}
+.page-hdr-insights:hover{text-decoration:underline;color:var(--ds-color-blue-300)}
+body:not([data-state="assigned"]) .page-hdr-insights{display:none}
+body.allot-drawer-open .page-hdr-insights{opacity:0.45;pointer-events:none}
 body.allot-drawer-open .page-hdr-cta{opacity:0.45;pointer-events:none}
 body.allot-drawer-open .content{pointer-events:none}
 
@@ -284,7 +294,7 @@ body.allot-drawer-open .content{pointer-events:none}
 .kpi-big{display:flex;align-items:baseline;gap:2px}
 .kpi-primary{font-size:28px;font-weight:var(--ds-font-weight-regular);line-height:1;color:var(--ds-color-text-primary);letter-spacing:-0.5px}
 .kpi-secondary{font-size:var(--ds-font-size-md);color:var(--ds-color-text-muted);letter-spacing:-0.28px}
-.kpi-bar-track{height:6px;background:#e5e9f0;border-radius:3px;overflow:hidden}
+.kpi-bar-track{height:6px;background:var(--ds-color-rail-bg);border-radius:var(--aero-radius-xs);overflow:hidden}
 .kpi-bar-fill{height:100%;border-radius:3px;background:var(--ds-color-blue-100)}
 .kpi-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
 .kpi-pct-row{
@@ -301,7 +311,7 @@ body.allot-drawer-open .content{pointer-events:none}
 .kpi-card--over .kpi-primary{color:var(--ds-color-danger)}
 .kpi-card--over .kpi-pct{color:var(--ds-color-danger)}
 .kpi-card--over .kpi-bar-fill{background:var(--ds-color-danger)}
-.kpi-card--over .kpi-bar-track{background:rgba(239,68,68,0.15)}
+.kpi-card--over .kpi-bar-track{background:color-mix(in srgb, var(--ds-color-danger) 15%, transparent)}
 
 /* ── PANEL (table wrapper in assigned state) ── */
 .panel{
@@ -461,7 +471,7 @@ body.allot-drawer-open .content{pointer-events:none}
 }
 .allot-row-credits::placeholder{color:var(--ds-color-text-muted);opacity:0.9}
 #drawer-conditions-box .allot-entity-search{
-  width:100%;margin-bottom:10px;font-size:14px;color:var(--ds-color-text-primary);
+  width:100%;margin-bottom:10px;font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
 }
 
 
@@ -477,8 +487,8 @@ body.allot-drawer-open .content{pointer-events:none}
 }
 .btn-primary{background:var(--ds-color-button-primary);color:var(--aero-gray-0);border-color:var(--ds-color-button-primary)}
 .btn-primary:hover{background:var(--ds-color-button-primary-hover);border-color:var(--ds-color-button-primary-hover)}
-.btn-primary:disabled{background:#cbd5e1;border-color:#cbd5e1;cursor:not-allowed;color:#fff}
-.btn-secondary{background:var(--ds-color-bg-surface);color:var(--ds-color-text-primary);border-color:#d1d5db}
+.btn-primary:disabled{background:var(--aero-gray-60);border-color:var(--aero-gray-60);cursor:not-allowed;color:var(--aero-gray-0)}
+.btn-secondary{background:var(--ds-color-bg-surface);color:var(--ds-color-text-primary);border-color:var(--ds-color-border)}
 .btn-secondary:hover{background:var(--ds-color-bg-muted)}
 .btn-ghost{background:transparent;color:var(--ds-color-blue-100);border-color:transparent;padding:4px 6px}
 .btn-ghost:hover{background:var(--ds-color-bg-muted)}
@@ -509,18 +519,18 @@ body.allot-drawer-open .content{pointer-events:none}
 .assigned-view-tabs{
   display:flex;align-items:flex-end;gap:4px;
   padding:0;margin:0 0 var(--ds-space-4);
-  border-bottom:1px solid #e5e7eb;
+  border-bottom:1px solid var(--ds-color-border);
 }
 .assigned-tab{
   appearance:none;-webkit-appearance:none;margin:0;padding:0 16px;
   height:37px;border:none;border-bottom:2px solid transparent;background:none;
   font:inherit;font-size:14px;line-height:37px;font-weight:var(--ds-font-weight-regular);
-  color:rgb(85,85,85);cursor:pointer;border-radius:0;margin-bottom:-1px;
+  color:var(--ds-color-text-secondary);cursor:pointer;border-radius:0;margin-bottom:-1px;
 }
 .assigned-tab:hover{color:var(--ds-color-text-primary);}
 .assigned-tab.is-active{
-  color:rgb(33,33,33);
-  border-bottom-color:rgb(25,118,210);
+  color:var(--ds-color-text-primary);
+  border-bottom-color:var(--ds-color-blue-100);
 }
 
 .td-product-name{font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);line-height:18px}
@@ -528,7 +538,7 @@ body.allot-drawer-open .content{pointer-events:none}
 .table-wrap{
   background:var(--ds-color-bg-surface);
   margin-top:0;
-  overflow:hidden;
+  overflow-x:auto;
 }
 table{width:100%;border-collapse:collapse;table-layout:auto}
 thead tr{border-bottom:1px solid var(--ds-color-border)}
@@ -541,7 +551,7 @@ th{
 }
 .th-inner{display:inline-flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
 .th-inner:hover{color:var(--ds-color-text-primary)}
-.sort-icon{display:flex;align-items:center;color:#bbb}
+.sort-icon{display:flex;align-items:center;color:var(--ds-color-text-muted)}
 th.sorted .sort-icon{color:var(--ds-color-text-primary)}
 th.sorted .th-inner{color:var(--ds-color-text-primary)}
 th.num{text-align:right}
@@ -550,7 +560,7 @@ th.num .th-inner{justify-content:flex-end}
 tbody tr{border-bottom:1px solid var(--ds-color-border);transition:background 0.12s ease}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--ds-color-bg-muted);cursor:pointer}
-tbody tr.selected{background:#F2F4F7}
+tbody tr.selected{background:var(--ds-color-bg-muted)}
 td{
   padding:12px var(--ds-space-4);
   font-size:var(--ds-font-size-base);
@@ -569,8 +579,8 @@ td.muted{color:var(--ds-color-text-secondary)}
   font-size:var(--ds-font-size-sm);
   font-weight:var(--ds-font-weight-regular);flex-shrink:0;
 }
-.allottee-avatar.team{background:#e0f2fe;color:#0369a1}
-.allottee-avatar.agent{background:#f5e8ff;color:#7e22ce}
+.allottee-avatar.team{background:var(--aero-blue-20);color:var(--aero-blue-100)}
+.allottee-avatar.agent{background:var(--aero-yellow-20);color:var(--aero-yellow-200)}
 .allottee-avatar .material-symbols-outlined{font-size:16px}
 .allottee-name{font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);line-height:18px}
 .allottee-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px;line-height:16px}
@@ -580,7 +590,7 @@ td.muted{color:var(--ds-color-text-secondary)}
 .usage-cell-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums}
 .usage-num{font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary)}
 .usage-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted)}
-.usage-track{height:4px;background:#e5e9f0;border-radius:2px;overflow:hidden}
+.usage-track{height:4px;background:var(--ds-color-rail-bg);border-radius:var(--aero-radius-xs);overflow:hidden}
 .usage-fill{height:100%;border-radius:2px;background:var(--ds-color-blue-100)}
 
 /* trend chip */
@@ -599,9 +609,77 @@ td.muted{color:var(--ds-color-text-secondary)}
   padding:2px 8px;border-radius:var(--ds-radius-full);
   background:var(--ds-color-bg-muted);color:var(--ds-color-text-secondary);
 }
-.chip.team{background:#e0f2fe;color:#0369a1}
-.chip.user{background:#ede9fe;color:#6d28d9}
-.chip.agent{background:#f5e8ff;color:#7e22ce}
+.chip.team{background:var(--aero-blue-20);color:var(--aero-blue-100)}
+.chip.user{background:var(--aero-green-20);color:var(--ds-color-success)}
+.chip.agent{background:var(--aero-yellow-20);color:var(--aero-yellow-200)}
+
+/* Allocations tab: filter + row kebab (overflow-x allows menus to show) */
+.allocations-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px var(--ds-space-3);
+  margin-bottom:var(--ds-space-3);
+}
+.allocations-filter-label{
+  margin:0;font-size:var(--ds-font-size-xs);
+  text-transform:uppercase;letter-spacing:0.5px;
+  color:var(--ds-color-text-muted);
+}
+.allocations-type-select{
+  width:auto;min-width:140px;max-width:100%;
+}
+
+#allotments-table th.row-corner-th,
+#allotments-table td.row-corner{
+  width:auto;min-width:88px;padding:0 var(--ds-space-2) 0 0;
+  position:relative;border-left:none;
+}
+#allotments-table .alloc-row-corner-inner{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  display:flex;align-items:center;gap:4px;z-index:2;
+}
+#allotments-table .alloc-row-kebab{position:static;transform:none}
+#allotments-table .alloc-row-kebab .kebab-menu{z-index:50;min-width:192px;}
+.row-chart-btn{
+  width:28px;height:28px;flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:0;border:1px solid var(--ds-color-border);border-radius:var(--ds-radius-sm);
+  background:var(--ds-color-bg-surface);color:var(--ds-color-blue-100);
+  cursor:pointer;
+  transition:background 0.12s ease,color 0.12s ease,border-color 0.12s ease;
+}
+.row-chart-btn:hover{
+  background:var(--ds-color-bg-muted);color:var(--ds-color-blue-200);
+}
+.row-chart-btn:focus-visible{outline:2px solid var(--ds-color-blue-100);outline-offset:2px;border-radius:var(--ds-radius-sm)}
+.row-chart-btn .material-symbols-outlined{font-size:18px}
+.row-chart-btn--visible{opacity:1;pointer-events:auto}
+
+#agents-usage-table th.agents-actions-th,
+#agents-usage-table td.agents-actions-cell{
+  width:auto;
+  min-width:80px;
+  white-space:nowrap;
+  vertical-align:middle;
+  padding-right:12px!important;
+  padding-left:4px!important;
+  box-sizing:border-box;
+}
+.agents-row-actions{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:4px;
+}
+
+#allotments-table .alloc-row-corner-inner .alloc-row-kebab .kebab-btn{
+  opacity:0;pointer-events:none;
+  transition:opacity 0.12s ease;
+}
+#allotments-table tbody tr:hover .alloc-row-kebab .kebab-btn,
+#allotments-table tbody tr.selected .alloc-row-kebab .kebab-btn,
+#allotments-table .alloc-row-kebab.open .kebab-btn{
+  opacity:1;pointer-events:auto;
+}
+
 
 /* ── Row-corner insights button (Figma node 1:30802) ──
    Appears on the right edge of a hovered or selected row */
@@ -614,10 +692,10 @@ td.row-corner{
   position:absolute;top:50%;right:12px;transform:translateY(-50%);
   width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
-  color:#555555;
-  background:#FFFFFF;
-  border:1px solid #EAEAEA;
-  border-radius:4px;
+  color:var(--ds-color-text-secondary);
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);
   opacity:0;pointer-events:none;
   transition:opacity 0.12s ease, background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
@@ -625,8 +703,8 @@ td.row-corner{
 tbody tr:hover .row-insights,
 tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
 .row-insights:hover{
-  background:#F7F7F7;
-  color:#212121;
+  background:var(--ds-color-bg-muted);
+  color:var(--ds-color-text-primary);
 }
 
 .table-foot{
@@ -674,7 +752,7 @@ tbody tr.selected .row-insights{opacity:1;pointer-events:auto}
   color:var(--ds-color-text-primary);
   padding:10px 16px;border-radius:var(--ds-radius-md);
   font-size:var(--ds-font-size-base);
-  box-shadow:0 4px 12px rgba(15,23,42,0.1);
+  box-shadow:var(--ds-shadow-toast);
   display:flex;align-items:center;gap:10px;pointer-events:auto;
   max-width:min(400px, calc(100vw - 32px));
   animation:toast-in 0.2s ease;
@@ -695,7 +773,7 @@ body[data-state="assigned"] .state-assigned{display:block}
 /* ── ALLOTMENT DRAWER (Figma: manage allocation, 650px) ─ */
 .allot-drawer-backdrop{
   position:fixed;inset:0;z-index:100;
-  background:rgba(15,23,42,0.35);
+  background:var(--ds-overlay-dialog-scrim);
   opacity:0;visibility:hidden;pointer-events:none;
   transition:opacity 0.2s ease, visibility 0.2s;
 }
@@ -711,7 +789,7 @@ body.allot-drawer-open{overflow:hidden}
   max-height:100dvh;
   background:var(--ds-color-bg-surface);
   border-left:1px solid var(--ds-color-border);
-  box-shadow:-12px 0 40px rgba(0,0,0,0.12);
+  box-shadow:var(--ds-shadow-drawer);
   display:flex;flex-direction:column;
   transform:translateX(100%);
   transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
@@ -766,7 +844,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   -webkit-overflow-scrolling:touch;
 }
 .allot-drawer-body::-webkit-scrollbar{width:6px}
-.allot-drawer-body::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+.allot-drawer-body::-webkit-scrollbar-thumb{background:var(--aero-gray-60);border-radius:var(--aero-radius-sm)}
 
 /* Boxed sections (spacing Figma) */
 .drawer-card{
@@ -805,7 +883,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   color:var(--ds-color-text-secondary);margin-bottom:12px;
 }
 .drawer-pool-line{
-  height:4px;border-radius:2px;background:#e5e9f0;margin:0;overflow:hidden;
+  height:4px;border-radius:var(--aero-radius-xs);background:var(--ds-color-rail-bg);margin:0;overflow:hidden;
 }
 .drawer-pool-line > span{
   display:block;height:100%;background:var(--ds-color-blue-100);border-radius:2px;
@@ -861,7 +939,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 }
 .drawer-field--resets-mini{
   margin-top:10px;padding-top:10px;
-  border-top:1px dashed #e5e7eb;
+  border-top:1px dashed var(--ds-color-border-subtle);
 }
 .drawer-reset-inline{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0}
 .drawer-reset-inline > .drawer-muted-tag{font-size:11px;line-height:1.2;color:var(--ds-color-text-muted);}
@@ -1016,7 +1094,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   grid-column:5;grid-row:1;
   width:28px;height:28px;flex:none;
   display:inline-flex;align-items:center;justify-content:center;
-  padding:0;border:none;border-radius:4px;
+  padding:0;border:none;border-radius:var(--ds-radius-sm);
   background:transparent;color:var(--ds-color-text-muted);
   cursor:pointer;
 }
@@ -1048,10 +1126,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   line-height:14px;
 }
 .dcr-type{
-  background:#E5E9F1;color:var(--ds-color-text-secondary);
+  background:var(--ds-color-rail-bg);color:var(--ds-color-text-secondary);
 }
 .dcr-status{
-  background:#DCFAE6;color:#067647;
+  background:var(--ds-color-success-bg);color:var(--ds-color-success);
 }
 .dcr-dl{
   display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px;
@@ -1079,7 +1157,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   <div class="rail">
     <a href="../index.html" class="rail-logo-area" style="text-decoration:none">
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6417 15.8029L17.6417 15.8027L17.6384 15.8014C17.5927 15.7816 17.5463 15.7632 17.4992 15.7463L12.7315 13.8611L12.7311 13.8618C12.6006 13.804 12.4564 13.7713 12.3044 13.7713C11.7231 13.7713 11.2518 14.2403 11.2518 14.8187C11.2518 15.0578 11.3332 15.2774 11.4688 15.4537L11.4681 15.4544L11.4764 15.4638C11.5005 15.4944 11.5259 15.524 11.5532 15.5517L14.9714 19.459L14.9715 19.4589C15.3977 19.9372 16.0196 20.2391 16.7125 20.2391C17.9972 20.2391 19.0387 19.2029 19.0387 17.9247C19.0387 16.9752 18.4638 16.1598 17.6417 15.8029M16.0713 7.92504C17.1523 7.58657 18.3171 8.14557 18.673 9.17345C19.0289 10.2013 18.4411 11.3088 17.36 11.6473C16.2791 11.9856 15.1142 11.4266 14.7583 10.3989C14.4025 9.37094 14.9903 8.26336 16.0713 7.92504M23.5537 9.17994C23.3965 8.95849 23.168 8.81665 22.9198 8.75419L22.9196 8.75053L21.9876 8.50627C21.9741 8.46262 21.9653 8.41842 21.9506 8.37481C20.9828 5.51383 17.8153 3.95809 14.8755 4.89999C13.3526 5.38783 12.1944 6.45242 11.5617 7.76098L9.87757 10.4368L5.88029 8.85972L5.87765 8.86265C5.62588 8.76042 5.33869 8.73796 5.05933 8.82742C4.44192 9.02534 4.10609 9.67275 4.30931 10.2738C4.33911 10.3616 4.38134 10.4416 4.42915 10.5168L4.4222 10.5248L8.59266 16.045C8.59643 16.05 8.59829 16.0555 8.60205 16.0603C8.60577 16.0655 8.61067 16.0695 8.61463 16.0746L11.5983 20.2565C12.9021 22.5847 15.7227 23.9859 18.4456 23.1135C21.3852 22.1718 22.984 19.089 22.0161 16.228C21.7148 15.3376 21.2002 14.5738 20.5458 13.9722C21.3708 13.1844 21.9306 12.1679 22.1398 11.0647L23.0412 10.8043L23.0406 10.7945C23.1205 10.7643 23.1987 10.7278 23.2723 10.6784C23.7751 10.3402 23.9012 9.66943 23.5537 9.17994" fill="#1976D2"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6417 15.8029L17.6417 15.8027L17.6384 15.8014C17.5927 15.7816 17.5463 15.7632 17.4992 15.7463L12.7315 13.8611L12.7311 13.8618C12.6006 13.804 12.4564 13.7713 12.3044 13.7713C11.7231 13.7713 11.2518 14.2403 11.2518 14.8187C11.2518 15.0578 11.3332 15.2774 11.4688 15.4537L11.4681 15.4544L11.4764 15.4638C11.5005 15.4944 11.5259 15.524 11.5532 15.5517L14.9714 19.459L14.9715 19.4589C15.3977 19.9372 16.0196 20.2391 16.7125 20.2391C17.9972 20.2391 19.0387 19.2029 19.0387 17.9247C19.0387 16.9752 18.4638 16.1598 17.6417 15.8029M16.0713 7.92504C17.1523 7.58657 18.3171 8.14557 18.673 9.17345C19.0289 10.2013 18.4411 11.3088 17.36 11.6473C16.2791 11.9856 15.1142 11.4266 14.7583 10.3989C14.4025 9.37094 14.9903 8.26336 16.0713 7.92504M23.5537 9.17994C23.3965 8.95849 23.168 8.81665 22.9198 8.75419L22.9196 8.75053L21.9876 8.50627C21.9741 8.46262 21.9653 8.41842 21.9506 8.37481C20.9828 5.51383 17.8153 3.95809 14.8755 4.89999C13.3526 5.38783 12.1944 6.45242 11.5617 7.76098L9.87757 10.4368L5.88029 8.85972L5.87765 8.86265C5.62588 8.76042 5.33869 8.73796 5.05933 8.82742C4.44192 9.02534 4.10609 9.67275 4.30931 10.2738C4.33911 10.3616 4.38134 10.4416 4.42915 10.5168L4.4222 10.5248L8.59266 16.045C8.59643 16.05 8.59829 16.0555 8.60205 16.0603C8.60577 16.0655 8.61067 16.0695 8.61463 16.0746L11.5983 20.2565C12.9021 22.5847 15.7227 23.9859 18.4456 23.1135C21.3852 22.1718 22.984 19.089 22.0161 16.228C21.7148 15.3376 21.2002 14.5738 20.5458 13.9722C21.3708 13.1844 21.9306 12.1679 22.1398 11.0647L23.0412 10.8043L23.0406 10.7945C23.1205 10.7643 23.1987 10.7278 23.2723 10.6784C23.7751 10.3402 23.9012 9.66943 23.5537 9.17994" fill="var(--ds-color-blue-100)"/>
       </svg>
     </a>
     <div class="rail-nav">
@@ -1151,13 +1229,13 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     <div class="breadcrumb-bar">
       <nav class="breadcrumb">
         <span class="breadcrumb-link">Settings</span>
-        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
         <span class="breadcrumb-link">Accounts</span>
-        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
         <span class="breadcrumb-link">Billing and usage</span>
-        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
         <span class="breadcrumb-link">Usage</span>
-        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
+        <span class="breadcrumb-sep"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>
         <span class="breadcrumb-current">Credits</span>
       </nav>
     </div>
@@ -1170,6 +1248,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           <h1 class="page-title">BirdAI credits used</h1>
         </div>
         <div class="page-hdr-actions">
+          <a class="page-hdr-insights" href="birdai_credits_insights.html?allottee=West%20Coast&amp;type=Location%20groups">Allottee insights</a>
           <button type="button" class="btn btn-primary page-hdr-cta" data-action="go-configure" title="Update who receives credits">
             Manage allocations
           </button>
@@ -1179,30 +1258,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           </button>
           <div class="col-view-btn" title="Column view">
             <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="0.5" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
-              <rect x="6.25" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
-              <rect x="12" y="0.5" width="3.5" height="13" rx="0.5" stroke="#555" stroke-width="1"/>
+              <rect x="0.5" y="0.5" width="3.5" height="13" rx="0.5" stroke="currentColor" stroke-width="1"/>
+              <rect x="6.25" y="0.5" width="3.5" height="13" rx="0.5" stroke="currentColor" stroke-width="1"/>
+              <rect x="12" y="0.5" width="3.5" height="13" rx="0.5" stroke="currentColor" stroke-width="1"/>
             </svg>
-          </div>
-          <div class="kebab-wrap" id="page-kebab">
-            <button class="kebab-btn" title="More options" data-kebab-toggle>
-              <span class="material-symbols-outlined">more_vert</span>
-            </button>
-            <div class="kebab-menu">
-              <div class="kebab-item hidden-empty" data-action="edit-conditions">
-                <span class="material-symbols-outlined">edit</span>
-                <span>Edit allotment</span>
-              </div>
-              <div class="kebab-item hidden-empty" data-action="export-csv">
-                <span class="material-symbols-outlined">download</span>
-                <span>Export CSV</span>
-              </div>
-              <div class="kebab-divider hidden-empty"></div>
-              <div class="kebab-item danger" data-action="reset-prototype">
-                <span class="material-symbols-outlined">refresh</span>
-                <span>Reset prototype</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -1297,6 +1356,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                       <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
                     </span>
                   </th>
+                  <th class="agents-actions-th" scope="col"><span class="visually-hidden">Insights and more</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -1306,6 +1366,31 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td>2 Reviews</td>
                   <td class="num">100</td>
                   <td class="num">+12.4%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Review Response Agent</div><div class="td-product-sub">Reviews</div></td>
@@ -1313,6 +1398,31 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td>8 Review Response</td>
                   <td class="num">600</td>
                   <td class="num">-2.8%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Social Publishing Agent</div><div class="td-product-sub">Social</div></td>
@@ -1320,6 +1430,31 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td>8 Posts</td>
                   <td class="num">400</td>
                   <td class="num">+7.1%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Social Engagement Agent</div><div class="td-product-sub">Social</div></td>
@@ -1327,6 +1462,31 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td>20 Responses</td>
                   <td class="num">1,500</td>
                   <td class="num">+18.3%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Listings Optimization Agent</div><div class="td-product-sub">Listing</div></td>
@@ -1334,6 +1494,31 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td>1 agent run</td>
                   <td class="num">75</td>
                   <td class="num">-5.2%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Search Optimization Agent</div><div class="td-product-sub">Search AI</div></td>
@@ -1341,6 +1526,31 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td>15 Prompts, 1 LLM, 1 Scan</td>
                   <td class="num">150</td>
                   <td class="num">+3.6%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
                 </tr>
               </tbody>
             </table>
@@ -1348,7 +1558,17 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         </div>
 
         <div id="panel-assigned-allocations" class="assigned-panel" role="tabpanel" aria-labelledby="tab-assigned-allocations" hidden>
-        <p class="allottee-table-hint">Double-click a row to edit that allottee&rsquo;s allocation. Select a row first to use Edit in the list menu.</p>
+        <div class="allocations-toolbar">
+          <label class="allocations-filter-label" for="allocations-type-filter">Allottee type</label>
+          <select id="allocations-type-filter" class="drawer-select allocations-type-select" aria-label="Filter allocations by allottee type">
+            <option value="all" selected>All types</option>
+            <option value="team">Teams</option>
+            <option value="location">Locations</option>
+            <option value="location_group">Location groups</option>
+            <option value="user">Users</option>
+            <option value="agent">Agents</option>
+          </select>
+        </div>
         <div class="table-wrap">
           <table class="billing-data-table" id="allotments-table" aria-label="Entity allocations">
             <thead>
@@ -1372,7 +1592,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-entity-kind="team">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">North America</div>
@@ -1381,9 +1601,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">45,900/50,000</span></td>
                 <td class="num">63,938</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="team">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">EMEA</div>
@@ -1392,9 +1626,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split usage-split--over" title="Used credits exceed allotted cap">61,000/60,000</span></td>
                 <td class="num">51,000</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="location">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">720 Castro St</div>
@@ -1403,9 +1651,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">29,700/35,000</span></td>
                 <td class="num">37,125</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="location">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">1 Market St</div>
@@ -1414,9 +1676,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">19,300/25,000</span></td>
                 <td class="num">24,125</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="location_group">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">West Coast</div>
@@ -1425,9 +1701,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">10,500/12,000</span></td>
                 <td class="num">13,125</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="location_group">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">East Coast</div>
@@ -1436,9 +1726,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">5,200/8,000</span></td>
                 <td class="num">6,500</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="user">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">Alex Chen</div>
@@ -1447,9 +1751,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">3,100/5,000</span></td>
                 <td class="num">3,875</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="user">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">Priya Ramesh</div>
@@ -1458,9 +1776,23 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">1,900/2,500</span></td>
                 <td class="num">2,375</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
-              <tr>
+              <tr data-entity-kind="agent">
                 <td>
                   <div class="outcome">
                     <div class="outcome-name">Review Generation Agent</div>
@@ -1469,7 +1801,21 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </td>
                 <td class="num"><span class="usage-split">1,050/2,000</span></td>
                 <td class="num">1,313</td>
-                <td class="row-corner"><button class="row-insights" data-action="open-insights" title="View insights"><span class="material-symbols-outlined">leaderboard</span></button></td>
+                <td class="row-corner">
+                  <div class="alloc-row-corner-inner">
+                  <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+                    <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+                  </button>
+                  <div class="kebab-wrap alloc-row-kebab">
+                    <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
+                    <div class="kebab-menu" role="menu">
+                      <div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>
+                      <div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>
+                      <div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -1813,7 +2159,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     return null;
   }
 
-  function findAllotteeRow(name, type){
+  function entityFromTableRow(tr){
     if(!tr) return null;
     var on = (tr.querySelector('.outcome-name') || {}).textContent.trim();
     var ot = (tr.querySelector('.outcome-sub') || {}).textContent.trim();
@@ -1873,7 +2219,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         if(o) o.textContent = (ctx.entity.outcomes != null && ctx.entity.outcomes !== '') ? ctx.entity.outcomes : '—';
         if(pr) pr.textContent = (ctx.entity.projected != null && ctx.entity.projected !== '') ? ctx.entity.projected : '—';
         if(so){
-          var map = { 'table-row': 'This list', insights: 'Insights', kebab: 'List menu' };
+          var map = { 'table-row': 'This list', 'table-row-menu': 'This list', insights: 'Insights', kebab: 'List menu' };
           so.textContent = map[ctx.from] || 'Allotment';
         }
         ribbon.hidden = false;
@@ -1885,16 +2231,59 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var flow = document.getElementById('drawer-assignment-flow');
     var capL = document.getElementById('drawer-cap-label');
     var capH = document.getElementById('drawer-cap-hint');
-    if(mode === 'edit'){
-      if(flow) flow.hidden = true;
-      if(capL) capL.textContent = 'Credit cap for this allottee';
-      if(capH) capH.textContent = 'Maximum credits this allottee can use each period. Change the cap and reset cadence here.';
-    } else {
-      if(flow) flow.hidden = false;
-      if(capL) capL.textContent = 'Credit cap for this allottee';
-      if(capH) capH.textContent = 'Enter a cap once to apply to every selected row, or type credits directly in the table column.';
+    if(flow) flow.hidden = false;
+    if(capL) capL.textContent = 'Credit cap for this allottee';
+    if(capH){
+      capH.textContent = mode === 'edit'
+        ? 'Change who gets credits, edit the table amounts, use AI rules if you like, or adjust the cap fields below when applicable.'
+        : 'Enter a cap once to apply to every selected row, or type credits directly in the table column.';
     }
     updateDrawerCapFieldVisibility();
+  }
+
+  /** Map allottee subtype label from the main table to manual entity `<select>` value */
+  function attrTypeFromEntityTypeLabel(label){
+    var s = (label || '').trim().toLowerCase();
+    var map = {
+      'team':'team','teams':'team',
+      'location':'location','locations':'location',
+      'region':'region','regions':'region',
+      'location group':'location_group','location groups':'location_group',
+      'regional group':'regional_group','regional groups':'regional_group',
+      'division':'division','divisions':'division',
+      'user':'user','users':'user',
+      'agent':'agent','agents':'agent'
+    };
+    return map[s] || 'location_group';
+  }
+
+  function parseAllottedCapFromUsageCell(text){
+    var raw = String(text || '').replace(/,/g,'').trim();
+    var ix = raw.indexOf('/');
+    if(ix === -1) return 0;
+    return parseNum(raw.slice(ix + 1));
+  }
+
+  function hydrateDrawerForEdit(ent){
+    if(!ent || !ent.name) return;
+    resetAssignmentDrawerUi();
+    var attr = attrTypeFromEntityTypeLabel(ent.type);
+    setDrawerAssignMode('manual');
+    syncAllotTypeButtons(attr);
+    rebuildAllotEntityList({ resetChecks: true, checkLabel: ent.name });
+    filterAllotEntityRows();
+    var capNum = parseAllottedCapFromUsageCell(ent.creditsUsed);
+    document.querySelectorAll('#allot-manual-tbody tr').forEach(function(tr){
+      var cb = tr.querySelector('input[type="checkbox"]');
+      var inp = tr.querySelector('.allot-row-credits');
+      if(cb && cb.checked && inp && capNum > 0){
+        inp.value = formatNum(capNum);
+      }
+    });
+    var capInput = document.getElementById('drawer-credit-cap');
+    if(capInput) capInput.value = '';
+    updateDrawerAllocStats();
+    evaluateApplyState();
   }
 
   function openDrawer(ctx){
@@ -1911,7 +2300,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       capInput.value = '';
       capInput.placeholder = 'Example: 25000';
     }
-    if(mode !== 'edit'){
+    if(mode === 'edit' && ctx.entity){
+      hydrateDrawerForEdit(ctx.entity);
+    } else if(mode !== 'edit'){
       resetAssignmentDrawerUi();
       initAllotmentSelectorDefaults();
     }
@@ -2321,6 +2712,21 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     return m[t] || 'Allottee';
   }
 
+  function entityKindFromOutcomeSub(sub){
+    var s = (sub || '').trim().toLowerCase();
+    var map = {
+      'team':'team','teams':'team',
+      'location':'location','locations':'location',
+      'region':'region','regions':'region',
+      'location group':'location_group','location groups':'location_group',
+      'regional group':'regional_group','regional groups':'regional_group',
+      'division':'division','divisions':'division',
+      'user':'user','users':'user',
+      'agent':'agent','agents':'agent'
+    };
+    return map[s] || '';
+  }
+
   function getCapForManualRow(tr){
     if(!tr) return 0;
     var rowInp = tr.querySelector('.allot-row-credits');
@@ -2357,7 +2763,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     function makeRow(name, subLabel, rowCap){
       var cap = rowCap;
       var proj = Math.round(cap * 1.12);
+      var kind = entityKindFromOutcomeSub(subLabel);
       var r = document.createElement('tr');
+      if(kind) r.setAttribute('data-entity-kind', kind);
       r.innerHTML = ''
         + '<td>'
         +   '<div class="outcome">'
@@ -2368,9 +2776,19 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         + '<td class="num"></td>'
         + '<td class="num"></td>'
         + '<td class="row-corner">'
-        +   '<button class="row-insights" data-action="open-insights" type="button" title="View insights">'
-        +     '<span class="material-symbols-outlined">leaderboard</span>'
-        +   '</button>'
+        +   '<div class="alloc-row-corner-inner">'
+        +     '<button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights">'
+        +       '<span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>'
+        +     '</button>'
+        +   '<div class="kebab-wrap alloc-row-kebab">'
+        +     '<button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>'
+        +     '<div class="kebab-menu" role="menu">'
+        +       '<div class="kebab-item" role="menuitem" data-action="edit-allocation-row" tabindex="0">Edit allocations</div>'
+        +       '<div class="kebab-item danger" role="menuitem" data-action="archive-allocation-row" tabindex="0">Archive</div>'
+        +       '<div class="kebab-item" role="menuitem" data-action="open-insights" tabindex="0"><span class="material-symbols-outlined" aria-hidden="true">leaderboard</span> View insights</div>'
+        +     '</div>'
+        +   '</div>'
+        +   '</div>'
         + '</td>';
       r.querySelector('.outcome-name').textContent = name;
       r.querySelector('.outcome-sub').textContent  = subLabel;
@@ -2421,8 +2839,11 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       mode = dr && dr.getAttribute('data-drawer-mode');
     }
     if(mode === 'edit'){
-      var el = document.getElementById('drawer-credit-cap');
-      return !!(el && drawerCapEntered(el) && parseNum(el.value) > 0);
+      if(getAssignMode() === 'ai'){
+        var a = document.getElementById('drawer-credit-cap');
+        return !!(isDrawerCreditCapFieldApplicable() && a && drawerCapEntered(a) && parseNum(a.value) > 0);
+      }
+      return manualHasRowOrGlobalCap();
     }
     if(getAssignMode() === 'ai'){
       var a = document.getElementById('drawer-credit-cap');
@@ -2690,7 +3111,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       mode = dr && dr.getAttribute('data-drawer-mode');
     }
     if(mode === 'edit'){
-      btn.disabled = !capIsValid();
+      btn.disabled = !(hasValidConditions() && capIsValid());
       return;
     }
     btn.disabled = !(hasValidConditions() && capIsValid());
@@ -2743,6 +3164,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       }
       case 'edit-conditions':
         closeKebab();
+        closeAllocRowKebabs();
         savePersisted({ returnTo: 'assigned' });
         (function(){
           var row = document.querySelector('#allotments-table tbody tr.selected');
@@ -2767,12 +3189,37 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         toast('Prototype reset');
         break;
       case 'open-insights': {
+        closeAllocRowKebabs();
         var row = el.closest('tr');
-        var name = row ? (row.querySelector('.outcome-name') || {}).textContent : '';
-        var type = row ? (row.querySelector('.outcome-sub')  || {}).textContent : '';
-        var qs = 'allottee=' + encodeURIComponent((name||'').trim())
-               + '&type=' + encodeURIComponent((type||'').trim());
+        var name = '';
+        var type = '';
+        if(row && row.closest && row.closest('#agents-usage-table tbody')){
+          var pn = row.querySelector('.td-product-name');
+          var ps = row.querySelector('.td-product-sub');
+          name = pn ? pn.textContent.trim() : '';
+          type = ps ? ps.textContent.trim() : '';
+        } else {
+          name = row ? (row.querySelector('.outcome-name') || {}).textContent.trim() : '';
+          type = row ? (row.querySelector('.outcome-sub') || {}).textContent.trim() : '';
+        }
+        var qs = 'allottee=' + encodeURIComponent(name || '')
+               + '&type=' + encodeURIComponent(type || '');
         window.location.href = 'birdai_credits_insights.html?' + qs;
+        break;
+      }
+      case 'edit-allocation-row': {
+        closeAllocRowKebabs();
+        savePersisted({ returnTo: 'assigned' });
+        var editRow = el.closest('#allotments-table tbody tr');
+        if(editRow){
+          var pent = entityFromTableRow(editRow);
+          if(pent) openDrawer({ mode: 'edit', from: 'table-row-menu', entity: pent });
+        }
+        break;
+      }
+      case 'archive-allocation-row': {
+        closeAllocRowKebabs();
+        toast('Archived (prototype)');
         break;
       }
     }
@@ -2780,19 +3227,62 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
   /* ── KEBAB MENU ────────────────────────────────────── */
   function closeKebab(){
-    var w = document.getElementById('page-kebab');
-    if(w) w.classList.remove('open');
+    document.querySelectorAll('.agents-toolbar-kebab.open').forEach(function(w){
+      w.classList.remove('open');
+      var b = w.querySelector('[data-kebab-toggle]');
+      if(b) b.setAttribute('aria-expanded','false');
+    });
+  }
+  function closeAllocRowKebabs(){
+    document.querySelectorAll('.alloc-row-kebab.open').forEach(function(w){
+      w.classList.remove('open');
+      var b = w.querySelector('[data-row-kebab-toggle]');
+      if(b) b.setAttribute('aria-expanded','false');
+    });
   }
   document.addEventListener('click', function(e){
-    var toggle = e.target.closest('[data-kebab-toggle]');
-    var wrap = document.getElementById('page-kebab');
-    if(!wrap) return;
-    if(toggle){
-      wrap.classList.toggle('open');
+    var rt = e.target.closest('[data-row-kebab-toggle]');
+    if(rt){
+      var rw = rt.closest('.alloc-row-kebab');
+      document.querySelectorAll('.alloc-row-kebab.open').forEach(function(w){
+        if(w !== rw){
+          w.classList.remove('open');
+          var bb = w.querySelector('[data-row-kebab-toggle]');
+          if(bb) bb.setAttribute('aria-expanded','false');
+        }
+      });
+      if(rw){
+        var opening = !rw.classList.contains('open');
+        rw.classList.toggle('open', opening);
+        rt.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      }
+      closeKebab();
       e.stopPropagation();
       return;
     }
-    if(!e.target.closest('.kebab-menu')) closeKebab();
+    if(e.target.closest('.alloc-row-kebab')) return;
+
+    var toggle = e.target.closest('[data-kebab-toggle]');
+    if(toggle){
+      var ak = toggle.closest('.agents-toolbar-kebab');
+      if(ak){
+        document.querySelectorAll('.agents-toolbar-kebab').forEach(function(w){
+          if(w !== ak) w.classList.remove('open');
+        });
+        var opening = !ak.classList.contains('open');
+        ak.classList.toggle('open', opening);
+        toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+        closeAllocRowKebabs();
+        e.stopPropagation();
+        return;
+      }
+    }
+    if(e.target.closest('.agents-toolbar-kebab')) return;
+
+    if(!e.target.closest('.kebab-menu')){
+      closeKebab();
+      closeAllocRowKebabs();
+    }
   });
 
   /* ── PROTOTYPE-STATES LAUNCHER ─────────────────────── */
@@ -2825,7 +3315,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   document.addEventListener('click', function(e){
     var row = e.target.closest('#allotments-table tbody tr');
     if(!row) return;
-    if(e.target.closest('.row-insights')) return;
+    if(e.target.closest('[data-action="open-insights"]')) return;
+    if(e.target.closest('.row-insights') || e.target.closest('.alloc-row-kebab')) return;
     var tbody = row.parentElement;
     var wasSelected = row.classList.contains('selected');
     tbody.querySelectorAll('tr.selected').forEach(function(r){ r.classList.remove('selected'); });
@@ -2835,7 +3326,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   /* Double-click row → Edit allocation with live row context */
   document.addEventListener('dblclick', function(e){
     var row = e.target.closest('#allotments-table tbody tr');
-    if(!row || e.target.closest('.row-insights')) return;
+    if(!row || e.target.closest('[data-action="open-insights"]') || e.target.closest('.row-insights') || e.target.closest('.alloc-row-kebab')) return;
     e.preventDefault();
     savePersisted({ returnTo: 'assigned' });
     var ent = entityFromTableRow(row);
@@ -2919,6 +3410,21 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         }
       });
     });
+  })();
+
+  (function setupAllocationsTypeFilter(){
+    var sel = document.getElementById('allocations-type-filter');
+    if(!sel) return;
+    function applyAllocationsTypeFilter(){
+      var val = sel.value || 'all';
+      document.querySelectorAll('#allotments-table tbody tr').forEach(function(tr){
+        var k = tr.getAttribute('data-entity-kind') || '';
+        var show = val === 'all' || val === k;
+        tr.hidden = !show;
+        if(!show) tr.classList.remove('selected');
+      });
+    }
+    sel.addEventListener('change', applyAllocationsTypeFilter);
   })();
 
   (function setupDrawerAssignModes(){

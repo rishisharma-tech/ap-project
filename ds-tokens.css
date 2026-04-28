@@ -8,12 +8,12 @@
    Figma (legacy ref): xecPAre4cKkeXEdvTig1oI
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
 
   /* ── TYPOGRAPHY (RISHI) ───────────────────────────────── */
-  --aero-font-family:     'Poppins', sans-serif;
+  --aero-font-family:     'Roboto', sans-serif;
   --aero-font-mono:       'SFMono-Regular', ui-monospace, Menlo, Monaco, monospace;
 
   --aero-fs-10:  10px;
@@ -224,13 +224,23 @@
   /* ── SHADOWS ── */
   --ds-shadow-panel: -4px 0 24px rgba(0,0,0,0.08);
   --ds-shadow-card:  0 1px 3px rgba(0,0,0,0.08);
+  --ds-shadow-drawer: -12px 0 40px rgba(0,0,0,0.12);
+  --ds-shadow-menu:   0 8px 24px rgba(0,0,0,0.12);
+  --ds-shadow-toast:  0 4px 12px rgba(15,23,42,0.1);
+  --ds-shadow-float:  0 4px 12px rgba(0,0,0,0.24);
+  --ds-shadow-raised: 0 12px 32px rgba(0,0,0,0.18);
+
+  /* Hover / backdrop overlays — use instead of repeating rgba in screens */
+  --ds-overlay-black-060: rgba(0, 0, 0, 0.06);
+  --ds-overlay-black-040: rgba(0, 0, 0, 0.04);
+  --ds-overlay-dialog-scrim: rgba(15, 23, 42, 0.35);
 
   /* Material Symbols Outlined — load in HTML
      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:..."/> */
   --ds-icon-size: 20px;
 }
 
-/* Poppins = primary UI (RISHI). Form controls inherit. */
+/* Roboto = primary UI (RISHI). Form controls inherit. */
 html {
   font-family: var(--aero-font-family);
 }

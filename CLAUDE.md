@@ -12,14 +12,14 @@ Preview: `https://chamakalayilpaul-cyber.github.io/l4-nav/L4/reviews_dashboard_v
 
 - Plain HTML + CSS (no frameworks)
 - Chart.js bundled locally as `./chart.umd.min.js`
-- Google Fonts: **Poppins** (loaded in `ds-tokens.css` per RISHI) + Material Symbols Outlined in HTML
+- Google Fonts: **Roboto** (loaded in `ds-tokens.css` per RISHI) + Material Symbols Outlined in HTML
 - DS / Aero tokens: `./ds-tokens.css` (see `RISHI-AERO-DS-TOKENS.md`)
 
 ---
 
 ## Typography
 
-- Font family: Poppins (primary UI, per RISHI) — `var(--aero-font-family)` / `var(--ds-font-family)` from `ds-tokens.css`
+- Font family: Roboto (primary UI, per RISHI) — `var(--aero-font-family)` / `var(--ds-font-family)` from `ds-tokens.css`
 - Base size: `14px` (`--aero-fs-14` / `--ds-font-size-base`)
 - Page/section titles: `18px`, weight `400`
 - Body and running copy: weight `400` only. Do not use bold for emphasis in paragraphs—no `<strong>`, `<b>`, or `font-weight` 600/700 in body text. Use hierarchy via size, spacing, or muted color (`--aero-gray-90`, etc.).
@@ -31,7 +31,7 @@ Preview: `https://chamakalayilpaul-cyber.github.io/l4-nav/L4/reviews_dashboard_v
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
 ```
 
-(Poppins is `@import`ed from `ds-tokens.css`; do not add a separate Roboto link.)
+(Roboto is `@import`ed from `ds-tokens.css`; do not add a duplicate body-font link.)
 
 ---
 

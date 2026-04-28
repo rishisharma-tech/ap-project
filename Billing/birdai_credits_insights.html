@@ -772,7 +772,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       if(!meta || meta.hidden) return;
       var ctx = chart.ctx;
       ctx.save();
-      ctx.font = '400 12px Poppins, sans-serif';
+      ctx.font = '400 12px Roboto, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       meta.data.forEach(function(pt, i){
@@ -812,7 +812,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       if(!meta || meta.hidden) return;
       var ctx = chart.ctx;
       ctx.save();
-      ctx.font = '400 11px Poppins, sans-serif';
+      ctx.font = '400 11px Roboto, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillStyle = '#555';
@@ -876,7 +876,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
         x: {
           grid: { display: false },
           ticks: {
-            font: { family:'Poppins', size: 11 },
+            font: { family:'Roboto', size: 11 },
             color: '#8f8f8f',
             callback: function(v){
               var raw = this.getLabelForValue(v);
@@ -1009,7 +1009,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
             boxWidth: 8,
             boxHeight: 8,
             padding: 8,
-            font: { family: 'Poppins, sans-serif', size: 11 },
+            font: { family: 'Roboto, sans-serif', size: 11 },
             color: '#555'
           }
         },
@@ -1031,7 +1031,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
           grid: { display: true, color: 'rgba(0,0,0,0.06)' },
           border: { display: false },
           ticks: {
-            font: { family: 'Poppins, sans-serif', size: 11 },
+            font: { family: 'Roboto, sans-serif', size: 11 },
             color: '#8f8f8f',
             callback: function(v){
               if(v >= 1000) return (v / 1000) + 'K';
