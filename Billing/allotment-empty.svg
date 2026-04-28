@@ -1,0 +1,23 @@
+<svg width="260" height="200" viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Credit pool ready to divide among allottees</title>
+  <!-- soft panel -->
+  <path d="M24 36C24 22.7452 34.7452 12 48 12H228C241.255 12 252 22.7452 252 36V172C252 185.255 241.255 196 228 196H48C34.7452 196 24 185.255 24 172V36Z" fill="#8D9DCA" fill-opacity="0.22"/>
+  <!-- main pool card -->
+  <rect x="44" y="40" width="172" height="96" rx="10" fill="white" stroke="#C5D3E8" stroke-width="1"/>
+  <!-- pool bar (one block = full pool; dashed = not yet split) -->
+  <rect x="58" y="58" width="144" height="14" rx="4" fill="#EBEFF6"/>
+  <rect x="58" y="58" width="144" height="14" rx="4" fill="url(#poolGrad)" opacity="0.35"/>
+  <rect x="58" y="58" width="144" height="14" rx="4" stroke="#1976D2" stroke-opacity="0.35" stroke-dasharray="4 3" fill="none"/>
+  <!-- segment guides (allotment slots) -->
+  <rect x="58" y="84" width="42" height="36" rx="6" fill="#F4F7FB" stroke="#8D9DCA" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+  <rect x="109" y="84" width="42" height="36" rx="6" fill="#F4F7FB" stroke="#8D9DCA" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+  <rect x="160" y="84" width="42" height="36" rx="6" fill="#F4F7FB" stroke="#8D9DCA" stroke-opacity="0.5" stroke-dasharray="3 2"/>
+  <!-- connectors -->
+  <path d="M79 72V79M130 72V79M181 72V79" stroke="#8D9DCA" stroke-width="1.5" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="poolGrad" x1="58" y1="58" x2="202" y2="72" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1976D2"/>
+      <stop offset="1" stop-color="#42A5F5"/>
+    </linearGradient>
+  </defs>
+</svg>
