@@ -14,7 +14,8 @@
 
   /* ── TYPOGRAPHY (RISHI) ───────────────────────────────── */
   --aero-font-family:     'Roboto', sans-serif;
-  --aero-font-mono:       'SFMono-Regular', ui-monospace, Menlo, Monaco, monospace;
+  /* Same as UI: Roboto-only stack (no system mono fallbacks). */
+  --aero-font-mono:       'Roboto', sans-serif;
 
   --aero-fs-10:  10px;
   --aero-fs-12:  12px;

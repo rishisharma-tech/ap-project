@@ -604,7 +604,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       <!-- Credits + reviews over time -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">Credits used and New reviews over time</span>
+          <span class="card-title">Credits used over time</span>
           <div class="card-right">
             <button class="range-btn">Last 6 months <span class="material-symbols-outlined">expand_more</span></button>
             <div class="icon-btn" title="More">
@@ -616,7 +616,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
           <canvas id="timeChart"></canvas>
         </div>
         <div class="chart-legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#1976D2"></div>New reviews</div>
           <div class="legend-item"><div class="legend-dot" style="background:#2C3E91"></div>Credits used</div>
         </div>
       </div>
@@ -759,31 +758,31 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     if(!e.target.closest('.bc-menu')) bcSwitcher.classList.remove('open');
   });
 
-  /* ── Time chart: combo bar + line ─────────────────────── */
+  /* ── Time chart: credits bar + value pills ───────────────── */
   var timeLabels = ['Aug\n2025', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan\n2026'];
-  var reviewData = [654, 954, 993, 1100, 1200, 844];
   var creditsData = [16300, 23800, 24800, 28800, 31400, 21200];
 
   var pillPlugin = {
     id: 'creditsPills',
     afterDatasetsDraw: function(chart){
-      var ds = chart.data.datasets[1];
-      var meta = chart.getDatasetMeta(1);
+      var ds = chart.data.datasets[0];
+      var meta = chart.getDatasetMeta(0);
       if(!meta || meta.hidden) return;
       var ctx = chart.ctx;
       ctx.save();
       ctx.font = '400 12px Roboto, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      meta.data.forEach(function(pt, i){
-        if(!pt) return;
+      meta.data.forEach(function(bar, i){
+        if(!bar) return;
         var raw = ds.data[i];
         var label = (raw/1000).toFixed(1) + 'K';
         var tw = ctx.measureText(label).width;
         var pw = tw + 18;
         var ph = 20;
-        var px = pt.x;
-        var py = pt.y - 18;
+        var px = bar.x;
+        var topY = Math.min(bar.y, bar.base);
+        var py = topY - 18;
         ctx.fillStyle = '#2C3E91';
         ctx.beginPath();
         var r = ph/2;
@@ -805,27 +804,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     }
   };
 
-  var barLabelsPlugin = {
-    id: 'barLabels',
-    afterDatasetsDraw: function(chart){
-      var meta = chart.getDatasetMeta(0);
-      if(!meta || meta.hidden) return;
-      var ctx = chart.ctx;
-      ctx.save();
-      ctx.font = '400 11px Roboto, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillStyle = '#555';
-      meta.data.forEach(function(bar, i){
-        if(!bar) return;
-        var raw = chart.data.datasets[0].data[i];
-        var label = raw >= 1000 ? (raw/1000).toFixed(1) + 'K' : String(raw);
-        ctx.fillText(label, bar.x, bar.y - 4);
-      });
-      ctx.restore();
-    }
-  };
-
   var timeCtx = document.getElementById('timeChart').getContext('2d');
   new Chart(timeCtx, {
     type: 'bar',
@@ -833,27 +811,12 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       labels: timeLabels,
       datasets: [
         {
-          type: 'bar',
-          label: 'New reviews',
-          data: reviewData,
-          backgroundColor: '#1976D2',
-          borderRadius: 2,
-          barThickness: 18,
-          yAxisID: 'yReviews',
-          order: 2,
-        },
-        {
-          type: 'line',
           label: 'Credits used',
           data: creditsData,
-          borderColor: '#2C3E91',
           backgroundColor: '#2C3E91',
-          borderWidth: 2,
-          pointRadius: 0,
-          pointHoverRadius: 4,
-          tension: 0.25,
-          yAxisID: 'yCredits',
-          order: 1,
+          borderRadius: 2,
+          barThickness: 18,
+          yAxisID: 'y'
         }
       ]
     },
@@ -885,14 +848,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
           },
           border: { display: false }
         },
-        yReviews: {
-          position: 'left',
-          beginAtZero: true,
-          grid: { display: false },
-          ticks: { display: false },
-          border: { display: false }
-        },
-        yCredits: {
+        y: {
           position: 'right',
           beginAtZero: true,
           grid: { display: false },
@@ -901,7 +857,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
         }
       }
     },
-    plugins: [pillPlugin, barLabelsPlugin]
+    plugins: [pillPlugin]
   });
 
   /* ── Work-type credit mix (admin dashboard) ──────────── */

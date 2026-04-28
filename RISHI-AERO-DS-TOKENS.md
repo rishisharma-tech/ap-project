@@ -1,7 +1,7 @@
 # Aero DS Token Reference
 > Use this file in every Claude Design session. Paste it at the start and say: "Design using these exact Aero DS tokens from Birdeye's Elemental design system."
 
-**Implementation:** CSS custom properties live in [`ds-tokens.css`](./ds-tokens.css) (`--aero-*` = values from this doc; `--ds-*` = backward-compatible aliases). Pages that import `ds-tokens.css` load **Roboto** via that file. Prefer tokens over hard-coded hex in HTML/CSS.
+**Implementation:** CSS custom properties live in [`ds-tokens.css`](./ds-tokens.css) (`--aero-*` = values from this doc; `--ds-*` = backward-compatible aliases). Typography is **Roboto-only** in this repo (see **Typography** below). Pages that import `ds-tokens.css` load Roboto from Google Fonts in that file. Prefer tokens over hard-coded hex in HTML/CSS. **Icons** use Material Symbols Outlined (linked in page HTML, not in `ds-tokens.css`).
 
 ---
 
@@ -85,9 +85,21 @@
 
 ## Typography
 
-### Font Family
-- **Primary:** Roboto (UI text, headings)
-- **Mono:** SF Mono / system monospace (code, kbd keys)
+### Font family (Roboto)
+
+All UI text—including body, headings, tables, forms, and **code / technical strings** in this project—uses **Roboto**. Do not mix in system UI fonts, Poppins, or separate monospace stacks unless a product requirement explicitly overrides this doc.
+
+| Role | Design token | CSS (see [`ds-tokens.css`](./ds-tokens.css)) |
+|------|--------------|-----------------------------------------------|
+| Primary UI | *(default)* | `--aero-font-family` → `'Roboto', sans-serif` |
+| Legacy alias | *(default)* | `--ds-font-family` → `var(--aero-font-family)` |
+| Mono-styled slots (code, kbd) | `$fontMono` * | `--aero-font-mono` → same as primary: `'Roboto', sans-serif` * |
+
+\*In Elemental specs, monospace content may use a monospace face elsewhere; **this repo** maps `$fontMono` / `--aero-font-mono` to Roboto so one family loads and renders consistently.
+
+#### Google Fonts (loaded in `ds-tokens.css`)
+
+Single `@import`: **Roboto** — weights **300, 400, 500, 600, 700** plus **italic 400**. Use **`font-weight`** and size tokens for hierarchy, not additional font families.
 
 ### Font Sizes
 | Token | Value | Use for |
@@ -107,9 +119,10 @@
 |-------|-------|---------|
 | `$fwRegular` | `400` | Body text, descriptions |
 | `$fwMedium` | `500` | Labels, nav items, emphasis |
+| `$fwSemibold` | `600` | Occasional UI emphasis (`--ds-font-weight-semibold` in CSS) |
 | `$fwBold` | `700` | Headings, strong emphasis |
 
-**Project note (this repo):** Prefer weight `400` for body and UI copy. Do not use bold (700) or semibold in running text for decoration—use type size and color for hierarchy. Reserve heavier weights for rare cases (e.g. dataviz) if needed.
+**Project note (this repo):** Prefer weight `400` for body and UI copy. Do not use bold (700) or semibold (600) in running text for decoration—use type size and color for hierarchy. Reserve heavier weights for rare cases (e.g. dataviz) if needed.
 
 ### Line Heights
 | Token | Value | Paired with font size |
