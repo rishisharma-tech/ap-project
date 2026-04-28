@@ -287,8 +287,18 @@ body.allot-drawer-open .content{pointer-events:none}
 .kpi-bar-track{height:6px;background:#e5e9f0;border-radius:3px;overflow:hidden}
 .kpi-bar-fill{height:100%;border-radius:3px;background:var(--ds-color-blue-100)}
 .kpi-pct{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
+.kpi-pct-row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:var(--ds-space-2);margin-top:2px;
+}
+.kpi-pct-row > .kpi-pct{margin-top:0;min-width:0}
+.kpi-reset-note{
+  font-size:var(--ds-font-size-sm);
+  color:var(--ds-color-text-muted);
+  white-space:nowrap;text-align:right;flex-shrink:0;
+}
 
-/* ── PANEL (Conditions + Table container) ── */
+/* ── PANEL (table wrapper in assigned state) ── */
 .panel{
   background:var(--ds-color-bg-surface);
   border:1px solid var(--ds-color-border);
@@ -312,37 +322,33 @@ body.allot-drawer-open .content{pointer-events:none}
 .panel-body{border-top:1px solid var(--ds-color-border);padding:var(--ds-space-5)}
 .panel.collapsed .panel-body{display:none}
 
-/* ── EMPTY STATE ── */
+/* ── EMPTY STATE (title + body + CTA); starting page ── */
+.empty-block{
+  background:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-md);
+  margin-bottom:var(--ds-space-3);
+  padding:var(--ds-space-6) var(--ds-space-5);
+}
 .empty-state{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:var(--ds-space-6) 0;gap:var(--ds-space-3);
-  min-height:180px;
+  gap:var(--ds-space-3);
+  max-width:52ch;margin:0 auto;
+  text-align:center;
 }
-.empty-illus{
-  width:56px;height:56px;position:relative;
-  display:flex;align-items:center;justify-content:center;
-}
-.empty-illus .dot{
-  width:14px;height:14px;border-radius:50%;
-  border:1.5px dashed var(--ds-color-text-muted);
-  position:absolute;
-}
-.empty-illus .dot:nth-child(1){top:8px;left:12px}
-.empty-illus .dot:nth-child(2){top:8px;right:12px}
-.empty-illus .dot:nth-child(3){bottom:8px;left:12px}
-.empty-illus .dot:nth-child(4){bottom:8px;right:12px}
 .empty-title{
-  font-size:var(--ds-font-size-base);
+  margin:0;
+  font-size:18px;
   font-weight:var(--ds-font-weight-regular);
+  line-height:1.35;
   color:var(--ds-color-text-primary);
 }
-.empty-desc{
-  font-size:var(--ds-font-size-sm);
+.empty-body{
+  margin:0;
+  font-size:var(--ds-font-size-base);
   color:var(--ds-color-text-secondary);
-  text-align:center;line-height:20px;
+  line-height:1.43;
 }
-.empty-desc a{color:var(--ds-color-blue-100);cursor:pointer;text-decoration:none}
-.empty-desc a:hover{text-decoration:underline}
 
 /* ── CONDITION ROW ── */
 .cond-rows{display:flex;flex-direction:column;gap:var(--ds-space-2)}
@@ -381,15 +387,6 @@ body.allot-drawer-open .content{pointer-events:none}
 }
 .cond-remove:hover{background:var(--ds-color-bg-muted);color:var(--ds-color-danger)}
 .cond-remove .material-symbols-outlined{font-size:18px}
-
-.cond-add{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:var(--ds-font-size-base);color:var(--ds-color-blue-100);
-  background:transparent;border:none;cursor:pointer;
-  padding:6px 4px;margin-top:var(--ds-space-2);
-}
-.cond-add:hover{text-decoration:underline}
-.cond-add .material-symbols-outlined{font-size:16px}
 
 .cond-footer{
   display:flex;align-items:center;justify-content:flex-end;
@@ -716,11 +713,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;
   align-items:end;
 }
-/* Credits summary: key figures + plan pool in one card */
-.drawer-credits-summary-title{
-  font-size:12px;letter-spacing:0.4px;text-transform:uppercase;
-  color:var(--ds-color-text-secondary);margin-bottom:16px;
-}
+/* Credits summary card: balance + cap tiles + pool footer */
 .drawer-stat-row-summary{
   display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;
   padding:0 0 16px;margin:0 0 16px;
@@ -756,8 +749,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   font-size:12px;color:var(--ds-color-text-muted);margin-top:10px;
 }
 .drawer-pool-note span{font-variant-numeric:tabular-nums}
-.drawer-card--form .drawer-field{margin-bottom:0}
-.drawer-card--form .drawer-field + .drawer-field{margin-top:16px}
+.drawer-allotment-form .drawer-field{margin-bottom:0}
+.drawer-allotment-form .drawer-field + .drawer-field{margin-top:16px}
 .drawer-field{
   margin-bottom:0;
 }
@@ -779,6 +772,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   border-color:var(--ds-color-blue-100);outline:none;
   box-shadow:0 0 0 1px var(--ds-color-blue-100);
 }
+.drawer-input--cap::placeholder{
+  color:var(--ds-color-text-muted);
+}
+.drawer-stat-value--muted{font-size:22px;color:var(--ds-color-text-muted)}
 .drawer-seg{
   display:flex;gap:0;border:1px solid var(--ds-color-border);
   border-radius:var(--ds-radius-sm);overflow:hidden;
@@ -795,9 +792,15 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   background:var(--ds-color-blue-selected);
   color:var(--ds-color-text-primary);
 }
-.drawer-card--cond{
-  padding-bottom:32px;
+/* One bordered card: conditions (who) + cap / resets (how much) */
+.drawer-allotment-form{
+  border-top:1px solid var(--ds-color-border);
+  margin-top:4px;padding-top:18px;
 }
+#drawer-conditions-box[hidden] ~ .drawer-allotment-form{
+  border-top:none;margin-top:0;padding-top:0;
+}
+
 .drawer-cond-hdr{
   display:flex;align-items:center;justify-content:space-between;
   margin:0 0 12px;
@@ -1018,7 +1021,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           <div class="kpi-bar-track">
             <div class="kpi-bar-fill" id="kpi1-bar" style="width:62.8%"></div>
           </div>
-          <div class="kpi-pct" id="kpi1-pct">62.8% used</div>
+          <div class="kpi-pct-row" aria-label="Credits usage summary for this billing period">
+            <span class="kpi-pct" id="kpi1-pct">62.8% used</span>
+            <span class="kpi-reset-note" id="kpi1-reset-note">Resets on May 1, 2026</span>
+          </div>
         </div>
 
         <div class="kpi-card">
@@ -1035,26 +1041,16 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       </div>
 
       <!-- =============================================================
-           EMPTY STATE
+           EMPTY STATE (starting page — title + body + CTA; no Conditions)
            ============================================================= -->
       <div class="state-empty">
-        <div class="panel" id="panel-empty">
-          <div class="panel-hdr" data-toggle-panel="panel-empty">
-            <div class="panel-hdr-title">Conditions</div>
-            <span class="panel-hdr-chevron material-symbols-outlined">expand_less</span>
-          </div>
-          <div class="panel-body">
-            <div class="empty-state">
-              <div class="empty-illus">
-                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-              </div>
-              <div class="empty-title">Add conditions</div>
-              <div class="empty-desc">
-                Chat with our Segmentation Agent to define conditions
-                <br/>
-                or manually <a data-action="go-configure">add conditions</a>
-              </div>
-            </div>
+        <div class="empty-block">
+          <div class="empty-state">
+            <p class="empty-title">No allotment yet</p>
+            <p class="empty-body">
+              Divide your BirdAI credit pool among teams, locations, and users. Create an allotment to set caps and who is eligible.
+            </p>
+            <button type="button" class="btn btn-primary" data-action="go-configure">Allot credits</button>
           </div>
         </div>
       </div>
@@ -1249,7 +1245,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
 </div><!-- /body-wrap -->
 
-<!-- Allotment side panel: pool + cap/resets + conditions -->
+<!-- Allotment side panel: pool summary, then conditions + cap/resets -->
 <div class="allot-drawer-backdrop" id="allot-drawer-backdrop" aria-hidden="true">
   <div class="allot-drawer" id="allot-drawer" role="dialog" aria-modal="true" aria-labelledby="allot-drawer-title" tabindex="-1" data-drawer-mode="manage">
     <div class="allot-drawer-hdr">
@@ -1297,89 +1293,85 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         </dl>
       </div>
 
-      <div class="drawer-card drawer-card--credits-summary" role="region" aria-label="This cap in your plan">
-        <div class="drawer-credits-summary-title">This cap in your plan</div>
-        <div class="drawer-stat-row-summary" role="group" aria-label="Cap and available credits">
-          <div class="drawer-stat-col-summary" aria-label="Credits available after this cap">
+      <div class="drawer-card drawer-card--credits-summary" role="region" aria-label="Plan pool and balance for this allotment">
+        <div class="drawer-stat-row-summary" role="group" aria-label="Balance after allotment and entered credit cap">
+          <div class="drawer-stat-col-summary" aria-label="Pool balance left after this allotment amount">
             <div class="drawer-stat-tile-main">
-              <div class="drawer-stat-value" id="drawer-stat-available">200,000</div>
-              <div class="drawer-stat-label">Credits available after this cap</div>
+              <div class="drawer-stat-value" id="drawer-stat-available">83,804</div>
+              <div class="drawer-stat-label">Balance after allotment</div>
             </div>
           </div>
-          <div class="drawer-stat-col-summary" aria-label="Credit cap for this rule">
+          <div class="drawer-stat-col-summary" aria-label="Credit cap entered for this allottee">
             <div class="drawer-stat-tile-main">
-              <div class="drawer-stat-value" id="drawer-stat-allocated">25,000</div>
-              <div class="drawer-stat-label">Credit cap (this rule)</div>
+              <div class="drawer-stat-value drawer-stat-value--muted" id="drawer-stat-allocated">—</div>
+              <div class="drawer-stat-label">Credit cap (this allottee)</div>
             </div>
           </div>
         </div>
-        <div class="drawer-pool-line" aria-hidden="true" role="presentation"><span id="drawer-alloc-bar" style="width:11%"></span></div>
+        <div class="drawer-pool-line" aria-hidden="true" role="presentation"><span id="drawer-alloc-bar" style="width:0"></span></div>
         <div class="drawer-pool-note" id="drawer-pool-note">
           <span>Total in plan: <span id="drawer-pool-total">225,000</span></span>
-          <span>Already in rules: <span id="drawer-pool-committed">141,196</span></span>
-          <span>Remaining: <span id="drawer-pool-available">83,804</span></span>
+          <span>Credits used elsewhere: <span id="drawer-pool-committed">141,196</span></span>
+          <span>Unallocated pool: <span id="drawer-pool-available">83,804</span></span>
         </div>
       </div>
 
-      <div class="drawer-card drawer-card--form">
-        <div class="drawer-field">
-          <label class="drawer-label" for="drawer-credit-cap" id="drawer-cap-label">Credit cap for this rule</label>
-          <input type="text" class="drawer-input" id="drawer-credit-cap" inputmode="numeric" autocomplete="off" value="25,000" aria-describedby="drawer-cap-hint"/>
-          <p class="drawer-hint" id="drawer-cap-hint">Maximum credits this rule can consume per period, before conditions.</p>
-        </div>
-        <div class="drawer-field">
-          <span class="drawer-label">Resets</span>
-          <div class="drawer-seg" role="group" aria-label="Allotment reset">
-            <button type="button" id="drawer-reset-monthly" aria-pressed="true">Each billing period</button>
-            <button type="button" id="drawer-reset-once" aria-pressed="false">One-time</button>
+      <div class="drawer-card drawer-card--allotment-rule" role="region" aria-label="Who receives credits and how much">
+        <div id="drawer-conditions-box">
+          <div class="drawer-cond-hdr">
+            <div class="panel-hdr-title">Conditions</div>
           </div>
-          <p class="drawer-hint">One-time allotments do not refill until you edit or remove them.</p>
+          <div class="cond-rows" id="cond-rows">
+            <div class="cond-row" data-cond-row>
+              <span class="cond-where">Where</span>
+              <div class="cond-select placeholder" data-field="attribute" tabindex="0">
+                <span class="cond-select-label">Select</span>
+                <span class="material-symbols-outlined">expand_more</span>
+                <div class="dd-menu" data-dd="attribute">
+                  <div class="dd-item" data-value="Team" data-type="team">Team</div>
+                  <div class="dd-item" data-value="Locations" data-type="location">Locations</div>
+                  <div class="dd-item" data-value="Location groups" data-type="location_group">Location groups</div>
+                  <div class="dd-item" data-value="Users" data-type="user">Users</div>
+                  <div class="dd-item" data-value="Agents" data-type="agent">Agents</div>
+                </div>
+              </div>
+              <div class="cond-select narrow" data-field="operator" tabindex="0">
+                <span class="cond-select-label">is</span>
+                <span class="material-symbols-outlined">expand_more</span>
+                <div class="dd-menu" data-dd="operator">
+                  <div class="dd-item" data-value="is">is</div>
+                  <div class="dd-item" data-value="is not">is not</div>
+                  <div class="dd-item" data-value="is any of">is any of</div>
+                  <div class="dd-item" data-value="is none of">is none of</div>
+                </div>
+              </div>
+              <div class="cond-select placeholder" data-field="value" tabindex="0" style="min-width:200px;flex:1 1 200px;max-width:100%">
+                <span class="cond-select-label">Select value</span>
+                <span class="material-symbols-outlined">expand_more</span>
+                <div class="dd-menu" data-dd="value"></div>
+              </div>
+              <button type="button" class="cond-remove" data-remove-row title="Remove">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="drawer-card drawer-card--cond" id="drawer-conditions-box">
-        <div class="drawer-cond-hdr">
-          <div class="panel-hdr-title">Conditions</div>
-        </div>
-        <div class="cond-rows" id="cond-rows">
-          <div class="cond-row" data-cond-row>
-            <span class="cond-where">Where</span>
-            <div class="cond-select placeholder" data-field="attribute" tabindex="0">
-              <span class="cond-select-label">Select</span>
-              <span class="material-symbols-outlined">expand_more</span>
-              <div class="dd-menu" data-dd="attribute">
-                <div class="dd-item" data-value="Team" data-type="team">Team</div>
-                <div class="dd-item" data-value="Locations" data-type="location">Locations</div>
-                <div class="dd-item" data-value="Location groups" data-type="location_group">Location groups</div>
-                <div class="dd-item" data-value="Users" data-type="user">Users</div>
-                <div class="dd-item" data-value="Agents" data-type="agent">Agents</div>
-              </div>
+        <div class="drawer-allotment-form">
+          <div class="drawer-field">
+            <label class="drawer-label" for="drawer-credit-cap" id="drawer-cap-label">Credit cap for this allottee</label>
+            <input type="text" class="drawer-input drawer-input--cap" id="drawer-credit-cap" inputmode="numeric" autocomplete="off" value="" placeholder="Example: 25000" aria-describedby="drawer-cap-hint"/>
+            <p class="drawer-hint" id="drawer-cap-hint">Maximum credits this rule can consume per period, before conditions.</p>
+          </div>
+          <div class="drawer-field">
+            <span class="drawer-label">Resets</span>
+            <div class="drawer-seg" role="group" aria-label="Allotment reset">
+              <button type="button" id="drawer-reset-monthly" aria-pressed="true">Each billing period</button>
+              <button type="button" id="drawer-reset-once" aria-pressed="false">One-time</button>
             </div>
-            <div class="cond-select narrow" data-field="operator" tabindex="0">
-              <span class="cond-select-label">is</span>
-              <span class="material-symbols-outlined">expand_more</span>
-              <div class="dd-menu" data-dd="operator">
-                <div class="dd-item" data-value="is">is</div>
-                <div class="dd-item" data-value="is not">is not</div>
-                <div class="dd-item" data-value="is any of">is any of</div>
-                <div class="dd-item" data-value="is none of">is none of</div>
-              </div>
-            </div>
-            <div class="cond-select placeholder" data-field="value" tabindex="0" style="min-width:200px;flex:1 1 200px;max-width:100%">
-              <span class="cond-select-label">Select value</span>
-              <span class="material-symbols-outlined">expand_more</span>
-              <div class="dd-menu" data-dd="value"></div>
-            </div>
-            <button type="button" class="cond-remove" data-remove-row title="Remove">
-              <span class="material-symbols-outlined">delete</span>
-            </button>
+            <p class="drawer-hint">One-time allotments do not refill until you edit or remove them.</p>
           </div>
         </div>
-        <button type="button" class="cond-add" data-add-row>
-          <span class="material-symbols-outlined">add_circle</span>
-          Add condition
-          <span class="material-symbols-outlined" style="font-size:16px">expand_more</span>
-        </button>
       </div>
     </div>
   </div>
@@ -1640,8 +1632,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       if(capH) capH.textContent = 'Maximum credits this allottee can use each period. Change the cap and reset cadence here.';
     } else {
       if(cond) cond.hidden = false;
-      if(capL) capL.textContent = 'Credit cap for this rule';
-      if(capH) capH.textContent = 'Maximum credits this rule can consume per period, before conditions.';
+      if(capL) capL.textContent = 'Credit cap for this allottee';
+      if(capH) capH.textContent = 'Maximum credits this allottee can consume per period, once conditions apply.';
     }
   }
 
@@ -1654,6 +1646,11 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       ctx.entity = mergeEntityWithTableData(ctx.entity);
     }
     applyDrawerMode(mode, ctx);
+    var capInput = document.getElementById('drawer-credit-cap');
+    if(capInput){
+      capInput.value = '';
+      capInput.placeholder = 'Example: 25000';
+    }
     document.body.classList.add('allot-drawer-open');
     setDrawerA11y(true);
     var d = document.getElementById('allot-drawer');
@@ -1682,16 +1679,30 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     return (isNaN(n) ? 0 : n);
   }
 
+  function drawerCapEntered(capEl){
+    return capEl && String(capEl.value || '').trim() !== '';
+  }
+
   function updateDrawerAllocStats(){
+    /* Balance = full unallocated until the cap field has input; then unallocated − cap. */
     var capEl = document.getElementById('drawer-credit-cap');
-    var cap = capEl ? parseNum(capEl.value) : 0;
+    var entered = drawerCapEntered(capEl);
+    var capNum = entered && capEl ? parseNum(capEl.value) : 0;
     var elA = document.getElementById('drawer-stat-available');
     var elB = document.getElementById('drawer-stat-allocated');
     var bar = document.getElementById('drawer-alloc-bar');
-    var poolTotal = getPoolTotal();
-    if(elB) elB.textContent = formatNum(cap);
-    if(elA) elA.textContent = formatNum(Math.max(0, poolTotal - cap));
-    if(bar) bar.style.width = Math.min(100, (cap / poolTotal) * 100) + '%';
+    var snap = getPlanPoolFromKpi();
+    var unallocated = snap.remaining;
+    var balance = entered ? Math.max(0, unallocated - capNum) : unallocated;
+    if(elB){
+      elB.textContent = entered ? formatNum(capNum) : '—';
+      elB.classList.toggle('drawer-stat-value--muted', !entered);
+    }
+    if(elA) elA.textContent = formatNum(balance);
+    if(bar){
+      var pct = !entered || unallocated <= 0 ? 0 : Math.min(100, (capNum / unallocated) * 100);
+      bar.style.width = pct + '%';
+    }
   }
 
   function hasValidConditions(){
@@ -1711,6 +1722,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var mainTbody = document.querySelector('.outcomes-table tbody');
     if(!mainTbody) return;
     var capEl = document.getElementById('drawer-credit-cap');
+    if(!drawerCapEntered(capEl)) return;
     var cap = capEl ? parseNum(capEl.value) : 0;
     if(cap <= 0) return;
     var existing = {};
@@ -1755,7 +1767,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
   function capIsValid(){
     var el = document.getElementById('drawer-credit-cap');
-    return el && parseNum(el.value) > 0;
+    return el && drawerCapEntered(el) && parseNum(el.value) > 0;
   }
 
   /* ── SIDEBAR GROUP TOGGLE ──────────────────────────── */
@@ -1913,35 +1925,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     if(!e.target.closest('.dd-menu')) closeAllDropdowns();
   });
 
-  /* ── Add / Remove condition rows ───────────────────── */
-  function buildRow(){
-    var tpl = document.querySelector('#cond-rows .cond-row');
-    var clone = tpl.cloneNode(true);
-    // reset state on clone
-    clone.querySelectorAll('[data-field]').forEach(function(sel){
-      sel.dataset.value = '';
-      delete sel.dataset.type;
-      sel.classList.add('placeholder');
-      sel.classList.remove('open');
-      var label = sel.querySelector('.cond-select-label');
-      if(sel.dataset.field === 'attribute') label.textContent = 'Select';
-      else if(sel.dataset.field === 'operator'){
-        sel.dataset.value = 'is';
-        sel.classList.remove('placeholder');
-        label.textContent = 'is';
-      } else label.textContent = 'Select value';
-      var menu = sel.querySelector('.dd-menu');
-      menu.classList.remove('open');
-      if(sel.dataset.field === 'value') menu.innerHTML = '';
-    });
-    return clone;
-  }
-
+  /* ── Remove condition row (single row resets instead of removing) ─ */
   document.addEventListener('click', function(e){
-    if(e.target.closest('[data-add-row]')){
-      document.getElementById('cond-rows').appendChild(buildRow());
-      evaluateApplyState();
-    }
     var rm = e.target.closest('[data-remove-row]');
     if(rm){
       var rows = document.querySelectorAll('#cond-rows .cond-row');
@@ -2183,6 +2168,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       evaluateApplyState();
     });
     cap.addEventListener('blur', function(){
+      var raw = String(this.value || '').replace(/,/g,'').trim();
+      if(!raw){
+        this.value = '';
+        updateDrawerAllocStats();
+        return;
+      }
       this.value = formatNum(parseNum(this.value));
       updateDrawerAllocStats();
     });
@@ -2237,6 +2228,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   })();
 
   ensureDrawerDdItemsFocusable();
+  updateDrawerAllocStats();
   evaluateApplyState();
 })();
 </script>
