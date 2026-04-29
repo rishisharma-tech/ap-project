@@ -5,12 +5,9 @@
   Reads ?allottee=<name>&type=<entity> from the URL.
 
   Sections:
-  - Summary card  (5 stats: New reviews, Avg monthly reviews, Credits per review,
-                   Credits used, Projected credits usage)
+  - Summary: one lede + three metrics in a single row (allotted, used, projected)
   - Credits-over-time chart  (bars `--aero-gray-1000`; values above bars — plain text, `--ds-color-text-secondary`)
-  - Credit mix dashboard: work-type matrix (share, outcomes, credits/outcome) + stacked
-    composition bar — answers “where are credits going?” for admins; locations removed
-    as low-signal for credit policy.
+  - Credit mix dashboard: work-type matrix (share of credits) + stacked composition bar.
 -->
 <html lang="en">
 <head>
@@ -322,29 +319,68 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
 .range-btn:hover{background:var(--ds-color-bg-muted)}
 .range-btn .material-symbols-outlined{font-size:14px;color:var(--ds-color-text-icon)}
 
-/* ── SUMMARY ── */
-.summary-grid{
+/* ── SUMMARY: one block, three metrics (no split columns) ── */
+.insights-summary-band{
+  padding:0;
+}
+.insights-summary-lede{
+  margin:0 0 16px;
+  max-width:72ch;
+  font-size:var(--ds-font-size-base);
+  line-height:1.45;
+  font-weight:var(--ds-font-weight-regular);
+  color:var(--ds-color-text-secondary);
+}
+.insights-summary-metrics{
   display:grid;
-  grid-template-columns:repeat(4, minmax(0,1fr));
-  gap:24px 48px;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  column-gap:clamp(20px, 4vw, 40px);
+  row-gap:var(--ds-space-4);
+  align-items:end;
 }
-.summary-stat{display:flex;flex-direction:column;gap:4px}
-.summary-stat-num{
-  font-size:28px;font-weight:400;
+.insights-metric{
+  min-width:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.drawer-section-label--prompt{
+  text-transform:none;
+  letter-spacing:0;
+  margin:0 0 6px;
+  font-size:var(--ds-font-size-base);
   color:var(--ds-color-text-primary);
-  letter-spacing:-0.5px;line-height:1.1;
 }
-.summary-stat-label{
-  font-size:12px;color:var(--ds-color-text-muted);line-height:16px;
-  display:inline-flex;align-items:center;gap:4px;
+.drawer-ai-lede{
+  margin:0 0 14px;line-height:1.45;color:var(--ds-color-text-secondary);
+  font-size:var(--ds-font-size-base);font-weight:var(--ds-font-weight-regular);
 }
-.stat-dot{
-  width:12px;height:12px;border-radius:50%;
-  background:#7C3AED;position:relative;flex-shrink:0;
-  display:inline-flex;align-items:center;justify-content:center;
+.drawer-ai-lede--tight{max-width:52ch}
+.drawer-stat-tile-main{
+  display:flex;flex-direction:column;gap:6px;
 }
-.stat-dot::after{
-  content:"";width:4px;height:4px;border-radius:50%;background:#fff;
+.drawer-stat-value{
+  font-size:24px;letter-spacing:-0.4px;line-height:1.1;
+  color:var(--ds-color-text-primary);font-variant-numeric:tabular-nums;
+}
+.drawer-stat-label{
+  font-size:12px;color:var(--ds-color-text-secondary);
+  line-height:16px;
+}
+@media (max-width:900px){
+  .insights-summary-metrics{
+    grid-template-columns:1fr;
+    column-gap:0;
+  }
+  .insights-metric{
+    border-top:1px solid var(--ds-color-border);
+    padding-top:var(--ds-space-4);
+  }
+  .insights-metric:first-child{
+    padding-top:0;
+    border-top:none;
+  }
 }
 
 /* ── CHART CARDS ── */
@@ -573,11 +609,11 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     <!-- CONTENT -->
     <div class="content">
 
-      <!-- Page header (Figma: By outcome, date, Manage allocation, More) -->
+      <!-- Page header -->
       <div class="page-header">
         <div class="page-header-left">
           <h1 class="page-title" id="page-title">Allottee</h1>
-          <p class="page-title-sub">By outcome</p>
+          <p class="page-title-sub">Credit usage</p>
         </div>
         <div class="page-header-right">
           <button type="button" class="date-pill" title="Date range" data-action="toast-date">
@@ -602,31 +638,28 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
         </div>
       </div>
 
-      <!-- Summary card -->
-      <div class="card">
+      <!-- Summary: three metrics in one row -->
+      <div class="card insights-summary-card">
         <div class="card-header">
           <span class="card-title">Summary</span>
         </div>
-        <div class="summary-grid">
-          <div class="summary-stat">
-            <div class="summary-stat-num">2,046</div>
-            <div class="summary-stat-label">New reviews</div>
-          </div>
-          <div class="summary-stat">
-            <div class="summary-stat-num">1,546</div>
-            <div class="summary-stat-label">Avg monthly reviews</div>
-          </div>
-          <div class="summary-stat">
-            <div class="summary-stat-num">25</div>
-            <div class="summary-stat-label"><span class="stat-dot"></span>Credits per review</div>
-          </div>
-          <div class="summary-stat">
-            <div class="summary-stat-num">51,150</div>
-            <div class="summary-stat-label"><span class="stat-dot"></span>Credits used</div>
-          </div>
-          <div class="summary-stat" style="grid-column:1 / span 1">
-            <div class="summary-stat-num">63,938</div>
-            <div class="summary-stat-label"><span class="stat-dot"></span>Projected credits usage</div>
+        <div class="insights-summary-band" role="group" aria-label="Credit usage summary">
+          <p class="insights-summary-lede" id="insights-summary-lede">
+            Credit cap and activity for this allottee for the selected date range.
+          </p>
+          <div class="insights-summary-metrics">
+            <div class="insights-metric">
+              <div class="drawer-stat-value">72,500</div>
+              <div class="drawer-stat-label">Total credits allotted</div>
+            </div>
+            <div class="insights-metric">
+              <div class="drawer-stat-value">51,150</div>
+              <div class="drawer-stat-label">Credits used</div>
+            </div>
+            <div class="insights-metric">
+              <div class="drawer-stat-value">63,938</div>
+              <div class="drawer-stat-label">Projected credits usage</div>
+            </div>
           </div>
         </div>
       </div>
@@ -651,15 +684,14 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       </div>
 
       <!--
-        Credit policy view (vs. ops location list):
-        Admins need (1) where spend concentrates — by capability/work type,
-        (2) efficiency — credits per outcome, (3) dependency risk — top-2 concentration.
+        Credit policy view: where spend concentrates by work type, tail vs head,
+        and top-2 concentration risk.
       -->
       <div class="card" id="usage-mix-card">
         <div class="card-header">
           <span class="card-title">
             Credit usage by work type
-            <span class="info-icon" title="For this allottee: how credits are split across BirdAI work types, with outcomes and efficiency. Use it to see cost drivers, compare surfaces, and plan enablement."><span class="material-symbols-outlined">info</span></span>
+            <span class="info-icon" title="For this allottee: how credits are split across BirdAI work types. Use it to see cost drivers, compare surfaces, and plan enablement."><span class="material-symbols-outlined">info</span></span>
           </span>
           <div class="card-right">
             <button class="range-btn">Last 6 months <span class="material-symbols-outlined">expand_more</span></button>
@@ -670,7 +702,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
         </div>
         <p class="usage-dash-sub">
           Location lists answer where in the org tree work happens. For credit governance, admins usually need to see
-          which capabilities consume the pool, how that mix concentrates, and which surfaces are lean or expensive in credits per outcome.
+          which capabilities consume the pool and how that mix concentrates.
           That supports training teams, tuning rollouts, and defending budget.
         </p>
         <div class="usage-insights" id="usage-insights-strip">
@@ -686,8 +718,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
                 <th>Work type</th>
                 <th class="num">Credits</th>
                 <th>Share of credits</th>
-                <th class="num">Outcomes</th>
-                <th class="num">Credits / outcome</th>
               </tr>
             </thead>
             <tbody id="usage-matrix-tbody">
@@ -896,11 +926,11 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
   /* ── Work-type credit mix (admin dashboard) ──────────── */
   /* Totals match Summary card "Credits used" (51,150) for this prototype allottee. */
   var WORK_TYPE_USAGE = [
-    { key: 'reviews',  name: 'Review generation',     desc: 'New or refreshed review content',   credits: 18200, outcomes: 728 },
-    { key: 'listings', name: 'Listings & SEO scan',   desc: 'Listing and SEO optimization runs',  credits: 12400, outcomes: 412 },
-    { key: 'aeo',      name: 'AEO & prompts',         desc: 'AI search / prompt-driven responses',credits:  9400, outcomes: 1050 },
-    { key: 'agents',   name: 'Agent automation',      desc: 'BirdAI agent workflows and handoffs', credits:  6800, outcomes: 240 },
-    { key: 'export',   name: 'Reports & exports',     desc: 'Bulk exports, scheduled reports',   credits:  4350, outcomes: 87 }
+    { key: 'reviews',  name: 'Review generation',     desc: 'New or refreshed review content',   credits: 18200 },
+    { key: 'listings', name: 'Listings & SEO scan',   desc: 'Listing and SEO optimization runs',  credits: 12400 },
+    { key: 'aeo',      name: 'AEO & prompts',         desc: 'AI search / prompt-driven responses',credits:  9400 },
+    { key: 'agents',   name: 'Agent automation',      desc: 'BirdAI agent workflows and handoffs', credits:  6800 },
+    { key: 'export',   name: 'Reports & exports',     desc: 'Bulk exports, scheduled reports',   credits:  4350 }
   ];
   var MIX_SERIES_FALLBACK = ['#1976d2','#1565b4','#2c3e50','#5ba4ec','#a4ccf4'];
   var MIX_COLORS = [
@@ -914,19 +944,16 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
   });
 
   var totalMix = WORK_TYPE_USAGE.reduce(function(s, r){ return s + r.credits; }, 0);
-  var rowsWithEff = WORK_TYPE_USAGE.map(function(r){
+  var rowsMix = WORK_TYPE_USAGE.map(function(r){
     var pct = (r.credits / totalMix) * 100;
-    var cpe = r.outcomes ? r.credits / r.outcomes : 0;
     return {
-      name: r.name, desc: r.desc, credits: r.credits, outcomes: r.outcomes,
-      pct: pct, cpe: cpe
+      name: r.name, desc: r.desc, credits: r.credits,
+      pct: pct
     };
   });
-  var largest = rowsWithEff.reduce(function(a, b){ return a.pct >= b.pct ? a : b; });
-  var mostEfficient = rowsWithEff.reduce(function(a, b){
-    return a.cpe <= b.cpe ? a : b;
-  });
-  var top2 = rowsWithEff.slice().sort(function(a, b){ return b.credits - a.credits; }).slice(0, 2);
+  var largest = rowsMix.reduce(function(a, b){ return a.pct >= b.pct ? a : b; });
+  var smallestSpend = rowsMix.reduce(function(a, b){ return a.credits <= b.credits ? a : b; });
+  var top2 = rowsMix.slice().sort(function(a, b){ return b.credits - a.credits; }).slice(0, 2);
   var top2Share = (top2[0].credits + top2[1].credits) / totalMix * 100;
 
   var strip = document.getElementById('usage-insights-strip');
@@ -937,9 +964,9 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     +   '<div class="usage-insight-hint">' + largest.pct.toFixed(1) + '% of credits in this period</div>'
     + '</div>'
     + '<div class="usage-insight">'
-    +   '<div class="usage-insight-label">Most credits-efficient</div>'
-    +   '<div class="usage-insight-val">' + mostEfficient.name + '</div>'
-    +   '<div class="usage-insight-hint">≈ ' + mostEfficient.cpe.toFixed(1) + ' credits per outcome (lower is leaner for comparable work)</div>'
+    +   '<div class="usage-insight-label">Smallest work-type spend</div>'
+    +   '<div class="usage-insight-val">' + smallestSpend.name + '</div>'
+    +   '<div class="usage-insight-hint">' + smallestSpend.credits.toLocaleString() + ' credits — tail vs head drivers above</div>'
     + '</div>'
     + '<div class="usage-insight">'
     +   '<div class="usage-insight-label">Concentration risk</div>'
@@ -948,7 +975,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     + '</div>';
 
   var tbody = document.getElementById('usage-matrix-tbody');
-  rowsWithEff.forEach(function(row, i){
+  rowsMix.forEach(function(row, i){
     var tr = document.createElement('tr');
     var pctW = row.pct;
     tr.innerHTML = ''
@@ -960,14 +987,10 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       + '<td class="share-wrap">'
       +   '<span class="usage-pct-label"></span>'
       +   '<div class="share-bar" role="img" aria-label="Share bar"><span></span></div>'
-      + '</td>'
-      + '<td class="num" data-outcomes></td>'
-      + '<td class="num" data-cpe></td>';
+      + '</td>';
     tr.querySelector('.work-type-name').textContent = row.name;
     tr.querySelector('.work-type-desc').textContent = row.desc;
     tr.querySelector('[data-credits]').textContent = row.credits.toLocaleString();
-    tr.querySelector('[data-outcomes]').textContent = row.outcomes.toLocaleString();
-    tr.querySelector('[data-cpe]').textContent = row.cpe.toFixed(1);
     var pctLabel = tr.querySelector('.usage-pct-label');
     pctLabel.textContent = row.pct.toFixed(1) + '%';
     pctLabel.style.cssText = 'font-size:12px;color:var(--ds-color-text-secondary)';
