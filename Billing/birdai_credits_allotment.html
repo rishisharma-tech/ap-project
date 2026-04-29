@@ -586,18 +586,62 @@ td.muted{color:var(--ds-color-text-secondary)}
 .chip.user{background:var(--aero-green-20);color:var(--ds-color-success)}
 .chip.agent{background:var(--aero-yellow-20);color:var(--aero-yellow-200)}
 
-/* Allocations tab: filter + row kebab (overflow-x allows menus to show) */
-.allocations-toolbar{
-  display:flex;flex-wrap:wrap;align-items:center;gap:10px var(--ds-space-3);
-  margin-bottom:var(--ds-space-3);
+/* Allocations tab: first column header = th-inner + native select styled like other headers */
+.allocations-allottee-th-inner{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  max-width:100%;
+  min-width:0;
+  cursor:pointer;
 }
-.allocations-filter-label{
-  margin:0;font-size:var(--ds-font-size-xs);
-  text-transform:uppercase;letter-spacing:0.5px;
-  color:var(--ds-color-text-muted);
+.allocations-allottee-th-inner .allocations-th-select{
+  flex:1 1 auto;
+  min-width:0;
 }
-.allocations-type-select{
-  width:auto;min-width:140px;max-width:100%;
+.allocations-th-select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  font-family:var(--ds-font-family);
+  font-size:var(--ds-font-size-sm);
+  font-weight:var(--ds-font-weight-regular);
+  line-height:1.25;
+  letter-spacing:inherit;
+  color:var(--ds-color-text-secondary);
+  background-color:var(--ds-color-bg-surface);
+  border:1px solid var(--ds-color-border);
+  border-radius:var(--ds-radius-sm);
+  margin:0;
+  padding:4px 6px;
+  max-width:min(100%,280px);
+  cursor:pointer;
+  text-align:left;
+  vertical-align:middle;
+}
+.allocations-allottee-th-inner select.allocations-th-select::-webkit-expand-button,
+.allocations-allottee-th-inner select.allocations-th-select::-ms-expand{
+  display:none;
+}
+.allocations-allottee-th-inner select.allocations-th-select::-moz-focus-inner{border:0}
+.allocations-th-select:hover,
+.allocations-allottee-th-inner:hover .allocations-th-select{
+  color:var(--ds-color-text-primary);
+  border-color:var(--aero-gray-60);
+}
+.allocations-allottee-th-inner:hover .sort-icon{color:var(--ds-color-text-primary)}
+.allocations-th-select:focus{
+  outline:2px solid var(--ds-color-blue-100);
+  outline-offset:1px;
+  border-color:var(--ds-color-blue-100);
+  background-color:var(--ds-color-bg-surface);
+}
+.allocations-th-allottee{
+  white-space:normal;
+  vertical-align:middle;
+}
+.allocations-allottee-th-inner .sort-icon{
+  flex-shrink:0;
 }
 
 /* Full-width column distribution: avoid a huge empty last cell with icons pinned to the viewport edge */
@@ -1789,24 +1833,22 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           </div>
         </div>
         <div id="allocations-with-data">
-        <div class="allocations-toolbar">
-          <label class="allocations-filter-label" for="allocations-type-filter">Allottee type</label>
-          <select id="allocations-type-filter" class="drawer-select allocations-type-select" aria-label="Filter allocations by allottee type">
-            <option value="all" selected>All types</option>
-            <option value="team">Teams</option>
-            <option value="location">Locations</option>
-            <option value="location_group">Location groups</option>
-            <option value="user">Users</option>
-            <option value="agent">Agents</option>
-          </select>
-        </div>
         <div class="table-wrap">
           <table class="billing-data-table" id="allotments-table" aria-label="Entity allocations">
             <thead>
               <tr>
-                <th scope="col">
-                  <span class="th-inner"><span id="allocations-first-column-heading">Allottee</span>
-                    <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <th scope="col" class="allocations-th-allottee">
+                  <span class="th-inner allocations-allottee-th-inner">
+                    <label class="visually-hidden" for="allocations-type-filter">Allottee type</label>
+                    <select id="allocations-type-filter" class="allocations-th-select">
+                      <option value="all" selected>All types</option>
+                      <option value="team">Teams</option>
+                      <option value="location">Locations</option>
+                      <option value="location_group">Location groups</option>
+                      <option value="user">Users</option>
+                      <option value="agent">Agents</option>
+                    </select>
+                    <span class="sort-icon" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </span>
                 </th>
                 <th class="num sorted">
@@ -2141,7 +2183,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 <div class="drawer-field drawer-field--compact">
                   <label class="drawer-label drawer-label--ai-prompt" for="drawer-ai-prompt" id="drawer-ai-prompt-label">
                     <span class="drawer-ai-prompt-brand">
-                      <span class="drawer-ai-prompt-brand__muted">Allot with </span><span class="drawer-ai-prompt-brand__aiWrap"><span class="drawer-ai-prompt-brand__ai">AI</span><span class="material-symbols-outlined drawer-ai-prompt-brand__spark" aria-hidden="true">auto_awesome</span></span>
+                      <span class="drawer-ai-prompt-brand__muted">Allocate with </span><span class="drawer-ai-prompt-brand__aiWrap"><span class="drawer-ai-prompt-brand__ai">AI</span><span class="material-symbols-outlined drawer-ai-prompt-brand__spark" aria-hidden="true">auto_awesome</span></span>
                     </span>
                   </label>
                   <textarea id="drawer-ai-prompt" class="drawer-textarea drawer-textarea--ai" rows="3"
@@ -3687,14 +3729,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var sel = document.getElementById('allocations-type-filter');
     if(!sel) return;
 
-    function syncAllocationsFirstColumnHeading(){
-      var heading = document.getElementById('allocations-first-column-heading');
-      if(!heading) return;
-      var opt = sel.options[sel.selectedIndex];
-      var raw = opt ? opt.textContent.trim() : 'Allottee';
-      heading.textContent = sel.value === 'all' ? 'Allottee' : raw;
-    }
-
     function applyAllocationsTypeFilter(){
       var val = sel.value || 'all';
       document.querySelectorAll('#allotments-table tbody tr').forEach(function(tr){
@@ -3703,10 +3737,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         tr.hidden = !show;
         if(!show) tr.classList.remove('selected');
       });
-      syncAllocationsFirstColumnHeading();
     }
     sel.addEventListener('change', applyAllocationsTypeFilter);
-    syncAllocationsFirstColumnHeading();
+    applyAllocationsTypeFilter();
   })();
 
   (function setupDrawerAiRulesUi(){
