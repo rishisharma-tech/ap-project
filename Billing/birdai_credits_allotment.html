@@ -17,7 +17,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BirdAI credits — Allotment</title>
+<title>Credits — Allotment</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=block"/>
@@ -246,17 +246,6 @@ body:not([data-state="assigned"]) .kebab-divider.hidden-empty{display:none}
   font-size:var(--ds-font-size-lg);font-weight:var(--ds-font-weight-regular);
   line-height:26px;letter-spacing:-0.36px;color:var(--ds-color-text-primary);
 }
-.page-hdr-insights{
-  display:inline-flex;align-items:center;
-  font-size:var(--ds-font-size-sm);
-  color:var(--ds-color-blue-100);
-  text-decoration:none;
-  padding:4px 2px;
-  margin-right:var(--ds-space-2);
-}
-.page-hdr-insights:hover{text-decoration:underline;color:var(--ds-color-blue-300)}
-body:not([data-state="assigned"]) .page-hdr-insights{display:none}
-body.allot-drawer-open .page-hdr-insights{opacity:0.45;pointer-events:none}
 body.allot-drawer-open .page-hdr-cta{opacity:0.45;pointer-events:none}
 body.allot-drawer-open .content{pointer-events:none}
 
@@ -472,23 +461,17 @@ body.allot-drawer-open .content{pointer-events:none}
   color:var(--ds-color-text-primary);
 }
 .section-sub{font-size:var(--ds-font-size-sm);color:var(--ds-color-text-muted);margin-top:2px}
-.allottee-table-hint{
-  font-size:12px;color:var(--ds-color-text-muted);
-  line-height:16px;
-  margin:0 0 10px 2px;max-width:72ch;
-}
 
 /* Assigned section: Agents vs Allocations */
 .assigned-view-tabs{
   display:flex;align-items:flex-end;gap:4px;
   padding:0;margin:0 0 var(--ds-space-4);
-  border-bottom:1px solid var(--ds-color-border);
 }
 .assigned-tab{
   appearance:none;-webkit-appearance:none;margin:0;padding:0 16px;
   height:37px;border:none;border-bottom:2px solid transparent;background:none;
   font:inherit;font-size:14px;line-height:37px;font-weight:var(--ds-font-weight-regular);
-  color:var(--ds-color-text-secondary);cursor:pointer;border-radius:0;margin-bottom:-1px;
+  color:var(--ds-color-text-secondary);cursor:pointer;border-radius:0;
 }
 .assigned-tab:hover{color:var(--ds-color-text-primary);}
 .assigned-tab.is-active{
@@ -703,8 +686,6 @@ td.muted{color:var(--ds-color-text-secondary)}
 }
 .row-chart-btn:focus-visible{outline:2px solid var(--ds-color-blue-100);outline-offset:2px;border-radius:var(--ds-radius-sm)}
 .row-chart-btn .material-symbols-outlined{font-size:18px}
-.row-chart-btn--visible{opacity:1;pointer-events:auto}
-
 #agents-usage-table th.agents-actions-th,
 #agents-usage-table td.agents-actions-cell{
   width:auto;
@@ -722,11 +703,96 @@ td.muted{color:var(--ds-color-text-secondary)}
   gap:4px;
 }
 
+/* Agents table: ghost icon actions until hover, row focus-within, or kebab menu open — mirrors allocations row tooling */
+#agents-usage-table .agents-row-actions .row-chart-btn,
+#agents-usage-table .agents-row-actions .agents-toolbar-kebab .kebab-btn{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.12s ease, background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+#agents-usage-table tbody tr:hover .agents-row-actions .row-chart-btn,
+#agents-usage-table tbody tr:focus-within .agents-row-actions .row-chart-btn,
+#agents-usage-table .agents-row-actions:has(.agents-toolbar-kebab.open) .row-chart-btn,
+#agents-usage-table tbody tr:hover .agents-row-actions .agents-toolbar-kebab .kebab-btn,
+#agents-usage-table tbody tr:focus-within .agents-row-actions .agents-toolbar-kebab .kebab-btn,
+#agents-usage-table .agents-toolbar-kebab.open .kebab-btn{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* DS: 28×28 icon buttons — insights (blue accent), overflow (neutral icon fill) */
+#agents-usage-table .agents-row-actions .row-chart-btn{
+  width:var(--ds-width-btn);
+  height:var(--ds-width-btn);
+  box-sizing:border-box;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:var(--ds-radius-sm);
+  background:transparent;
+  color:var(--ds-color-blue-100);
+}
+#agents-usage-table .agents-row-actions .row-chart-btn:hover{
+  background:var(--ds-color-bg-muted);
+  border-color:var(--ds-color-border);
+  color:var(--ds-color-blue-200);
+}
+
+#agents-usage-table .agents-row-actions .agents-toolbar-kebab .kebab-btn{
+  width:var(--ds-width-btn);
+  height:var(--ds-width-btn);
+  box-sizing:border-box;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:var(--ds-radius-sm);
+  background:transparent;
+  color:var(--ds-color-text-icon);
+}
+#agents-usage-table .agents-row-actions .agents-toolbar-kebab .kebab-btn:hover{
+  background:var(--ds-color-bg-muted);
+  border-color:var(--ds-color-border);
+  color:var(--ds-color-text-primary);
+}
+
+#agents-usage-table .agents-row-actions .material-symbols-outlined{
+  font-size:20px;
+  font-variation-settings:'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+
+#allotments-table .alloc-row-corner-inner .row-chart-btn{
+  width:var(--ds-width-btn);
+  height:var(--ds-width-btn);
+  box-sizing:border-box;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:var(--ds-radius-sm);
+  background:transparent;
+  color:var(--ds-color-blue-100);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:opacity 0.12s ease, background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+#allotments-table .alloc-row-corner-inner .row-chart-btn:hover{
+  background:var(--ds-color-bg-muted);
+  border-color:var(--ds-color-border);
+  color:var(--ds-color-blue-200);
+}
+#allotments-table .alloc-row-corner-inner .row-chart-btn .material-symbols-outlined{
+  font-size:20px;
+  font-variation-settings:'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+
+#allotments-table .alloc-row-corner-inner .row-chart-btn,
 #allotments-table .alloc-row-corner-inner .alloc-row-kebab .kebab-btn{
   opacity:0;pointer-events:none;
-  transition:opacity 0.12s ease;
 }
+#allotments-table tbody tr:hover .alloc-row-corner-inner .row-chart-btn,
+#allotments-table tbody tr:focus-within .alloc-row-corner-inner .row-chart-btn,
+#allotments-table tbody tr.selected .alloc-row-corner-inner .row-chart-btn,
+#allotments-table .alloc-row-corner-inner:has(.alloc-row-kebab.open) .row-chart-btn,
 #allotments-table tbody tr:hover .alloc-row-kebab .kebab-btn,
+#allotments-table tbody tr:focus-within .alloc-row-kebab .kebab-btn,
 #allotments-table tbody tr.selected .alloc-row-kebab .kebab-btn,
 #allotments-table .alloc-row-kebab.open .kebab-btn{
   opacity:1;pointer-events:auto;
@@ -884,25 +950,25 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
 .allot-drawer-hdr{
   flex-shrink:0;
-  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:24px 24px 16px;
   border-bottom:1px solid var(--ds-color-border);
 }
 .allot-drawer-hdr-left{
-  display:flex;align-items:flex-start;gap:8px;min-width:0;flex:1;
+  display:flex;align-items:center;gap:8px;min-width:0;flex:1;
 }
 .allot-drawer-back{
-  width:36px;height:36px;flex-shrink:0;margin-top:2px;
-  border:1px solid var(--ds-color-border);
-  border-radius:var(--ds-radius-sm);
-  background:var(--ds-color-bg-surface);
-  color:var(--ds-color-text-secondary);
+  width:36px;height:36px;flex-shrink:0;
+  border:none;border-radius:var(--ds-radius-sm);
+  background:transparent;
+  color:var(--ds-color-text-icon);
   cursor:pointer;display:flex;align-items:center;justify-content:center;
 }
 .allot-drawer-back:hover{background:var(--ds-color-bg-muted)}
 .allot-drawer-back .material-symbols-outlined{font-size:22px}
-.allot-drawer-hdr-text{min-width:0}
+.allot-drawer-hdr-text{min-width:0;display:flex;align-items:center}
 .allot-drawer-title{
+  margin:0;
   font-size:18px;
   font-weight:var(--ds-font-weight-regular);
   line-height:24px;letter-spacing:-0.3px;
@@ -962,10 +1028,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 #save-allocation-btn{height:36px;padding:0 16px}
 .allot-drawer-close{
   width:36px;height:36px;flex-shrink:0;
-  border:1px solid var(--ds-color-border);
-  border-radius:var(--ds-radius-sm);
-  background:var(--ds-color-bg-surface);
-  color:var(--ds-color-text-secondary);
+  border:none;border-radius:var(--ds-radius-sm);
+  background:transparent;
+  color:var(--ds-color-text-icon);
   cursor:pointer;display:flex;align-items:center;justify-content:center;
 }
 .allot-drawer-close:hover{background:var(--ds-color-bg-muted)}
@@ -1012,22 +1077,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   font-size:12px;color:var(--ds-color-text-secondary);
   line-height:16px;
 }
-.drawer-pool-card-title{
-  font-size:12px;letter-spacing:0.4px;text-transform:uppercase;
-  color:var(--ds-color-text-secondary);margin-bottom:12px;
-}
-.drawer-pool-line{
-  height:4px;border-radius:var(--aero-radius-xs);background:var(--ds-color-rail-bg);margin:0;overflow:hidden;
-}
-.drawer-pool-line > span{
-  display:block;height:100%;background:var(--ds-color-blue-100);border-radius:2px;
-  transition:width 0.2s ease;
-}
-.drawer-pool-note{
-  display:flex;flex-wrap:wrap;gap:6px 12px;
-  font-size:12px;color:var(--ds-color-text-muted);margin-top:10px;
-}
-.drawer-pool-note span{font-variant-numeric:tabular-nums}
 .drawer-allotment-form .drawer-field{margin-bottom:0}
 .drawer-allotment-form .drawer-field + .drawer-field{margin-top:16px}
 .drawer-field{
@@ -1491,10 +1540,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
       <div class="page-header">
         <div>
-          <h1 class="page-title">BirdAI credits used</h1>
+          <h1 class="page-title">Credits used</h1>
         </div>
         <div class="page-hdr-actions">
-          <a class="page-hdr-insights" href="birdai_credits_insights.html?allottee=West%20Coast&amp;type=Location%20groups">Allottee insights</a>
           <button type="button" class="btn btn-primary page-hdr-cta" data-action="go-configure" title="Update who receives credits">
             Manage allocations
           </button>
@@ -1514,8 +1562,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
       <!-- KPI CARDS -->
       <div class="cards-row">
-        <div class="kpi-card" id="kpi-card-credits" aria-label="Credits available from this period’s pool" aria-describedby="kpi-card-credits-hint">
-          <div class="kpi-label">Credits available</div>
+        <div class="kpi-card" id="kpi-card-credits" aria-label="Credits used from this period's plan pool" aria-describedby="kpi-card-credits-hint">
+          <div class="kpi-label">Credits used</div>
           <div class="kpi-big">
             <span class="kpi-primary" id="kpi1-num">182,250</span>
             <span class="kpi-secondary">/ <span id="kpi-pool-total">225,000</span></span>
@@ -1523,22 +1571,22 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           <div class="kpi-bar-track">
             <div class="kpi-bar-fill" id="kpi1-bar" style="width:81%"></div>
           </div>
-          <div class="kpi-pct-row" aria-label="Credits availability for this billing period">
-            <span class="kpi-pct" id="kpi1-pct">81% available</span>
+          <div class="kpi-pct-row" aria-label="Credits usage for this billing period">
+            <span class="kpi-pct" id="kpi1-pct">81% used</span>
             <span class="kpi-reset-note" id="kpi1-reset-note">Resets on May 1, 2026</span>
           </div>
         </div>
 
-        <div class="kpi-card">
+        <div class="kpi-card kpi-card--over" id="kpi-card-projected" aria-label="Projected credits by period end">
           <div class="kpi-label" id="kpi2-label">Projected usage</div>
           <div class="kpi-big">
-            <span class="kpi-primary" id="kpi2-num">158,940</span>
+            <span class="kpi-primary" id="kpi2-num">255,150</span>
             <span class="kpi-secondary">/ <span id="kpi2-pool-total">225,000</span></span>
           </div>
           <div class="kpi-bar-track">
-            <div class="kpi-bar-fill" id="kpi2-bar" style="width:70.6%"></div>
+            <div class="kpi-bar-fill" id="kpi2-bar" style="width:100%"></div>
           </div>
-          <div class="kpi-pct" id="kpi2-pct">70.6% usage estimated</div>
+          <div class="kpi-pct" id="kpi2-pct">113.4% usage estimated</div>
         </div>
 
         <p class="kpi-card-hint" id="kpi-card-credits-hint">Allocations use available credits. Unused credits remain in your main pool.</p>
@@ -1556,7 +1604,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           <div class="empty-state">
             <p class="empty-title">No allotment yet</p>
             <p class="empty-body">
-              Divide your BirdAI credit pool among teams, locations, and users. Create an allotment to set caps and who is eligible.
+              Divide your credit pool among teams, locations, and users. Create an allotment to set caps and who is eligible.
             </p>
             <button type="button" class="btn btn-primary" data-action="go-configure">Manage allocations</button>
           </div>
@@ -1569,13 +1617,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
            ASSIGNED — two views: Agents (default) · Allocations (entity caps)
            ============================================================= -->
       <div class="state-assigned">
-        <div class="assigned-view-tabs" role="tablist" aria-label="BirdAI credits views">
+        <div class="assigned-view-tabs" role="tablist" aria-label="Credits allocation views">
           <button type="button" class="assigned-tab is-active" role="tab" aria-selected="true" id="tab-assigned-agents" aria-controls="panel-assigned-agents" data-assigned-tab="agents">Agents</button>
           <button type="button" class="assigned-tab" role="tab" aria-selected="false" id="tab-assigned-allocations" aria-controls="panel-assigned-allocations" data-assigned-tab="allocations">Allocations</button>
         </div>
 
         <div id="panel-assigned-agents" class="assigned-panel" role="tabpanel" aria-labelledby="tab-assigned-agents">
-          <p class="allottee-table-hint">Credits per agent for this billing period. Aligns with Billing › Usage › Agents.</p>
           <div class="table-wrap">
             <table class="billing-data-table" id="agents-usage-table" aria-label="Agents credit usage">
               <thead>
@@ -1590,9 +1637,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                       <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
                     </span>
                   </th>
-                  <th class="sorted num">
+                  <th class="sorted num agents-th-used" scope="col" aria-sort="descending">
                     <span class="th-inner">Credits used
                       <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></span>
+                    </span>
+                  </th>
+                  <th class="num agents-th-projected" scope="col">
+                    <span class="th-inner">Projected credit usage
+                      <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
                     </span>
                   </th>
                   <th class="num">
@@ -1605,13 +1657,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
               </thead>
               <tbody>
                 <tr>
-                  <td><div class="td-product-name">Review Generation Agent</div><div class="td-product-sub">Reviews</div></td>
-                  <td>50</td>
-                  <td class="num">100</td>
-                  <td class="num">+12.4%</td>
+                  <td><div class="td-product-name">Social Engagement Agent</div><div class="td-product-sub">Social</div></td>
+                  <td>75</td>
+                  <td class="num agents-used-credits">97,050</td>
+                  <td class="num agents-projected-credits">135,870</td>
+                  <td class="num agents-usage-change">+18.3%</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1642,11 +1695,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 <tr>
                   <td><div class="td-product-name">Review Response Agent</div><div class="td-product-sub">Reviews</div></td>
                   <td>75</td>
-                  <td class="num">600</td>
-                  <td class="num">-2.8%</td>
+                  <td class="num agents-used-credits">38,550</td>
+                  <td class="num agents-projected-credits">53,970</td>
+                  <td class="num agents-usage-change">-2.8%</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1677,81 +1731,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 <tr>
                   <td><div class="td-product-name">Social Publishing Agent</div><div class="td-product-sub">Social</div></td>
                   <td>50</td>
-                  <td class="num">400</td>
-                  <td class="num">+7.1%</td>
+                  <td class="num agents-used-credits">25,750</td>
+                  <td class="num agents-projected-credits">36,050</td>
+                  <td class="num agents-usage-change">+7.1%</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
-                    <div class="kebab-wrap agents-toolbar-kebab">
-                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
-                      </button>
-                      <div class="kebab-menu" role="menu">
-                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
-                          <span class="material-symbols-outlined">edit</span>
-                          <span>Edit allotment</span>
-                        </div>
-                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
-                          <span class="material-symbols-outlined">download</span>
-                          <span>Export CSV</span>
-                        </div>
-                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
-                          <span class="material-symbols-outlined">archive</span>
-                          <span>Archive</span>
-                        </div>
-                        <div class="kebab-divider hidden-empty"></div>
-                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
-                          <span class="material-symbols-outlined">refresh</span>
-                          <span>Reset prototype</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                </tr>
-                <tr>
-                  <td><div class="td-product-name">Social Engagement Agent</div><div class="td-product-sub">Social</div></td>
-                  <td>75</td>
-                  <td class="num">1,500</td>
-                  <td class="num">+18.3%</td>
-                <td class="agents-actions-cell">
-                  <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
-                    <div class="kebab-wrap agents-toolbar-kebab">
-                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
-                      </button>
-                      <div class="kebab-menu" role="menu">
-                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
-                          <span class="material-symbols-outlined">edit</span>
-                          <span>Edit allotment</span>
-                        </div>
-                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
-                          <span class="material-symbols-outlined">download</span>
-                          <span>Export CSV</span>
-                        </div>
-                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
-                          <span class="material-symbols-outlined">archive</span>
-                          <span>Archive</span>
-                        </div>
-                        <div class="kebab-divider hidden-empty"></div>
-                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
-                          <span class="material-symbols-outlined">refresh</span>
-                          <span>Reset prototype</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                </tr>
-                <tr>
-                  <td><div class="td-product-name">Listings Optimization Agent</div><div class="td-product-sub">Listing</div></td>
-                  <td>75</td>
-                  <td class="num">75</td>
-                  <td class="num">-5.2%</td>
-                <td class="agents-actions-cell">
-                  <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1782,11 +1767,84 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 <tr>
                   <td><div class="td-product-name">Search Optimization Agent</div><div class="td-product-sub">Search AI</div></td>
                   <td>10</td>
-                  <td class="num">150</td>
-                  <td class="num">+3.6%</td>
+                  <td class="num agents-used-credits">9,650</td>
+                  <td class="num agents-projected-credits">13,510</td>
+                  <td class="num agents-usage-change">+3.6%</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                </tr>
+                <tr>
+                  <td><div class="td-product-name">Review Generation Agent</div><div class="td-product-sub">Reviews</div></td>
+                  <td>50</td>
+                  <td class="num agents-used-credits">6,450</td>
+                  <td class="num agents-projected-credits">9,030</td>
+                  <td class="num agents-usage-change">+12.4%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <div class="kebab-wrap agents-toolbar-kebab">
+                      <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
+                      </button>
+                      <div class="kebab-menu" role="menu">
+                        <div class="kebab-item hidden-empty" data-action="edit-conditions" role="menuitem">
+                          <span class="material-symbols-outlined">edit</span>
+                          <span>Edit allotment</span>
+                        </div>
+                        <div class="kebab-item hidden-empty" data-action="export-csv" role="menuitem">
+                          <span class="material-symbols-outlined">download</span>
+                          <span>Export CSV</span>
+                        </div>
+                        <div class="kebab-item danger hidden-empty" data-action="archive-agent-row" role="menuitem" tabindex="0">
+                          <span class="material-symbols-outlined">archive</span>
+                          <span>Archive</span>
+                        </div>
+                        <div class="kebab-divider hidden-empty"></div>
+                        <div class="kebab-item danger" data-action="reset-prototype" role="menuitem">
+                          <span class="material-symbols-outlined">refresh</span>
+                          <span>Reset prototype</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                </tr>
+                <tr>
+                  <td><div class="td-product-name">Listings Optimization Agent</div><div class="td-product-sub">Listing</div></td>
+                  <td>75</td>
+                  <td class="num agents-used-credits">4,800</td>
+                  <td class="num agents-projected-credits">6,720</td>
+                  <td class="num agents-usage-change">-5.2%</td>
+                <td class="agents-actions-cell">
+                  <div class="agents-row-actions">
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1879,7 +1937,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">63,938</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -1904,7 +1962,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">51,000</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -1929,7 +1987,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">37,125</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -1954,7 +2012,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">24,125</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -1979,7 +2037,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">13,125</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -2004,7 +2062,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">6,500</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -2029,7 +2087,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">3,875</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -2054,7 +2112,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">2,375</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -2079,7 +2137,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="num">1,313</td>
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
-            <button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
+            <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
             <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
@@ -2152,7 +2210,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         <div class="drawer-stat-row-summary" role="group" aria-label="Balance after allotment and entered credit cap">
           <div class="drawer-stat-col-summary" aria-label="Pool balance left after this allotment amount">
             <div class="drawer-stat-tile-main">
-              <div class="drawer-stat-value" id="drawer-stat-available">182,250</div>
+              <div class="drawer-stat-value" id="drawer-stat-available">42,750</div>
               <div class="drawer-stat-label">Balance after allotment</div>
             </div>
           </div>
@@ -2162,12 +2220,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
               <div class="drawer-stat-label">Credit cap (this allottee)</div>
             </div>
           </div>
-        </div>
-        <div class="drawer-pool-line" aria-hidden="true" role="presentation"><span id="drawer-alloc-bar" style="width:0"></span></div>
-        <div class="drawer-pool-note" id="drawer-pool-note">
-          <span>Total in plan: <span id="drawer-pool-total">225,000</span></span>
-          <span>Credits used elsewhere: <span id="drawer-pool-committed">42,750</span></span>
-          <span>Unallocated pool: <span id="drawer-pool-available">182,250</span></span>
         </div>
       </div>
 
@@ -2573,12 +2625,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     return 225000;
   }
 
-  /** Plan pool: KPI primary #kpi1-num is credits available (remaining); committed = total − that. */
+  /** Plan pool: #kpi1-num = credits USED (committed/consumed) from plan pool; remaining = total − used. */
   function getPlanPoolFromKpi(){
     var total = getPoolTotal();
     var primaryEl = document.getElementById('kpi1-num');
-    var remaining = primaryEl ? parseNum(primaryEl.textContent) : 0;
-    var committed = Math.max(0, total - remaining);
+    var committed = primaryEl ? parseNum(primaryEl.textContent) : 0;
+    var remaining = Math.max(0, total - committed);
     return { total: total, committed: committed, remaining: remaining };
   }
 
@@ -2590,16 +2642,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var isEmpty = tbody.rows.length === 0;
     emptyEl.hidden = !isEmpty;
     dataEl.hidden = isEmpty;
-  }
-
-  function syncDrawerPoolFooterFromKpi(){
-    var snap = getPlanPoolFromKpi();
-    var t = document.getElementById('drawer-pool-total');
-    var c = document.getElementById('drawer-pool-committed');
-    var r = document.getElementById('drawer-pool-available');
-    if(t) t.textContent = formatNum(snap.total);
-    if(c) c.textContent = formatNum(snap.committed);
-    if(r) r.textContent = formatNum(snap.remaining);
   }
 
   function findAllotteeRow(name, type){
@@ -2637,12 +2679,13 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var pn = tr.querySelector('.td-product-name');
     var name = pn ? pn.textContent.trim() : '';
     if(!name) return null;
-    var tds = tr.querySelectorAll('td');
+    var u = tr.querySelector('.agents-used-credits');
+    var p = tr.querySelector('.agents-projected-credits');
     return {
       name: name,
       type: 'Agents',
-      creditsUsed: tds[2] ? tds[2].textContent.trim() : '—',
-      projected: tds[3] ? tds[3].textContent.trim() : '—'
+      creditsUsed: u ? u.textContent.trim() : '—',
+      projected: p ? p.textContent.trim() : '—'
     };
   }
 
@@ -2744,7 +2787,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     if(d) d.focus();
     closeAllDropdowns();
     ensureDrawerDdItemsFocusable();
-    if(st === 'assigned') syncDrawerPoolFooterFromKpi();
     updateDrawerAllocStats();
     if(mode === 'edit'){
       captureDrawerEditBaseline();
@@ -2767,6 +2809,46 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var t = String(str || '').replace(/,/g, '').replace(/\D/g, '');
     var n = parseInt(t || '0', 10);
     return (isNaN(n) ? 0 : n);
+  }
+
+  /** Midpoint of +30–50% above credits used for period-end projection (prototype). */
+  var PROJECTED_USAGE_UPLIFT = 1.4;
+
+  function syncProjectedUsageKpiFromCreditsUsed(){
+    var snap = getPlanPoolFromKpi();
+    var used = snap.committed;
+    var total = snap.total;
+    var projected = Math.round(used * PROJECTED_USAGE_UPLIFT);
+    var numEl = document.getElementById('kpi2-num');
+    var barEl = document.getElementById('kpi2-bar');
+    var pctEl = document.getElementById('kpi2-pct');
+    var poolTotEl = document.getElementById('kpi2-pool-total');
+    var cardEl = document.getElementById('kpi-card-projected');
+
+    if(poolTotEl) poolTotEl.textContent = formatNum(total);
+    if(numEl) numEl.textContent = formatNum(projected);
+
+    var pctOfPlan = total > 0 ? (projected / total) * 100 : 0;
+    var barWidth = Math.min(100, Math.max(0, pctOfPlan));
+    if(barEl) barEl.style.width = barWidth + '%';
+
+    var pctRounded = Math.round(pctOfPlan * 10) / 10;
+    var pctParts = pctRounded.toFixed(1).split('.');
+    var pctStr = pctParts[1] === '0' ? pctParts[0] : pctRounded.toFixed(1);
+    if(pctEl) pctEl.textContent = pctStr + '% usage estimated';
+    if(cardEl) cardEl.classList.toggle('kpi-card--over', pctOfPlan > 100);
+    syncAgentsTableProjectedColumn();
+  }
+
+  /** Per-agent projected column: same uplift as KPI projected usage (period-end run rate). */
+  function syncAgentsTableProjectedColumn(){
+    document.querySelectorAll('#agents-usage-table tbody tr').forEach(function(tr){
+      var usedTd = tr.querySelector('.agents-used-credits');
+      var projTd = tr.querySelector('.agents-projected-credits');
+      if(!usedTd || !projTd) return;
+      var used = parseNum(usedTd.textContent);
+      projTd.textContent = formatNum(Math.round(used * PROJECTED_USAGE_UPLIFT));
+    });
   }
 
   function drawerCapEntered(capEl){
@@ -2816,7 +2898,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var capNum = entered && capEl ? parseNum(capEl.value) : 0;
     var elA = document.getElementById('drawer-stat-available');
     var elB = document.getElementById('drawer-stat-allocated');
-    var bar = document.getElementById('drawer-alloc-bar');
     var snap = getPlanPoolFromKpi();
     var unallocated = snap.remaining;
     var balance = entered ? Math.max(0, unallocated - capNum) : unallocated;
@@ -2825,10 +2906,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       elB.classList.toggle('drawer-stat-value--muted', !entered);
     }
     if(elA) elA.textContent = formatNum(balance);
-    if(bar){
-      var pct = !entered || unallocated <= 0 ? 0 : Math.min(100, (capNum / unallocated) * 100);
-      bar.style.width = pct + '%';
-    }
   }
 
   var AI_RULE_CATALOG = {
@@ -3161,7 +3238,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       + '<td class="num"></td>'
       + '<td class="row-corner">'
       +   '<div class="alloc-row-corner-inner">'
-      +     '<button type="button" class="row-chart-btn row-chart-btn--visible" data-action="open-insights" title="View allottee insights">'
+      +     '<button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights">'
       +       '<span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>'
       +     '</button>'
       +   '<div class="kebab-wrap alloc-row-kebab">'
@@ -3880,6 +3957,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   refreshProtoActive();
 
   ensureDrawerDdItemsFocusable();
+  syncProjectedUsageKpiFromCreditsUsed();
   updateDrawerAllocStats();
   evaluateApplyState();
   refreshAllocationsEmptyUi();
