@@ -770,6 +770,11 @@ td.muted{color:var(--ds-color-text-secondary)}
 }
 .row-chart-btn:focus-visible{outline:2px solid var(--ds-color-blue-100);outline-offset:2px;border-radius:var(--ds-radius-sm)}
 .row-chart-btn .material-symbols-outlined{font-size:18px}
+.row-chart-btn svg{
+  width:18px;
+  height:18px;
+  display:block;
+}
 #agents-usage-table thead th:nth-child(6),
 #agents-usage-table tbody td:nth-child(6){
   /* Actions column: fixed width to avoid layout drift */
@@ -1316,34 +1321,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 .drawer-ai-lede--tight{max-width:52ch;}
 #drawer-assignment-flow .drawer-ai-lede{margin-bottom:10px;}
 
-/* Drawer assignment mode switch (Simple / Complex) */
-.drawer-mode-switch{
-  display:inline-flex;
-  gap:6px;
-  margin:0 0 12px;
-  padding:2px;
-  border:1px solid var(--ds-color-border);
-  border-radius:999px;
-  background:var(--ds-color-bg-surface);
-}
-.drawer-mode-btn{
-  height:28px;
-  padding:0 12px;
-  border:none;
-  border-radius:999px;
-  background:transparent;
-  cursor:pointer;
-  font:inherit;
-  color:var(--ds-color-text-secondary);
-  transition:background 0.12s ease,color 0.12s ease;
-}
-.drawer-mode-btn.is-active{
-  background:var(--ds-color-blue-selected);
-  color:var(--ds-color-text-primary);
-}
-.drawer-mode-btn:focus-visible{outline:2px solid var(--ds-color-blue-100);outline-offset:2px}
-
-/* Assignment modes */
+/* Assignment mode variants (Simple / Complex) */
 #drawer-assignment-flow[data-assignment-mode="simple"] .ai-condition-add-wrap{display:none}
 #drawer-assignment-flow[data-assignment-mode="simple"] .ai-cond-join{display:none}
 
@@ -1377,6 +1355,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 }
 .drawer-field--compact .drawer-label{
   margin-bottom:4px;
+}
+#drawer-condition-name-field{
+  margin-top:8px;
 }
 .drawer-label--ai-prompt{
   display:block;
@@ -1868,7 +1849,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td class="num agents-projected-credits">6,720</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1911,7 +1899,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td class="num agents-projected-credits">9,030</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1954,7 +1949,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td class="num agents-projected-credits">13,510</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -1997,7 +1999,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td class="num agents-projected-credits">36,050</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -2040,7 +2049,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td class="num agents-projected-credits">53,970</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -2083,7 +2099,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   <td class="num agents-projected-credits">135,870</td>
                 <td class="agents-actions-cell">
                   <div class="agents-row-actions">
-                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent"><span class="material-symbols-outlined" aria-hidden="true">bar_chart</span></button>
+                    <button type="button" class="row-chart-btn" data-action="open-insights" title="View insights for this agent" aria-label="View insights for this agent">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </button>
                     <div class="kebab-wrap agents-toolbar-kebab">
                       <button type="button" class="kebab-btn" title="More options" data-kebab-toggle="" aria-haspopup="true" aria-expanded="false">
                         <span class="material-symbols-outlined" aria-hidden="true">more_vert</span>
@@ -2193,7 +2216,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2219,7 +2247,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2245,7 +2278,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2271,7 +2309,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2297,7 +2340,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2323,7 +2371,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2349,7 +2402,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2375,7 +2433,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2401,7 +2464,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <td class="row-corner">
             <div class="alloc-row-corner-inner">
             <button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights" aria-label="View allottee insights">
-            <span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
             </button>
             <div class="kebab-wrap alloc-row-kebab">
             <button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>
@@ -2492,11 +2560,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           <p class="drawer-section-label drawer-section-label--prompt" id="drawer-prompt-heading">Who receives credits</p>
           <p class="drawer-ai-lede drawer-ai-lede--tight" id="drawer-prompt-lede">Allocate credits using an AI prompt or do it manually.</p>
 
-          <div class="drawer-mode-switch" role="tablist" aria-label="Allocation rule complexity">
-            <button type="button" class="drawer-mode-btn is-active" role="tab" aria-selected="true" data-drawer-assignment-mode="simple">Simple</button>
-            <button type="button" class="drawer-mode-btn" role="tab" aria-selected="false" data-drawer-assignment-mode="complex">Complex</button>
-          </div>
-
           <div class="drawer-rule-layout">
             <div class="drawer-split">
               <div class="drawer-split-col drawer-split-col--prompt">
@@ -2528,6 +2591,10 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                       <span class="drawer-ai-add-cond-ring" aria-hidden="true">+</span>
                       Add condition
                     </button>
+                  </div>
+
+                  <div class="drawer-field drawer-field--compact" id="drawer-condition-name-field">
+                    <input type="text" class="drawer-input" id="drawer-condition-name" placeholder="Condition Name" aria-label="Condition name" autocomplete="off"/>
                   </div>
                 </div>
               </div>
@@ -2596,14 +2663,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         <div class="proto-item-sub">Build conditions</div>
       </div>
     </a>
-    <a class="proto-item blue" href="birdai_credits_allotment.html?state=configure&amp;drawerMode=simple">
+    <a class="proto-item blue" href="birdai_credits_allotment.html?state=configure-simple">
       <span class="dot"></span>
       <div class="proto-item-text">
         <div class="proto-item-name">Configure · Simple</div>
         <div class="proto-item-sub">AI prompt + one condition row</div>
       </div>
     </a>
-    <a class="proto-item blue" href="birdai_credits_allotment.html?state=configure&amp;drawerMode=complex">
+    <a class="proto-item blue" href="birdai_credits_allotment.html?state=configure-complex">
       <span class="dot"></span>
       <div class="proto-item-text">
         <div class="proto-item-name">Configure · Complex</div>
@@ -2916,6 +2983,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
   function serializeDrawerEditSnapshot(){
     var ta = document.getElementById('drawer-ai-prompt');
+    var cn = document.getElementById('drawer-condition-name');
     var cap = document.getElementById('drawer-credit-cap');
     var reset = document.querySelector('input[name="drawer-reset-cadence"]:checked');
     var capNorm = '';
@@ -2924,6 +2992,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     }
     var segs = [
       ta ? String(ta.value) : '',
+      cn ? String(cn.value) : '',
       capNorm,
       reset ? reset.value : ''
     ];
@@ -3107,10 +3176,13 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       initAllotmentSelectorDefaults();
     }
 
-    // Default assignment complexity mode (Simple unless explicitly set).
-    var params = new URLSearchParams(window.location.search);
-    var dm = params.get('drawerMode');
-    setAssignmentMode(dm === 'complex' ? 'complex' : 'simple', { skipEval: true });
+    // Restore last condition name (prototype convenience).
+    (function(){
+      var cn = document.getElementById('drawer-condition-name');
+      if(!cn) return;
+      var persisted = loadPersisted();
+      cn.value = String((persisted && persisted.lastConditionName) || '');
+    })();
 
     document.body.classList.add('allot-drawer-open');
     setDrawerA11y(true);
@@ -3303,62 +3375,65 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   function fillAiWhereSelect(sel, selected){
     if(!sel) return;
     sel.innerHTML = '';
+    var ph = document.createElement('option');
+    ph.value = '';
+    ph.textContent = '';
+    sel.appendChild(ph);
     AI_RULE_CATALOG.whereOptions.forEach(function(o){
       var opt = document.createElement('option');
       opt.value = o.value;
       opt.textContent = o.label;
       sel.appendChild(opt);
     });
-    if(selected){
-      sel.value = selected;
-      if(sel.value !== selected){
-        sel.value = AI_RULE_CATALOG.whereOptions[0].value;
-      }
-    }
+    sel.value = selected || '';
   }
 
   function fillAiOpSelect(sel, selected){
     if(!sel) return;
     sel.innerHTML = '';
+    var ph = document.createElement('option');
+    ph.value = '';
+    ph.textContent = '';
+    sel.appendChild(ph);
     AI_RULE_CATALOG.opOptions.forEach(function(t){
       var opt = document.createElement('option');
       opt.value = t;
       opt.textContent = t;
       sel.appendChild(opt);
     });
-    if(selected){
+    sel.value = selected || '';
+    if(selected && sel.value !== selected){
+      var o2 = document.createElement('option');
+      o2.value = selected;
+      o2.textContent = selected;
+      sel.appendChild(o2);
       sel.value = selected;
-      if(sel.value !== selected){
-        var o2 = document.createElement('option');
-        o2.value = selected;
-        o2.textContent = selected;
-        sel.appendChild(o2);
-        sel.value = selected;
-      }
     }
   }
 
   function fillAiValueSelect(sel, whereKey, selected){
     if(!sel) return;
     sel.innerHTML = '';
-    var list = AI_RULE_CATALOG.valueOptionsByWhere[whereKey];
-    if(!list || !list.length){ list = ['—']; }
+    var ph = document.createElement('option');
+    ph.value = '';
+    ph.textContent = '';
+    sel.appendChild(ph);
+    var list = whereKey ? AI_RULE_CATALOG.valueOptionsByWhere[whereKey] : null;
+    if(!list || !list.length){ list = []; }
     list.forEach(function(t){
       var opt = document.createElement('option');
       opt.value = t;
       opt.textContent = t;
       sel.appendChild(opt);
     });
-    if(selected){
+    sel.value = selected || '';
+    if(selected && sel.value !== selected){
+      var ox = document.createElement('option');
+      ox.value = selected;
+      ox.textContent = selected;
+      sel.appendChild(ox);
       sel.value = selected;
-      if(sel.value !== selected){
-        var ox = document.createElement('option');
-        ox.value = selected;
-        ox.textContent = selected;
-        sel.appendChild(ox);
-        sel.value = selected;
-      }
-    } else if(sel.options.length){ sel.selectedIndex = 0; }
+    }
   }
 
   function refreshAiRowValueOptions(row){
@@ -3382,7 +3457,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       + '</button>';
     listEl.appendChild(row);
     data = data || {};
-    var wk = data.whereKey || 'max_credit_share';
+    // Default must be empty until user selects or Send fills.
+    var wk = (data.whereKey != null) ? data.whereKey : '';
     fillAiWhereSelect(row.querySelector('.ai-cond-select--where'), wk);
     fillAiOpSelect(row.querySelector('.ai-cond-select--op'), data.op);
     fillAiValueSelect(row.querySelector('.ai-cond-select--val'), wk, data.val);
@@ -3394,6 +3470,180 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     if(!p) return 'AND';
     if(/\b(or|either)\b/.test(p) || /\s(or|\/)\s/.test(p) || /\b(any|either)\s(one|of)\b/.test(p)) return 'OR';
     return 'AND';
+  }
+
+  function parsePromptToRuleSpecs(promptText){
+    var pRaw = String(promptText || '');
+    var p = pRaw.trim().toLowerCase();
+    if(!p) return { join: 'AND', rules: [] };
+
+    var join = inferAiJoinerFromPrompt(pRaw);
+    var rules = [];
+
+    // 1) Percentage / max credit share
+    var pctMatch = p.match(/(\d{1,2})\s*%/);
+    if(pctMatch){
+      var pct = pctMatch[1];
+      rules.push({
+        whereKey: 'max_credit_share',
+        op: (/(at\s+most|max(imum)?|cap|limit|<=|≤)/.test(p) ? '≤' : '≤'),
+        val: pct + '% of plan pool / period'
+      });
+    }
+
+    // 2) Credit amount / pool scope hints (best-effort)
+    // If they mention "pool" or "scope", reflect that as credit scope.
+    if(/\b(pool|scope|sub-?pool)\b/.test(p)){
+      var scopeVal = 'Full plan pool';
+      if(/\bmarketing\b/.test(p)) scopeVal = 'Marketing sub-pool';
+      if(/\boperations?\b/.test(p)) scopeVal = 'Operations sub-pool';
+      rules.push({ whereKey:'credit_scope', op:'is', val: scopeVal });
+    }
+
+    // 3) Entity targeting
+    // Location groups
+    if(/\blocation\s*groups?\b/.test(p)){
+      var lgVal = 'East Coast';
+      if(/\bwest\b/.test(p)) lgVal = 'West Coast';
+      if(/\bmidwest\b/.test(p)) lgVal = 'Midwest';
+      if(/\binternational\b/.test(p)) lgVal = 'International';
+      rules.push({ whereKey:'location_group', op:'is', val: lgVal });
+    }
+    // Generic locations mention (no specific address)
+    if(/\blocations?\b/.test(p) && !/\blocation\s*groups?\b/.test(p) && !/\b(720\s+castro|1\s+market|brickell|5th\s+ave|ross\s+ave)\b/.test(p)){
+      rules.push({ whereKey:'location', op:'is', val:'Any US location' });
+    }
+    // Specific location (address-like)
+    if(/\b(720\s+castro|1\s+market|brickell|5th\s+ave|ross\s+ave)\b/.test(p)){
+      var locVal = '720 Castro St';
+      if(/\b1\s+market\b/.test(p)) locVal = '1 Market St';
+      if(/\bbrickell\b/.test(p)) locVal = '500 Brickell Ave';
+      if(/\b5th\s+ave\b/.test(p)) locVal = '350 5th Ave';
+      if(/\bross\b/.test(p)) locVal = '2100 Ross Ave';
+      rules.push({ whereKey:'location', op:'is', val: locVal });
+    }
+    // Agent / product (map to Agent list)
+    if(/\bagent|product\b/.test(p)){
+      var aVal = 'Review Generation Agent';
+      if(/\bsearch\b/.test(p)) aVal = 'Search Optimization Agent';
+      if(/\bsocial\b/.test(p)) aVal = 'Social Publishing Agent';
+      rules.push({ whereKey:'agent', op:'is', val: aVal });
+    }
+    // Team/user/division/region (generic mentions)
+    if(/\bteams?\b/.test(p) && !rules.some(function(r){ return r.whereKey === 'team'; })){
+      rules.push({ whereKey:'team', op:'is', val:'North America' });
+    }
+    if(/\busers?\b/.test(p) && !rules.some(function(r){ return r.whereKey === 'user'; })){
+      rules.push({ whereKey:'user', op:'is', val:'Named users only' });
+    }
+    if(/\bdivisions?\b/.test(p) && !rules.some(function(r){ return r.whereKey === 'division'; })){
+      rules.push({ whereKey:'division', op:'is', val:'Enterprise' });
+    }
+    if(/\bregions?\b/.test(p) && !rules.some(function(r){ return r.whereKey === 'region'; })){
+      rules.push({ whereKey:'region', op:'is', val:'Americas' });
+    }
+    // Entities umbrella (if they generally mention entity types)
+    if(/\bentities?\b|\blocations?\b|\bteams?\b|\busers?\b|\bagents?\b|\bdivisions?\b/.test(p)){
+      var entVal = 'All entity types';
+      if(/\blocation\s*groups?\b/.test(p) && /\blocations?\b/.test(p)) entVal = 'Locations, location groups';
+      else if(/\blocation\s*groups?\b/.test(p)) entVal = 'Location groups only';
+      else if(/\blocations?\b/.test(p)) entVal = 'Locations only';
+      else if(/\bteams?\b/.test(p)) entVal = 'Teams only';
+      else if(/\bagents?\b/.test(p)) entVal = 'Agents';
+      else if(/\busers?\b/.test(p)) entVal = 'Users';
+      else if(/\bdivisions?\b/.test(p)) entVal = 'Divisions';
+      rules.push({ whereKey:'entities', op:'is', val: entVal });
+    }
+
+    // Dedup by whereKey (keep first occurrence).
+    var seen = {};
+    rules = rules.filter(function(r){
+      if(!r || !r.whereKey) return false;
+      if(seen[r.whereKey]) return false;
+      seen[r.whereKey] = true;
+      return true;
+    });
+
+    return { join: join, rules: rules };
+  }
+
+  function pickBestSimpleRule(rules){
+    rules = rules || [];
+    if(!rules.length) return null;
+    // Prefer "who/where" targeting over limits/scope for Simple.
+    var rank = {
+      location: 1,
+      location_group: 2,
+      region: 3,
+      division: 4,
+      team: 5,
+      user: 6,
+      agent: 7,
+      entities: 8,
+      max_credit_share: 9,
+      credit_scope: 10
+    };
+    var best = rules[0];
+    var bestScore = rank[best.whereKey] || 50;
+    for(var i = 1; i < rules.length; i++){
+      var r = rules[i];
+      var s = rank[r.whereKey] || 50;
+      if(s < bestScore){
+        best = r;
+        bestScore = s;
+      }
+    }
+    return best;
+  }
+
+  function renderAiConditionsFromPrompt(promptText, opts){
+    opts = opts || {};
+    var complex = !!opts.complex;
+    var listEl = document.getElementById('drawer-ai-conditions-list');
+    if(!listEl) return;
+
+    var parsed = parsePromptToRuleSpecs(promptText);
+    var rules = parsed.rules || [];
+
+    // If user clicked Send with text but we couldn't infer anything,
+    // fill a reasonable default rather than leaving the row blank.
+    if(String(promptText || '').trim() && !rules.length){
+      rules = [{ whereKey:'entities', op:'is', val:'All entity types' }];
+    }
+
+    if(!complex){
+      // Simple: exactly one row, no joiners.
+      setAssignmentMode('simple', { skipEval: true });
+      listEl.innerHTML = '';
+      var r0 = pickBestSimpleRule(rules) || { whereKey:'', op:'', val:'' };
+      appendAiConditionRow(listEl, r0);
+      aiGeneratedEntities = null;
+      evaluateApplyState();
+      return;
+    }
+
+    // Complex: multiple rows with joiners when present.
+    setAssignmentMode('complex', { skipEval: true });
+    listEl.innerHTML = '';
+
+    // In Complex, only show multiple rows if prompt yields multiple rules.
+    if(rules.length <= 1){
+      appendAiConditionRow(listEl, rules[0] || { whereKey:'', op:'', val:'' });
+      appendAiJoinerRow(listEl, parsed.join || 'AND');
+      appendAiConditionRow(listEl, { whereKey:'', op:'', val:'' });
+      aiGeneratedEntities = null;
+      evaluateApplyState();
+      return;
+    }
+
+    rules.forEach(function(rule, idx){
+      if(idx > 0){
+        appendAiJoinerRow(listEl, parsed.join || 'AND');
+      }
+      appendAiConditionRow(listEl, rule);
+    });
+    aiGeneratedEntities = null;
+    evaluateApplyState();
   }
 
   function appendAiJoinerRow(listEl, joinValue){
@@ -3544,17 +3794,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   function applySimplePromptToSingleRow(promptText){
     var listEl = document.getElementById('drawer-ai-conditions-list');
     if(!listEl) return;
-    setAssignmentMode('simple', { skipEval: true });
-    var row = listEl.querySelector('.ai-condition-row');
-    if(!row) row = appendAiConditionRow(listEl, { whereKey:'entities', op:'is', val:'All entity types' });
-    var whereKey = guessWhereKeyFromPrompt(promptText);
-    var op = guessOpFromPrompt(promptText);
-    var val = guessValueFromPrompt(whereKey, promptText);
-    fillAiWhereSelect(row.querySelector('.ai-cond-select--where'), whereKey);
-    fillAiOpSelect(row.querySelector('.ai-cond-select--op'), op);
-    fillAiValueSelect(row.querySelector('.ai-cond-select--val'), whereKey, val);
-    aiGeneratedEntities = null;
-    evaluateApplyState();
+    renderAiConditionsFromPrompt(promptText, { complex: false });
   }
 
   function renderAiAppliedConditions(promptText){
@@ -3588,15 +3828,17 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var listEl = document.getElementById('drawer-ai-conditions-list');
     if(!listEl || listEl.querySelector('.ai-condition-row')) return;
     appendAiConditionSegment(listEl, {
-      whereKey: 'entities',
-      op: 'is',
-      val: 'All entity types'
+      whereKey: '',
+      op: '',
+      val: ''
     });
   }
 
   function resetAssignmentDrawerUi(){
     var ta = document.getElementById('drawer-ai-prompt');
     if(ta) ta.value = '';
+    var cn = document.getElementById('drawer-condition-name');
+    if(cn) cn.value = '';
     var condList = document.getElementById('drawer-ai-conditions-list');
     setDrawerAiGenerateBusy(false);
     if(condList) condList.innerHTML = '';
@@ -3666,7 +3908,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       + '<td class="row-corner">'
       +   '<div class="alloc-row-corner-inner">'
       +     '<button type="button" class="row-chart-btn" data-action="open-insights" title="View allottee insights">'
-      +       '<span class="material-symbols-outlined" aria-hidden="true">bar_chart</span>'
+      +       '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">'
+      +         '<path d="M5 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      +         '<path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      +         '<path d="M15 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      +         '<path d="M20 20V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+      +       '</svg>'
       +     '</button>'
       +   '<div class="kebab-wrap alloc-row-kebab">'
       +     '<button type="button" class="kebab-btn" data-row-kebab-toggle aria-haspopup="true" aria-expanded="false" aria-label="Row actions"><span class="material-symbols-outlined">more_vert</span></button>'
@@ -3945,6 +4192,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         if(!btn) break;
         if(btn.getAttribute('aria-disabled') === 'true') break;
         if(btn.disabled) break;
+        // Persist the condition name field (prototype-only).
+        (function(){
+          var cn = document.getElementById('drawer-condition-name');
+          var name = cn ? String(cn.value || '').trim() : '';
+          try{ savePersisted({ lastConditionName: name }); }catch(x){}
+        })();
         var persistedApply = loadPersisted();
         if(persistedApply.returnTo === 'insights' && persistedApply.insightsQs){
           closeDrawer();
@@ -4263,18 +4516,15 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     }
     if(promptSend){
       promptSend.addEventListener('click', function(){
-        if(promptSend.disabled) return;
-        var condList = document.getElementById('drawer-ai-conditions-list');
-        aiGeneratedEntities = null;
-        if(condList) condList.innerHTML = '';
-        var txt = promptEl ? promptEl.value : '';
-        if(getAssignmentMode() === 'simple'){
-          applySimplePromptToSingleRow(txt);
-        } else {
-          // Complex: generate multiple condition rows with AND/OR joiners.
-          renderAiAppliedConditions(txt);
-          evaluateApplyState();
+        var txt = promptEl ? String(promptEl.value || '') : '';
+        if(!txt.trim()){
+          // Keep disabled state in sync even if click fires.
+          syncDrawerPromptSendDisabled();
+          return;
         }
+        var urlState = (new URLSearchParams(window.location.search)).get('state') || '';
+        var complex = urlState === 'configure-complex' || getAssignmentMode() === 'complex';
+        renderAiConditionsFromPrompt(txt, { complex: complex });
       });
     }
     if(gen){
@@ -4295,15 +4545,11 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         evaluateApplyState();
         syncDrawerPromptSendDisabled();
       });
+      promptEl.addEventListener('keyup', syncDrawerPromptSendDisabled);
+      promptEl.addEventListener('change', syncDrawerPromptSendDisabled);
       syncDrawerPromptSendDisabled();
     }
 
-    // Mode tabs
-    document.querySelectorAll('.drawer-mode-btn[data-drawer-assignment-mode]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        setAssignmentMode(btn.getAttribute('data-drawer-assignment-mode') || 'simple');
-      });
-    });
     var condListRoot = document.getElementById('drawer-ai-conditions-list');
     if(condListRoot){
       condListRoot.addEventListener('change', function(e){
@@ -4356,10 +4602,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       clearPersisted();
     }
 
-    var openFromUrl = params.get('state') === 'configure' || params.get('openDrawer') === '1';
+    var urlState = params.get('state');
+    var openFromUrl = urlState === 'configure'
+      || urlState === 'configure-simple'
+      || urlState === 'configure-complex'
+      || params.get('openDrawer') === '1';
 
     /* Open from Insights (Manage allocation / Edit allotment) */
-    if((params.get('state') === 'configure' || openFromUrl) && params.get('returnTo') === 'insights'){
+    if((urlState === 'configure' || openFromUrl) && params.get('returnTo') === 'insights'){
       var iq = [];
       if(params.get('allottee')) iq.push('allottee=' + encodeURIComponent(params.get('allottee')));
       if(params.get('type')) iq.push('type=' + encodeURIComponent(params.get('type')));
@@ -4371,8 +4621,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       try { savePersisted({ state: 'empty' }); } catch(x){}
       persisted = loadPersisted();
     }
-    var sp = params.get('state');
-    if(sp === 'configure' || sp === 'openDrawer') sp = null;
+    var sp = urlState;
+    if(sp === 'configure' || sp === 'configure-simple' || sp === 'configure-complex' || sp === 'openDrawer') sp = null;
 
     var state = sp;
     if(!state && params.get('returnTo') === 'insights') state = 'assigned';
@@ -4416,8 +4666,37 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         }
       }
       var s0 = document.body.getAttribute('data-state') || 'assigned';
-      if(s0 === 'empty') openDrawer({ mode: 'add', from: 'url' });
-      else openDrawer({ mode: 'manage', from: 'url' });
+      var modeHint = urlState;
+      // Configure variants always open in "manage" view for this prototype.
+      var openMode = (s0 === 'empty') ? 'add' : 'manage';
+      openDrawer({ mode: openMode, from: 'url' });
+
+      // Apply assignment complexity based on URL state.
+      if(modeHint === 'configure-complex'){
+        setAssignmentMode('complex', { skipEval: true });
+        // Complex state: start with multiple conditions + AND/OR connector.
+        var listEl = document.getElementById('drawer-ai-conditions-list');
+        if(listEl){
+          listEl.innerHTML = '';
+          appendAiConditionRow(listEl, { whereKey:'', op:'', val:'' });
+          appendAiJoinerRow(listEl, 'AND');
+          appendAiConditionRow(listEl, { whereKey:'', op:'', val:'' });
+        }
+        evaluateApplyState();
+      } else if(modeHint === 'configure-simple'){
+        setAssignmentMode('simple', { skipEval: true });
+        // Ensure exactly one row (user can fill manually, or use Send to parse).
+        var list2 = document.getElementById('drawer-ai-conditions-list');
+        if(list2){
+          list2.innerHTML = '';
+          appendAiConditionRow(list2, { whereKey:'', op:'', val:'' });
+        }
+        evaluateApplyState();
+      } else {
+        // Default: behave like Simple.
+        setAssignmentMode('simple', { skipEval: true });
+        evaluateApplyState();
+      }
     });
   })();
 
