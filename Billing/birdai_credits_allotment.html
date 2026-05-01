@@ -1359,6 +1359,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 #drawer-condition-name-field{
   margin-top:8px;
 }
+#drawer-assignment-flow[data-assignment-mode="simple"] #drawer-condition-name-field{
+  display:none;
+}
 .drawer-label--ai-prompt{
   display:block;
 }
@@ -2034,7 +2037,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   </div>
                 </td>
                 </tr>
-                <tr class="selected">
+                <tr>
                   <td><div class="td-product-name">Review Response Agent</div><div class="td-product-sub">Reviews</div></td>
                   <td><span class="row-status row-status--active">Active</span></td>
                   <td>75</td>
@@ -4289,6 +4292,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         savePersisted({ returnTo: 'assigned' });
         var editRow = el.closest('#allotments-table tbody tr');
         if(editRow){
+          forceSelectAllocationsRow(editRow);
           var pent = entityFromTableRow(editRow);
           if(pent) openDrawer({ mode: 'edit', from: 'table-row-menu', entity: pent });
         }
@@ -4401,11 +4405,19 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     if(!wasSelected) row.classList.add('selected');
   });
 
+  function forceSelectAllocationsRow(row){
+    if(!row || !row.parentElement) return;
+    var tbody = row.parentElement;
+    tbody.querySelectorAll('tr.selected').forEach(function(r){ r.classList.remove('selected'); });
+    row.classList.add('selected');
+  }
+
   /* Double-click row → Edit allocation with live row context */
   document.addEventListener('dblclick', function(e){
     var row = e.target.closest('#allotments-table tbody tr');
     if(!row || e.target.closest('[data-action="open-insights"]') || e.target.closest('.row-insights') || e.target.closest('.alloc-row-kebab')) return;
     e.preventDefault();
+    forceSelectAllocationsRow(row);
     savePersisted({ returnTo: 'assigned' });
     var ent = entityFromTableRow(row);
     if(ent) openDrawer({ mode: 'edit', from: 'table-row', entity: ent });

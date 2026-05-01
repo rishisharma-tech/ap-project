@@ -464,19 +464,28 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
   width:100%;
   border-collapse:collapse;
   font-size:13px;
+  table-layout:fixed;
+}
+.usage-mix-table th:nth-child(1),
+.usage-mix-table td:nth-child(1),
+.usage-mix-table th:nth-child(2),
+.usage-mix-table td:nth-child(2),
+.usage-mix-table th:nth-child(3),
+.usage-mix-table td:nth-child(3){
+  width:33.333%;
 }
 .usage-mix-table th{
   text-align:left;
-  padding:10px 12px 10px 0;
+  padding:10px 12px;
   font-weight:400;
   font-size:12px;
   color:var(--ds-color-text-secondary);
   border-bottom:1px solid var(--ds-color-border);
   white-space:nowrap;
 }
-.usage-mix-table th.num{text-align:right;padding-left:12px}
+.usage-mix-table th.num{text-align:right}
 .usage-mix-table td{
-  padding:12px 12px 12px 0;
+  padding:12px 12px;
   border-bottom:1px solid var(--ds-color-border-subtle);
   vertical-align:middle;
   color:var(--ds-color-text-primary);
@@ -496,7 +505,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
   margin-top:2px;
   max-width:360px;
 }
-.share-wrap{min-width:120px;max-width:200px}
+.share-wrap{min-width:0;max-width:none}
 .share-bar{
   height:6px;
   border-radius:var(--aero-radius-xs);
@@ -613,7 +622,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
       <div class="page-header">
         <div class="page-header-left">
           <h1 class="page-title" id="page-title">Allottee</h1>
-          <p class="page-title-sub">Credit usage</p>
         </div>
         <div class="page-header-right">
           <button type="button" class="date-pill" title="Date range" data-action="toast-date">
@@ -644,9 +652,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
           <span class="card-title">Summary</span>
         </div>
         <div class="insights-summary-band" role="group" aria-label="Credit usage summary">
-          <p class="insights-summary-lede" id="insights-summary-lede">
-            Credit cap and activity for this allottee for the selected date range.
-          </p>
           <div class="insights-summary-metrics">
             <div class="insights-metric">
               <div class="drawer-stat-value">72,500</div>
@@ -699,17 +704,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
               <span class="material-symbols-outlined">more_vert</span>
             </div>
           </div>
-        </div>
-        <p class="usage-dash-sub">
-          Location lists answer where in the org tree work happens. For credit governance, admins usually need to see
-          which capabilities consume the pool and how that mix concentrates.
-          That supports training teams, tuning rollouts, and defending budget.
-        </p>
-        <div class="usage-insights" id="usage-insights-strip">
-          <!-- filled by script -->
-        </div>
-        <div class="usage-mix-chart-wrap">
-          <canvas id="usageMixChart" aria-label="Share of credits by work type"></canvas>
         </div>
         <div class="usage-mix-table-wrap">
           <table class="usage-mix-table">
@@ -828,8 +822,8 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
   var timeLabels = ['Aug\n2025', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan\n2026'];
   var creditsData = [16300, 23800, 24800, 28800, 31400, 21200];
 
-  /* Bar fill: $gray1000 / --aero-gray-1000 (Aero DS) */
-  var CREDITS_SERIES = dsToken('--aero-gray-1000') || '#2c3e50';
+  /* Bar fill: primary blue (Aero DS) */
+  var CREDITS_SERIES = dsToken('--aero-blue-100') || dsToken('--ds-color-blue-100') || '#1976d2';
   /* Values above bars: secondary ink (not capsules) */
   var CHART_VALUE_LABEL = dsToken('--ds-color-text-secondary') || '#555555';
   var CHART_TEXT_MUTED = dsToken('--ds-color-text-muted') || '#8f8f8f';
@@ -956,23 +950,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
   var top2 = rowsMix.slice().sort(function(a, b){ return b.credits - a.credits; }).slice(0, 2);
   var top2Share = (top2[0].credits + top2[1].credits) / totalMix * 100;
 
-  var strip = document.getElementById('usage-insights-strip');
-  strip.innerHTML = ''
-    + '<div class="usage-insight">'
-    +   '<div class="usage-insight-label">Largest cost driver</div>'
-    +   '<div class="usage-insight-val">' + largest.name + '</div>'
-    +   '<div class="usage-insight-hint">' + largest.pct.toFixed(1) + '% of credits in this period</div>'
-    + '</div>'
-    + '<div class="usage-insight">'
-    +   '<div class="usage-insight-label">Smallest work-type spend</div>'
-    +   '<div class="usage-insight-val">' + smallestSpend.name + '</div>'
-    +   '<div class="usage-insight-hint">' + smallestSpend.credits.toLocaleString() + ' credits — tail vs head drivers above</div>'
-    + '</div>'
-    + '<div class="usage-insight">'
-    +   '<div class="usage-insight-label">Concentration risk</div>'
-    +   '<div class="usage-insight-val">Top 2 work types = ' + top2Share.toFixed(0) + '%</div>'
-    +   '<div class="usage-insight-hint">High share in few surfaces means changes there swing spend quickly</div>'
-    + '</div>';
+  // usage-insights strip removed per spec
 
   var tbody = document.getElementById('usage-matrix-tbody');
   rowsMix.forEach(function(row, i){
@@ -999,76 +977,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     tbody.appendChild(tr);
   });
 
-  var mixCtx = document.getElementById('usageMixChart').getContext('2d');
-  new Chart(mixCtx, {
-    type: 'bar',
-    data: {
-      labels: ['All credits in period'],
-      datasets: WORK_TYPE_USAGE.map(function(r, i){
-        var pct = (r.credits / totalMix) * 100;
-        return {
-          label: r.name + ' (' + pct.toFixed(0) + '%)',
-          data: [r.credits],
-          backgroundColor: MIX_COLORS[i % MIX_COLORS.length],
-          borderWidth: 0,
-          borderRadius: RADIUS_XS
-        };
-      })
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { left: 0, right: 8, top: 4, bottom: 0 } },
-      plugins: {
-        legend: {
-          position: 'bottom',
-          align: 'start',
-          labels: {
-            usePointStyle: true,
-            pointStyle: 'rect',
-            boxWidth: 8,
-            boxHeight: 8,
-            padding: 8,
-            font: { family: 'Roboto, sans-serif', size: CHART_FS_CAPTION },
-            color: CHART_TEXT_SECONDARY
-          }
-        },
-        tooltip: {
-          callbacks: {
-            label: function(ctx){
-              var v = ctx.parsed.x;
-              if(typeof v !== 'number') v = ctx.dataset.data[0];
-              var base = (ctx.dataset.label || '').split(' (')[0];
-              return base + ': ' + v.toLocaleString() + ' credits';
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          stacked: true,
-          suggestedMax: totalMix,
-          grid: { display: true, color: CHART_GRID_LINE },
-          border: { display: false },
-          ticks: {
-            font: { family: 'Roboto, sans-serif', size: CHART_FS_CAPTION },
-            color: CHART_TEXT_MUTED,
-            callback: function(v){
-              if(v >= 1000) return (v / 1000) + 'K';
-              return v;
-            }
-          }
-        },
-        y: {
-          stacked: true,
-          display: false,
-          grid: { display: false },
-          border: { display: false }
-        }
-      }
-    }
-  });
+  // usageMixChart removed per spec
 
   /* ── Page header: kebab, export, date pill (Figma) ───── */
   function closeInsightsKebab(){
