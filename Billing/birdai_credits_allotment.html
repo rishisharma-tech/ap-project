@@ -627,29 +627,113 @@ td.muted{color:var(--ds-color-text-secondary)}
   flex-shrink:0;
 }
 
-/* Full-width column distribution: avoid a huge empty last cell with icons pinned to the viewport edge */
+/* Table row status pills (Active / Archived) */
+.row-status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.4px;
+  padding:3px 8px;
+  border-radius:20px;
+  line-height:14px;
+  white-space:nowrap;
+}
+.row-status--active{
+  background:var(--ds-color-success-bg);
+  color:var(--ds-color-success);
+}
+.row-status--archived{
+  background:var(--ds-color-bg-muted);
+  color:var(--ds-color-text-secondary);
+}
+
+/* Billing tables: fixed layout + shared column rhythm (equal numeric pair, stable actions col) */
+#agents-usage-table{
+  table-layout:fixed;
+  width:100%;
+}
+#agents-usage-table thead th:nth-child(1),
+#agents-usage-table tbody td:nth-child(1){
+  width:30%;
+  min-width:0;
+}
+#agents-usage-table tbody td:nth-child(1) .td-product-name{
+  overflow-wrap:anywhere;
+}
+#agents-usage-table thead th:nth-child(2),
+#agents-usage-table tbody td:nth-child(2){
+  /* Status */
+  width:14%;
+}
+#agents-usage-table thead th:nth-child(3),
+#agents-usage-table tbody td:nth-child(3){
+  /* Credits per outcome */
+  width:14%;
+}
+/* Equal-ish width for “Credits used” and “Projected credit usage” */
+#agents-usage-table thead th:nth-child(4),
+#agents-usage-table tbody td:nth-child(4),
+#agents-usage-table thead th:nth-child(5),
+#agents-usage-table tbody td:nth-child(5){
+  width:14%;
+}
+#agents-usage-table th.agents-th-status,
+#agents-usage-table td:nth-child(2),
+#allotments-table th.allocations-th-status,
+#allotments-table td:nth-child(2){
+  text-align:center;
+}
+
+/* Make column rhythm *look* even by aligning content consistently */
+#agents-usage-table thead th:nth-child(3),
+#agents-usage-table thead th:nth-child(4),
+#agents-usage-table thead th:nth-child(5),
+#agents-usage-table tbody td:nth-child(3),
+#agents-usage-table tbody td:nth-child(4),
+#agents-usage-table tbody td:nth-child(5),
+#allotments-table thead th:nth-child(3),
+#allotments-table thead th:nth-child(4),
+#allotments-table tbody td:nth-child(3),
+#allotments-table tbody td:nth-child(4){
+  text-align:center;
+}
+#agents-usage-table td.num,
+#allotments-table td.num{
+  text-align:center;
+}
+#agents-usage-table td.agents-actions-cell{ text-align:right; }
+
+/* Matches agents: 32% primary | 22% + 22% metrics | room for row actions */
 #allotments-table{
   table-layout:fixed;
   width:100%;
 }
 #allotments-table thead th:nth-child(1),
 #allotments-table tbody td:nth-child(1){
-  width:40%;
+  width:30%;
   min-width:0;
-}
-#allotments-table thead th:nth-child(2),
-#allotments-table tbody td:nth-child(2){
-  width:25%;
 }
 #allotments-table thead th:nth-child(3),
 #allotments-table tbody td:nth-child(3){
-  width:25%;
+  width:17.5%;
+}
+#allotments-table thead th:nth-child(2),
+#allotments-table tbody td:nth-child(2){
+  /* Status */
+  width:17.5%;
+}
+#allotments-table thead th:nth-child(3),
+#allotments-table tbody td:nth-child(3),
+#allotments-table thead th:nth-child(4),
+#allotments-table tbody td:nth-child(4){
+  width:17.5%;
 }
 #allotments-table th.row-corner-th,
 #allotments-table td.row-corner{
-  width:10%;
-  min-width:96px;
-  max-width:120px;
+  width:17.5%;
+  min-width:88px;
   padding:0 10px 0 8px;
   box-sizing:border-box;
   position:relative;
@@ -686,23 +770,27 @@ td.muted{color:var(--ds-color-text-secondary)}
 }
 .row-chart-btn:focus-visible{outline:2px solid var(--ds-color-blue-100);outline-offset:2px;border-radius:var(--ds-radius-sm)}
 .row-chart-btn .material-symbols-outlined{font-size:18px}
+#agents-usage-table thead th:nth-child(6),
+#agents-usage-table tbody td:nth-child(6){
+  /* Actions column: fixed width to avoid layout drift */
+  width:14%;
+  min-width:72px;
+}
 #agents-usage-table th.agents-actions-th,
 #agents-usage-table td.agents-actions-cell{
-  width:auto;
-  min-width:80px;
   white-space:nowrap;
   vertical-align:middle;
-  padding-right:12px!important;
-  padding-left:4px!important;
   box-sizing:border-box;
+  text-align:right;
 }
-.agents-row-actions{
-  display:inline-flex;
+/* Icon pair flush to the row’s trailing edge (no toolbar chrome) */
+#agents-usage-table .agents-row-actions{
+  display:flex;
+  width:100%;
   align-items:center;
   justify-content:flex-end;
   gap:4px;
 }
-
 /* Agents table: ghost icon actions until hover, row focus-within, or kebab menu open — mirrors allocations row tooling */
 #agents-usage-table .agents-row-actions .row-chart-btn,
 #agents-usage-table .agents-row-actions .agents-toolbar-kebab .kebab-btn{
@@ -760,10 +848,10 @@ td.muted{color:var(--ds-color-text-secondary)}
 /* Credits used + usage change inline (usage-cell pattern; right-aligned in num column) */
 #agents-usage-table .agents-credits-usage-cell{
   min-width:120px;
-  align-items:flex-end;
+  align-items:center;
 }
 #agents-usage-table .agents-credits-usage-cell .usage-cell-top{
-  justify-content:flex-end;
+  justify-content:center;
   gap:10px;
 }
 #agents-usage-table td.agents-used-td{vertical-align:middle}
@@ -1201,9 +1289,6 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 #drawer-cap-field[hidden]{
   display:none !important;
 }
-#drawer-assignment-flow{
-  --drawer-ai-accent-brand: #9575ea;
-}
 
 .drawer-textarea{
   width:100%;min-height:96px;resize:vertical;
@@ -1230,6 +1315,37 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 }
 .drawer-ai-lede--tight{max-width:52ch;}
 #drawer-assignment-flow .drawer-ai-lede{margin-bottom:10px;}
+
+/* Drawer assignment mode switch (Simple / Complex) */
+.drawer-mode-switch{
+  display:inline-flex;
+  gap:6px;
+  margin:0 0 12px;
+  padding:2px;
+  border:1px solid var(--ds-color-border);
+  border-radius:999px;
+  background:var(--ds-color-bg-surface);
+}
+.drawer-mode-btn{
+  height:28px;
+  padding:0 12px;
+  border:none;
+  border-radius:999px;
+  background:transparent;
+  cursor:pointer;
+  font:inherit;
+  color:var(--ds-color-text-secondary);
+  transition:background 0.12s ease,color 0.12s ease;
+}
+.drawer-mode-btn.is-active{
+  background:var(--ds-color-blue-selected);
+  color:var(--ds-color-text-primary);
+}
+.drawer-mode-btn:focus-visible{outline:2px solid var(--ds-color-blue-100);outline-offset:2px}
+
+/* Assignment modes */
+#drawer-assignment-flow[data-assignment-mode="simple"] .ai-condition-add-wrap{display:none}
+#drawer-assignment-flow[data-assignment-mode="simple"] .ai-cond-join{display:none}
 
 /* AI prompt (top) + manual rules (below) — flat inside card, no extra panel chrome */
 .drawer-rule-layout{
@@ -1282,7 +1398,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   gap:1px;
 }
 .drawer-ai-prompt-brand__ai{
-  color:var(--drawer-ai-accent-brand);
+  color:var(--ds-color-blue-100);
   letter-spacing:-0.02em;
 }
 .drawer-ai-prompt-brand__spark.material-symbols-outlined{
@@ -1291,16 +1407,104 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   height:16px;
   margin-top:1px;
   line-height:16px;
-  color:var(--drawer-ai-accent-brand);
+  color:var(--ds-color-blue-100);
 }
 .drawer-field--compact .drawer-textarea{
   margin-bottom:6px;
 }
-.drawer-field--compact .drawer-textarea--ai{
+.drawer-field--compact .drawer-ai-prompt-shell{
   margin-bottom:0;
 }
-.drawer-textarea--ai{
-  min-height:76px;
+.drawer-ai-prompt-shell{
+  box-sizing:border-box;
+  width:100%;
+  margin:0 0 12px;
+  position:relative;
+  border:1px solid #9970D7;
+  border-radius:8px;
+  background:var(--ds-color-bg-surface);
+  overflow:hidden;
+}
+.drawer-ai-prompt-shell:focus-within{
+  border-color:#6834B7;
+  box-shadow:0 0 0 1px #6834B7;
+}
+.drawer-ai-prompt-input-wrap{
+  padding:16px;
+  padding-bottom:56px;
+}
+.drawer-ai-prompt-shell .drawer-textarea--ai{
+  display:block;
+  width:100%;
+  min-height:120px;
+  margin:0;
+  padding:0;
+  border:none;
+  border-radius:0;
+  resize:vertical;
+  background:transparent;
+  line-height:1.5;
+  box-shadow:none;
+}
+.drawer-ai-prompt-shell .drawer-textarea--ai:focus{
+  outline:none;
+}
+.drawer-ai-prompt-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:16px;
+  padding:0;
+  border-top:none;
+}
+.drawer-ai-prompt-toolbar__start{
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+.drawer-ai-prompt-tool{
+  box-sizing:border-box;
+  flex-shrink:0;
+  width:28px;
+  height:28px;
+  margin:0;
+  padding:0;
+  border:none;
+  border-radius:var(--ds-radius-sm);
+  background:transparent;
+  color:var(--ds-color-text-icon);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:background 0.12s ease,color 0.12s ease;
+}
+.drawer-ai-prompt-tool .material-symbols-outlined{
+  font-size:20px;
+  line-height:1;
+  font-variation-settings:'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+}
+.drawer-ai-prompt-tool:hover:not(:disabled){
+  background:var(--ds-color-bg-muted);
+  color:var(--ds-color-text-primary);
+}
+.drawer-ai-prompt-tool:focus-visible{
+  outline:2px solid var(--ds-color-blue-100);
+  outline-offset:2px;
+}
+.drawer-ai-prompt-tool--accent{color:var(--ds-color-blue-100);}
+.drawer-ai-prompt-tool--accent:hover:not(:disabled){
+  background:var(--ds-color-blue-selected);
+  color:var(--ds-color-blue-200);
+}
+.drawer-ai-prompt-tool--send{color:var(--ds-color-text-icon);}
+.drawer-ai-prompt-tool:disabled{
+  opacity:0.4;
+  cursor:default;
 }
 .drawer-hint--tight{
   margin:0 0 6px;
@@ -1555,7 +1759,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
 
       <div class="page-header">
         <div>
-          <h1 class="page-title">Credits used</h1>
+          <h1 class="page-title">Credits</h1>
         </div>
         <div class="page-hdr-actions">
           <button type="button" class="btn btn-primary page-hdr-cta" data-action="go-configure" title="Update who receives credits">
@@ -1629,6 +1833,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                       <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
                     </span>
                   </th>
+                  <th scope="col" class="agents-th-status"><span class="th-inner">Status</span></th>
                   <th>
                     <span class="th-inner">Credits per outcome
                       <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
@@ -1650,6 +1855,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
               <tbody>
                 <tr>
                   <td><div class="td-product-name">Listings Optimization Agent</div><div class="td-product-sub">Listing</div></td>
+                  <td><span class="row-status row-status--active">Active</span></td>
                   <td>75</td>
                   <td class="num agents-used-td">
                     <div class="usage-cell agents-credits-usage-cell">
@@ -1690,8 +1896,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   </div>
                 </td>
                 </tr>
-                <tr>
+                <tr data-status="archived">
                   <td><div class="td-product-name">Review Generation Agent</div><div class="td-product-sub">Reviews</div></td>
+                  <td><span class="row-status row-status--archived">Archived</span></td>
                   <td>50</td>
                   <td class="num agents-used-td">
                     <div class="usage-cell agents-credits-usage-cell">
@@ -1732,8 +1939,9 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                   </div>
                 </td>
                 </tr>
-                <tr>
+                <tr data-status="archived">
                   <td><div class="td-product-name">Search Optimization Agent</div><div class="td-product-sub">Search AI</div></td>
+                  <td><span class="row-status row-status--archived">Archived</span></td>
                   <td>10</td>
                   <td class="num agents-used-td">
                     <div class="usage-cell agents-credits-usage-cell">
@@ -1776,6 +1984,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Social Publishing Agent</div><div class="td-product-sub">Social</div></td>
+                  <td><span class="row-status row-status--active">Active</span></td>
                   <td>50</td>
                   <td class="num agents-used-td">
                     <div class="usage-cell agents-credits-usage-cell">
@@ -1818,6 +2027,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </tr>
                 <tr class="selected">
                   <td><div class="td-product-name">Review Response Agent</div><div class="td-product-sub">Reviews</div></td>
+                  <td><span class="row-status row-status--active">Active</span></td>
                   <td>75</td>
                   <td class="num agents-used-td">
                     <div class="usage-cell agents-credits-usage-cell">
@@ -1860,6 +2070,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                 </tr>
                 <tr>
                   <td><div class="td-product-name">Social Engagement Agent</div><div class="td-product-sub">Social</div></td>
+                  <td><span class="row-status row-status--active">Active</span></td>
                   <td>75</td>
                   <td class="num agents-used-td">
                     <div class="usage-cell agents-credits-usage-cell">
@@ -1906,15 +2117,15 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
         </div>
 
         <div id="panel-assigned-allocations" class="assigned-panel" role="tabpanel" aria-labelledby="tab-assigned-allocations" hidden>
-        <div class="global-allotment-empty" id="global-allotment-empty-allocations" role="region" aria-label="No allotment yet">
+        <div class="global-allotment-empty" id="global-allotment-empty-allocations" role="region" aria-label="No allocations yet">
           <div class="empty-block">
             <div class="empty-illus">
               <img src="allotment-empty.svg" width="260" height="200" alt="Credit pool with open slots to divide among allottees"/>
             </div>
             <div class="empty-state">
-              <p class="empty-title">No allotment yet</p>
+              <p class="empty-title">No allocations yet</p>
               <p class="empty-body">
-                Divide your credit pool among teams, locations, and users. Create an allotment to set caps and who is eligible.
+                Divide your credit pool among teams, locations, and users. Create allocations to set caps and who is eligible.
               </p>
               <button type="button" class="btn btn-primary" data-action="go-configure">Manage allocations</button>
             </div>
@@ -1951,6 +2162,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                     <span class="sort-icon" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </span>
                 </th>
+                <th scope="col" class="allocations-th-status"><span class="th-inner">Status</span></th>
                 <th class="num sorted" scope="col" aria-sort="ascending" aria-label="Credits used and allotted">
                   <span class="th-inner">Credits used / allotted
                     <span class="sort-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></span>
@@ -1975,6 +2187,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Team</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">45,900/50,000</span></td>
             <td class="num">63,938</td>
             <td class="row-corner">
@@ -1993,13 +2206,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             </div>
             </td>
             </tr>
-            <tr data-entity-kind="team">
+            <tr data-entity-kind="team" data-status="archived">
             <td>
             <div class="outcome">
             <div class="outcome-name">EMEA</div>
             <div class="outcome-sub">Team</div>
             </div>
             </td>
+            <td><span class="row-status row-status--archived">Archived</span></td>
             <td class="num"><span class="usage-split usage-split--over" title="Used credits exceed allotted cap">61,000/60,000</span></td>
             <td class="num">51,000</td>
             <td class="row-corner">
@@ -2025,6 +2239,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Locations</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">29,700/35,000</span></td>
             <td class="num">37,125</td>
             <td class="row-corner">
@@ -2050,6 +2265,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Locations</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">19,300/25,000</span></td>
             <td class="num">24,125</td>
             <td class="row-corner">
@@ -2075,6 +2291,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Location groups</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">10,500/12,000</span></td>
             <td class="num">13,125</td>
             <td class="row-corner">
@@ -2100,6 +2317,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Location groups</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">5,200/8,000</span></td>
             <td class="num">6,500</td>
             <td class="row-corner">
@@ -2125,6 +2343,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Users</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">3,100/5,000</span></td>
             <td class="num">3,875</td>
             <td class="row-corner">
@@ -2150,6 +2369,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Users</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">1,900/2,500</span></td>
             <td class="num">2,375</td>
             <td class="row-corner">
@@ -2175,6 +2395,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
             <div class="outcome-sub">Agents</div>
             </div>
             </td>
+            <td><span class="row-status row-status--active">Active</span></td>
             <td class="num"><span class="usage-split">1,050/2,000</span></td>
             <td class="num">1,313</td>
             <td class="row-corner">
@@ -2271,26 +2492,33 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
           <p class="drawer-section-label drawer-section-label--prompt" id="drawer-prompt-heading">Who receives credits</p>
           <p class="drawer-ai-lede drawer-ai-lede--tight" id="drawer-prompt-lede">Allocate credits using an AI prompt or do it manually.</p>
 
+          <div class="drawer-mode-switch" role="tablist" aria-label="Allocation rule complexity">
+            <button type="button" class="drawer-mode-btn is-active" role="tab" aria-selected="true" data-drawer-assignment-mode="simple">Simple</button>
+            <button type="button" class="drawer-mode-btn" role="tab" aria-selected="false" data-drawer-assignment-mode="complex">Complex</button>
+          </div>
+
           <div class="drawer-rule-layout">
             <div class="drawer-split">
               <div class="drawer-split-col drawer-split-col--prompt">
                 <div class="drawer-field drawer-field--compact">
-                  <label class="drawer-label drawer-label--ai-prompt" for="drawer-ai-prompt" id="drawer-ai-prompt-label">
-                    <span class="drawer-ai-prompt-brand">
-                      <span class="drawer-ai-prompt-brand__muted">Allocate with </span><span class="drawer-ai-prompt-brand__aiWrap"><span class="drawer-ai-prompt-brand__ai">AI</span><span class="material-symbols-outlined drawer-ai-prompt-brand__spark" aria-hidden="true">auto_awesome</span></span>
-                    </span>
-                  </label>
-                  <textarea id="drawer-ai-prompt" class="drawer-textarea drawer-textarea--ai" rows="3"
-                    placeholder="Example: Allocate 25,000 credits to each regional sales pod this quarter, cap any one location at 22% of the allotment pool."
-                    aria-describedby="drawer-prompt-lede"></textarea>
+                  <div class="drawer-ai-prompt-shell">
+                    <div class="drawer-ai-prompt-input-wrap">
+                      <textarea id="drawer-ai-prompt" class="drawer-textarea drawer-textarea--ai" rows="3"
+                        placeholder="Example: Allocate 25,000 credits to each regional sales pod this quarter, cap any one location at 22% of the allotment pool."
+                        aria-label="Allocation prompt"
+                        aria-describedby="drawer-prompt-lede"></textarea>
+                    </div>
+                    <div class="drawer-ai-prompt-toolbar" role="toolbar" aria-label="Prompt composer">
+                      <div class="drawer-ai-prompt-toolbar__start">
+                        <button type="button" class="drawer-ai-prompt-tool" title="Add" aria-label="Add attachment"><span class="material-symbols-outlined" aria-hidden="true">add</span></button>
+                        <button type="button" class="drawer-ai-prompt-tool drawer-ai-prompt-tool--accent" title="AI assist" aria-label="AI assist"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span></button>
+                        <button type="button" class="drawer-ai-prompt-tool" title="More" aria-label="More options"><span class="material-symbols-outlined" aria-hidden="true">more_horiz</span></button>
+                      </div>
+                      <button type="button" class="drawer-ai-prompt-tool drawer-ai-prompt-tool--send" id="drawer-ai-prompt-send" title="Send" aria-label="Send prompt" disabled><span class="material-symbols-outlined" aria-hidden="true">send</span></button>
+                    </div>
+                  </div>
                 </div>
-                <div class="drawer-ai-compose-foot">
-                  <button type="button" class="btn btn-secondary drawer-ai-gen-btn" id="drawer-ai-generate-btn">
-                    <span class="material-symbols-outlined drawer-ai-gen-ico" aria-hidden="true" hidden>progress_activity</span>
-                    <span class="drawer-ai-gen-text">Generate rules</span>
-                    <span class="drawer-ai-gen-suffix" aria-hidden="true">&#8594;</span>
-                  </button>
-                </div>
+                <!-- removed Generate rules CTA per spec -->
               </div>
               <div class="drawer-split-col drawer-split-col--manual">
                 <div id="drawer-ai-results" class="drawer-ai-applied drawer-conditions-band drawer-conditions-band--flat">
@@ -2366,6 +2594,20 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       <div class="proto-item-text">
         <div class="proto-item-name">Configure</div>
         <div class="proto-item-sub">Build conditions</div>
+      </div>
+    </a>
+    <a class="proto-item blue" href="birdai_credits_allotment.html?state=configure&amp;drawerMode=simple">
+      <span class="dot"></span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Configure · Simple</div>
+        <div class="proto-item-sub">AI prompt + one condition row</div>
+      </div>
+    </a>
+    <a class="proto-item blue" href="birdai_credits_allotment.html?state=configure&amp;drawerMode=complex">
+      <span class="dot"></span>
+      <div class="proto-item-text">
+        <div class="proto-item-name">Configure · Complex</div>
+        <div class="proto-item-sub">Multiple conditions with AND/OR</div>
       </div>
     </a>
     <a class="proto-item ok" data-proto-state="assigned" href="birdai_credits_allotment.html?state=assigned">
@@ -2864,6 +3106,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       resetAssignmentDrawerUi();
       initAllotmentSelectorDefaults();
     }
+
+    // Default assignment complexity mode (Simple unless explicitly set).
+    var params = new URLSearchParams(window.location.search);
+    var dm = params.get('drawerMode');
+    setAssignmentMode(dm === 'complex' ? 'complex' : 'simple', { skipEval: true });
+
     document.body.classList.add('allot-drawer-open');
     setDrawerA11y(true);
     var d = document.getElementById('allot-drawer');
@@ -3215,6 +3463,100 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     }
   }
 
+  function getAssignmentMode(){
+    var flow = document.getElementById('drawer-assignment-flow');
+    var m = flow ? flow.getAttribute('data-assignment-mode') : '';
+    return (m === 'complex') ? 'complex' : 'simple';
+  }
+
+  function setAssignmentMode(mode, opts){
+    opts = opts || {};
+    mode = (mode === 'complex') ? 'complex' : 'simple';
+    var flow = document.getElementById('drawer-assignment-flow');
+    if(flow) flow.setAttribute('data-assignment-mode', mode);
+    document.querySelectorAll('.drawer-mode-btn[data-drawer-assignment-mode]').forEach(function(btn){
+      var isOn = btn.getAttribute('data-drawer-assignment-mode') === mode;
+      btn.classList.toggle('is-active', isOn);
+      btn.setAttribute('aria-selected', isOn ? 'true' : 'false');
+    });
+
+    var listEl = document.getElementById('drawer-ai-conditions-list');
+    if(!listEl) return;
+
+    if(mode === 'simple'){
+      // Ensure exactly one condition row, no joiners.
+      listEl.querySelectorAll('.ai-cond-join').forEach(function(x){ x.remove(); });
+      var rows = listEl.querySelectorAll('.ai-condition-row');
+      for(var i = 1; i < rows.length; i++){ rows[i].remove(); }
+      if(!listEl.querySelector('.ai-condition-row')){
+        appendAiConditionRow(listEl, { whereKey:'entities', op:'is', val:'All entity types' });
+      }
+    } else {
+      // Complex: keep existing rows; if none, seed.
+      seedDefaultConditionRows();
+    }
+    if(!opts.skipEval) evaluateApplyState();
+  }
+
+  function guessWhereKeyFromPrompt(promptText){
+    var p = String(promptText || '').toLowerCase();
+    if(/\bmax\s*credit\s*share\b|\bshare\b|\bpercent\b|%/.test(p)) return 'max_credit_share';
+    if(/\bcredit\s*pool\s*scope\b|\bscope\b/.test(p)) return 'credit_scope';
+    if(/\blocation\s*groups?\b/.test(p)) return 'location_group';
+    if(/\blocations?\b/.test(p)) return 'location';
+    if(/\bregions?\b/.test(p)) return 'region';
+    if(/\bdivisions?\b/.test(p)) return 'division';
+    if(/\bteams?\b/.test(p)) return 'team';
+    if(/\busers?\b/.test(p)) return 'user';
+    if(/\bagents?\b/.test(p)) return 'agent';
+    return 'entities';
+  }
+
+  function guessValueFromPrompt(whereKey, promptText){
+    var p = String(promptText || '').toLowerCase();
+    if(whereKey === 'max_credit_share'){
+      var m = p.match(/(\d{1,2})\s*%/);
+      var pct = m ? m[1] : '25';
+      return pct + '% of plan pool / period';
+    }
+    if(whereKey === 'entities'){
+      if(/\blocation\s*groups?\b/.test(p) && /\blocations?\b/.test(p)) return 'Locations, location groups';
+      if(/\blocation\s*groups?\b/.test(p)) return 'Location groups';
+      if(/\blocations?\b/.test(p)) return 'Locations';
+      if(/\bteams?\b/.test(p)) return 'Teams';
+      if(/\busers?\b/.test(p)) return 'Users';
+      if(/\bagents?\b/.test(p)) return 'Agents';
+      return 'All entity types';
+    }
+    // fall back to first option for that whereKey
+    var list = (AI_RULE_CATALOG.valueOptionsByWhere || {})[whereKey] || [];
+    return list.length ? list[0] : '—';
+  }
+
+  function guessOpFromPrompt(promptText){
+    var p = String(promptText || '').toLowerCase();
+    if(/\bnot\b|exclude|without/.test(p)) return 'is not';
+    if(/≤|<=|at\s+most|max(imum)?/.test(p)) return '≤';
+    if(/≥|>=|at\s+least|min(imum)?/.test(p)) return '≥';
+    return 'is';
+  }
+
+  function applySimplePromptToSingleRow(promptText){
+    var listEl = document.getElementById('drawer-ai-conditions-list');
+    if(!listEl) return;
+    setAssignmentMode('simple', { skipEval: true });
+    var row = listEl.querySelector('.ai-condition-row');
+    if(!row) row = appendAiConditionRow(listEl, { whereKey:'entities', op:'is', val:'All entity types' });
+    var whereKey = guessWhereKeyFromPrompt(promptText);
+    var op = guessOpFromPrompt(promptText);
+    var val = guessValueFromPrompt(whereKey, promptText);
+    fillAiWhereSelect(row.querySelector('.ai-cond-select--where'), whereKey);
+    fillAiOpSelect(row.querySelector('.ai-cond-select--op'), op);
+    fillAiValueSelect(row.querySelector('.ai-cond-select--val'), whereKey, val);
+    aiGeneratedEntities = null;
+    evaluateApplyState();
+  }
+
   function renderAiAppliedConditions(promptText){
     var listEl = document.getElementById('drawer-ai-conditions-list');
     if(!listEl) return;
@@ -3307,6 +3649,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var proj = spec.projected != null ? Number(spec.projected) : Math.round(cap * 1.12);
     var over = spec.over === true || (used > 0 && cap > 0 && used > cap);
     var kind = spec.kind || entityKindFromOutcomeSub(subLabel);
+    var archived = spec.archived === true || String(spec.status || '').toLowerCase() === 'archived';
 
     var r = document.createElement('tr');
     if(kind) r.setAttribute('data-entity-kind', kind);
@@ -3317,6 +3660,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       +     '<div class="outcome-sub"></div>'
       +   '</div>'
       + '</td>'
+      + '<td class="alloc-status-td"></td>'
       + '<td class="num"></td>'
       + '<td class="num"></td>'
       + '<td class="row-corner">'
@@ -3341,6 +3685,12 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var title = over ? ' title="Used credits exceed allotted cap"' : '';
     nums[0].innerHTML = '<span class="usage-split' + ovCls + '"' + title + '>' + formatNum(used) + '/' + formatNum(cap) + '</span>';
     nums[1].textContent = formatNum(proj);
+    var st = r.querySelector('.alloc-status-td');
+    if(st){
+      st.innerHTML = archived
+        ? '<span class="row-status row-status--archived">Archived</span>'
+        : '<span class="row-status row-status--active">Active</span>';
+    }
     return r;
   }
 
@@ -3906,6 +4256,27 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
   (function setupDrawerAiRulesUi(){
     var gen = document.getElementById('drawer-ai-generate-btn');
     var promptEl = document.getElementById('drawer-ai-prompt');
+    var promptSend = document.getElementById('drawer-ai-prompt-send');
+    function syncDrawerPromptSendDisabled(){
+      if(!promptSend || !promptEl) return;
+      promptSend.disabled = !String(promptEl.value || '').trim();
+    }
+    if(promptSend){
+      promptSend.addEventListener('click', function(){
+        if(promptSend.disabled) return;
+        var condList = document.getElementById('drawer-ai-conditions-list');
+        aiGeneratedEntities = null;
+        if(condList) condList.innerHTML = '';
+        var txt = promptEl ? promptEl.value : '';
+        if(getAssignmentMode() === 'simple'){
+          applySimplePromptToSingleRow(txt);
+        } else {
+          // Complex: generate multiple condition rows with AND/OR joiners.
+          renderAiAppliedConditions(txt);
+          evaluateApplyState();
+        }
+      });
+    }
     if(gen){
       gen.addEventListener('click', function(){
         var condList = document.getElementById('drawer-ai-conditions-list');
@@ -3920,8 +4291,19 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       });
     }
     if(promptEl){
-      promptEl.addEventListener('input', evaluateApplyState);
+      promptEl.addEventListener('input', function(){
+        evaluateApplyState();
+        syncDrawerPromptSendDisabled();
+      });
+      syncDrawerPromptSendDisabled();
     }
+
+    // Mode tabs
+    document.querySelectorAll('.drawer-mode-btn[data-drawer-assignment-mode]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        setAssignmentMode(btn.getAttribute('data-drawer-assignment-mode') || 'simple');
+      });
+    });
     var condListRoot = document.getElementById('drawer-ai-conditions-list');
     if(condListRoot){
       condListRoot.addEventListener('change', function(e){
@@ -3953,6 +4335,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     var addCond = document.getElementById('drawer-ai-add-condition');
     if(addCond){
       addCond.addEventListener('click', function(){
+        if(getAssignmentMode() === 'simple') return;
         var listEl = document.getElementById('drawer-ai-conditions-list');
         if(!listEl) return;
         appendAiConditionSegment(listEl, {
