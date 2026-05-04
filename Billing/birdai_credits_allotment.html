@@ -3662,8 +3662,8 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       // Simple: exactly one row, no joiners.
       setAssignmentMode('simple', { skipEval: true });
       listEl.innerHTML = '';
-      var r0 = pickBestSimpleRule(rules) || { whereKey:'', op:'', val:'' };
-      appendAiConditionRow(listEl, r0);
+      var r0 = pickBestSimpleRule(rules) || { whereKey: 'entities', op: 'is', val: 'All entity types' };
+      appendAiConditionRow(listEl, normalizeAiConditionRule(r0, promptText));
       aiGeneratedEntities = null;
       evaluateApplyState();
       return;
@@ -3673,11 +3673,15 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     setAssignmentMode('complex', { skipEval: true });
     listEl.innerHTML = '';
 
-    // In Complex, only show multiple rows if prompt yields multiple rules.
+    // In Complex, when the prompt maps to a single rule we still show two rows + joiner; fill both completely.
     if(rules.length <= 1){
-      appendAiConditionRow(listEl, rules[0] || { whereKey:'', op:'', val:'' });
+      var first = normalizeAiConditionRule(
+        rules[0] || { whereKey: 'entities', op: 'is', val: 'All entity types' },
+        promptText
+      );
+      appendAiConditionRow(listEl, first);
       appendAiJoinerRow(listEl, parsed.join || 'AND');
-      appendAiConditionRow(listEl, { whereKey:'', op:'', val:'' });
+      appendAiConditionRow(listEl, normalizeAiConditionRule(defaultSecondComplexRuleFromFirst(first), promptText));
       aiGeneratedEntities = null;
       evaluateApplyState();
       return;
@@ -3687,7 +3691,7 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
       if(idx > 0){
         appendAiJoinerRow(listEl, parsed.join || 'AND');
       }
-      appendAiConditionRow(listEl, rule);
+      appendAiConditionRow(listEl, normalizeAiConditionRule(rule, promptText));
     });
     aiGeneratedEntities = null;
     evaluateApplyState();
@@ -3836,6 +3840,40 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
     if(/≤|<=|at\s+most|max(imum)?/.test(p)) return '≤';
     if(/≥|>=|at\s+least|min(imum)?/.test(p)) return '≥';
     return 'is';
+  }
+
+  /** Ensure one rule object has non-empty where / op / val for UI selects (Send → conditions list). */
+  function normalizeAiConditionRule(rule, promptText){
+    rule = rule || {};
+    var wk = rule.whereKey;
+    if(!wk) wk = 'entities';
+    var op = rule.op;
+    if(!op) op = guessOpFromPrompt(promptText || '');
+    if(!op){
+      if(wk === 'max_credit_share') op = '≤';
+      else op = 'is';
+    }
+    var val = rule.val;
+    if(val == null || String(val).trim() === ''){
+      if(wk === 'entities') val = 'All entity types';
+      else if(wk === 'max_credit_share'){
+        var m = String(promptText || '').toLowerCase().match(/(\d{1,2})\s*%/);
+        val = (m ? m[1] : '25') + '% of plan pool / period';
+      } else {
+        var list = (AI_RULE_CATALOG.valueOptionsByWhere || {})[wk] || [];
+        val = list.length ? list[0] : '—';
+      }
+    }
+    return { whereKey: wk, op: op, val: val };
+  }
+
+  /** Second row for complex mode when the prompt only yields one rule: paired default so both blocks are complete. */
+  function defaultSecondComplexRuleFromFirst(first){
+    first = first || {};
+    if(first.whereKey === 'max_credit_share'){
+      return { whereKey: 'entities', op: 'is', val: 'All entity types' };
+    }
+    return { whereKey: 'max_credit_share', op: '≤', val: '25% of plan pool / period' };
   }
 
   function applySimplePromptToSingleRow(promptText){
