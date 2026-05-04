@@ -813,7 +813,7 @@ td.muted{color:var(--ds-color-text-secondary)}
   pointer-events:auto;
 }
 
-/* DS: 28×28 icon buttons — insights (blue accent), overflow (neutral icon fill) */
+/* DS: 28×28 icon buttons — insights chart (neutral / near-black stroke like row action reference), kebab (neutral) */
 #agents-usage-table .agents-row-actions .row-chart-btn{
   width:var(--ds-width-btn);
   height:var(--ds-width-btn);
@@ -822,12 +822,12 @@ td.muted{color:var(--ds-color-text-secondary)}
   border:1px solid transparent;
   border-radius:var(--ds-radius-sm);
   background:transparent;
-  color:var(--ds-color-blue-100);
+  color:var(--ds-color-text-primary);
 }
 #agents-usage-table .agents-row-actions .row-chart-btn:hover{
   background:var(--ds-color-bg-muted);
   border-color:var(--ds-color-border);
-  color:var(--ds-color-blue-200);
+  color:var(--ds-color-text-primary);
 }
 
 #agents-usage-table .agents-row-actions .agents-toolbar-kebab .kebab-btn{
@@ -2611,12 +2611,14 @@ body.allot-drawer-open .allot-drawer{transform:translateX(0)}
                           <img src="https://www.figma.com/api/mcp/asset/bc790b18-267c-463d-8486-eaad69ca93bd" width="20" height="20" alt="" style="display:block"/>
                         </button>
                         <button type="button" class="drawer-ai-prompt-tool drawer-ai-prompt-tool--sparkle" title="AI assist" aria-label="AI assist">
-                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 2L11.5 8.5L18 10L11.5 11.5L10 18L8.5 11.5L2 10L8.5 8.5L10 2Z" fill="#9970d7"/>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path fill="#9970D7" d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5z"/>
                           </svg>
                         </button>
                         <button type="button" class="drawer-ai-prompt-tool" title="More" aria-label="More options">
-                          <img src="https://www.figma.com/api/mcp/asset/97805585-2239-4a72-932f-f37e7fc3c678" width="20" height="20" alt="" style="display:block"/>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path fill="currentColor" d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                          </svg>
                         </button>
                         <button type="button" class="drawer-ai-prompt-tool" title="Format" aria-label="Format">
                           <img src="https://www.figma.com/api/mcp/asset/6960ecc5-8a7c-439d-b374-81ded5f53952" width="20" height="20" alt="" style="display:block"/>
