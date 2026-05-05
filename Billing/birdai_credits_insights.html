@@ -68,11 +68,12 @@ body{
   color:var(--ds-color-text-primary);border-radius:4px;
 }
 .sb-group-hdr:hover{background:rgba(0,0,0,0.04)}
-.sb-group-hdr svg{flex-shrink:0;color:var(--ds-color-text-secondary)}
+.sb-group-hdr svg{flex-shrink:0;color:var(--ds-color-text-secondary);transition:transform 0.15s ease}
+.sb-group.collapsed .sb-group-hdr svg{transform:rotate(180deg)}
 .sb-group-body{display:flex;flex-direction:column}
 .sb-item{
-  display:flex;align-items:center;padding:4px 8px 4px 16px;height:32px;
-  cursor:pointer;font-size:14px;color:var(--ds-color-text-primary);
+  display:flex;align-items:center;padding:4px 8px;height:32px;
+  cursor:pointer;font-size:14px;color:var(--ds-color-text-secondary);
   border-radius:4px;text-decoration:none;
 }
 .sb-item:hover{background:var(--ds-color-hover-bg,#f2f4f7)}
@@ -462,35 +463,44 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
 .usage-mix-table-wrap{overflow-x:auto}
 .usage-mix-table{
   width:100%;
-  border-collapse:collapse;
   font-size:13px;
-  table-layout:fixed;
 }
-.usage-mix-table th:nth-child(1),
-.usage-mix-table td:nth-child(1),
-.usage-mix-table th:nth-child(2),
-.usage-mix-table td:nth-child(2),
-.usage-mix-table th:nth-child(3),
-.usage-mix-table td:nth-child(3){
-  width:33.333%;
+.usage-mix-table thead,
+.usage-mix-table tbody{
+  display:block;
+  width:100%;
+}
+.usage-mix-table thead tr,
+.usage-mix-table tbody tr{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  align-items:center;
+  width:100%;
+}
+.usage-mix-table thead tr{
+  border-bottom:1px solid var(--ds-color-border);
+}
+.usage-mix-table tbody tr{
+  border-bottom:1px solid var(--ds-color-border-subtle);
+}
+.usage-mix-table tbody tr:last-child{
+  border-bottom:none;
 }
 .usage-mix-table th{
+  display:block;
   text-align:left;
-  padding:10px 12px;
+  padding:10px 24px;
   font-weight:400;
   font-size:12px;
   color:var(--ds-color-text-secondary);
-  border-bottom:1px solid var(--ds-color-border);
   white-space:nowrap;
 }
 .usage-mix-table th.num{text-align:right}
 .usage-mix-table td{
-  padding:12px 12px;
-  border-bottom:1px solid var(--ds-color-border-subtle);
-  vertical-align:middle;
+  display:block;
+  padding:12px 24px;
   color:var(--ds-color-text-primary);
 }
-.usage-mix-table tr:last-child td{border-bottom:none}
 .usage-mix-table .num{
   text-align:right;
   font-variant-numeric:tabular-nums;
@@ -564,12 +574,7 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
           <span>Billing</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="sb-group-body">
-          <a class="sb-item" href="billing_overview.html">Overview</a>
-          <a class="sb-item" href="billing_overview.html#invoices">Invoices</a>
-          <a class="sb-item" href="billing_overview.html#payment">Payment method</a>
-          <a class="sb-item" href="billing_overview.html#plan">Plan</a>
-        </div>
+        <div class="sb-group-body"></div>
       </div>
       <div class="sb-group" data-group="usage">
         <div class="sb-group-hdr">
@@ -973,7 +978,6 @@ button.kebab-item:hover{background:var(--ds-color-bg-muted)}
     pctLabel.textContent = row.pct.toFixed(1) + '%';
     pctLabel.style.cssText = 'font-size:12px;color:var(--ds-color-text-secondary)';
     tr.querySelector('.share-bar span').style.width = Math.min(100, pctW) + '%';
-    tr.querySelector('.share-bar span').style.background = MIX_COLORS[i % MIX_COLORS.length];
     tbody.appendChild(tr);
   });
 

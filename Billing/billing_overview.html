@@ -104,7 +104,7 @@ body{
   flex-shrink:0;color:var(--ds-color-text-secondary);
   transition:transform 0.15s ease;
 }
-.sb-group.collapsed .sb-group-hdr svg{transform:rotate(-90deg)}
+.sb-group.collapsed .sb-group-hdr svg{transform:rotate(180deg)}
 .sb-group-body{
   display:flex;flex-direction:column;
   overflow:hidden;transition:max-height 0.2s ease;
@@ -112,9 +112,9 @@ body{
 .sb-group.collapsed .sb-group-body{max-height:0 !important}
 .sb-item{
   display:flex;align-items:center;
-  padding:var(--ds-space-1) var(--ds-space-2) var(--ds-space-1) var(--ds-space-5);
+  padding:var(--ds-space-1) var(--ds-space-2);
   height:32px;cursor:pointer;
-  font-size:var(--ds-font-size-base);color:var(--ds-color-text-primary);
+  font-size:var(--ds-font-size-base);color:var(--ds-color-text-secondary);
   border-radius:var(--ds-radius-sm);text-decoration:none;
 }
 .sb-item:hover{background:var(--ds-color-bg-muted)}
@@ -660,12 +660,7 @@ td.right{text-align:right}
           <span>Billing</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="sb-group-body">
-          <a class="sb-item active" href="billing_overview.html">Overview</a>
-          <a class="sb-item" href="billing_invoices.html">Invoices</a>
-          <a class="sb-item" href="billing_payment.html">Payment method</a>
-          <a class="sb-item" href="billing_plan.html">Plan</a>
-        </div>
+        <div class="sb-group-body"></div>
       </div>
       <div class="sb-group" data-group="usage">
         <div class="sb-group-hdr" data-toggle-group>
